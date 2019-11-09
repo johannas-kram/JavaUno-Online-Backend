@@ -4,7 +4,12 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.components.Game;
+import de.markherrmann.javauno.data.state.components.GameLifecycle;
 import de.markherrmann.javauno.data.state.components.Player;
+import de.markherrmann.javauno.data.state.responses.GameAddPlayersState;
+import de.markherrmann.javauno.data.state.responses.GameBetweenRoundsState;
+import de.markherrmann.javauno.data.state.responses.GameRunningState;
+import de.markherrmann.javauno.data.state.responses.GameState;
 import org.springframework.stereotype.Service;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -22,7 +27,7 @@ public class GameService {
 
     public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, InvalidStateException {
         Game game = getGame(gameUuid);
-        if(!game.playersAddable()){
+        if(!isGameInLivecycle(game, GameLifecycle.ADD_PLAYERS)){
             throw new InvalidStateException("Game is started. Players can not be added anymore.");
         }
         Player player = new Player(name, bot);
@@ -33,7 +38,7 @@ public class GameService {
 
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
-        if(!game.gameStartable()){
+        if(isGameInLivecycle(game, GameLifecycle.RUNNING)){
             throw new InvalidStateException("Current round is not finished. New round can not be started yet.");
         }
         resetGame(game);
@@ -41,12 +46,7 @@ public class GameService {
         game.getLayStack().push(deck.pop());
         giveCards(game.getPlayerList(), deck);
         game.getTakeStack().addAll(deck);
-    }
-
-    public List<Card> getOwnCards(String gameUuid, String playerUuid) throws IllegalArgumentException {
-        Game game = getGame(gameUuid);
-        Player player = getPlayer(playerUuid, game);
-        return player.getCards();
+        game.setGameLifecycle(GameLifecycle.RUNNING);
     }
 
     private void resetGame(Game game){
@@ -56,9 +56,16 @@ public class GameService {
         game.getTakeStack().clear();
         game.getLayStack().clear();
         game.setDesiredColor(null);
-        game.setTake(0);
+        resetPlayers(game);
         if(game.isReversed()){
             game.toggleReversed();
+        }
+    }
+
+    private void resetPlayers(Game game){
+        for(Player player : game.getPlayerList()){
+            player.setTake(0);
+            player.setUnoSaid(false);
         }
     }
 
@@ -82,5 +89,9 @@ public class GameService {
             throw new IllegalArgumentException("There is no player with uuid " +playerUuid + " in game with uuid " + game.getUuid());
         }
         return game.getPlayer().get(playerUuid);
+    }
+
+    private boolean isGameInLivecycle(Game game, GameLifecycle gameLifecycle){
+        return game.getGameLifecycle().equals(gameLifecycle);
     }
 }

@@ -57,18 +57,6 @@ public class GameServiceTest {
         assertStartedGameState();
     }
 
-    @Test
-    public void shouldGetOwnCards(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
-        prepareGame();
-        gameService.startGame(game.getUuid());
-
-        List<Card> ownCards = gameService.getOwnCards(game.getUuid(), game.getPlayerList().get(0).getUuid());
-
-        assertThat(ownCards.size()).isEqualTo(7);
-    }
-
     private void assertStartedGameState(){
         for(Player player : game.getPlayerList()){
             assertThat(player.getCards().size()).isEqualTo(7);
