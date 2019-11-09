@@ -6,10 +6,6 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.components.Game;
 import de.markherrmann.javauno.data.state.components.GameLifecycle;
 import de.markherrmann.javauno.data.state.components.Player;
-import de.markherrmann.javauno.data.state.responses.GameAddPlayersState;
-import de.markherrmann.javauno.data.state.responses.GameBetweenRoundsState;
-import de.markherrmann.javauno.data.state.responses.GameRunningState;
-import de.markherrmann.javauno.data.state.responses.GameState;
 import org.springframework.stereotype.Service;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -82,13 +78,6 @@ public class GameService {
             throw new IllegalArgumentException("There is no game with uuid " +gameUuid);
         }
         return UnoState.getGames().get(gameUuid);
-    }
-
-    private Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
-        if(!game.getPlayer().containsKey(playerUuid)){
-            throw new IllegalArgumentException("There is no player with uuid " +playerUuid + " in game with uuid " + game.getUuid());
-        }
-        return game.getPlayer().get(playerUuid);
     }
 
     private boolean isGameInLivecycle(Game game, GameLifecycle gameLifecycle){
