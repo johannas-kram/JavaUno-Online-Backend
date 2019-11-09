@@ -16,11 +16,10 @@ public class Game{
 	private boolean reversed;
 	private Color desiredColor;
 	private int currentPlayerIndex;
-	private GameLifecycle gameLifecycle = GameLifecycle.ADD_PLAYERS;
+	private GameLifecycle gameLifecycle = GameLifecycle.SET_PLAYERS;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
-	    this.currentPlayerIndex = 0;
     }
 
     @JsonIgnore
@@ -68,7 +67,11 @@ public class Game{
         return currentPlayerIndex;
     }
 
-    @JsonIgnore
+	public void setCurrentPlayerIndex(int currentPlayerIndex) {
+		this.currentPlayerIndex = currentPlayerIndex;
+	}
+
+	@JsonIgnore
 	public GameLifecycle getGameLifecycle() {
 		return gameLifecycle;
 	}

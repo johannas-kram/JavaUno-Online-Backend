@@ -42,6 +42,20 @@ public class PlayerServiceTest {
     }
 
     @Test
+    public void shouldRemovePlayer(){
+        prepareGame();
+        game.setCurrentPlayerIndex(2);
+        int playersBefore = game.getPlayer().size();
+
+        playerService.removePlayer(game.getUuid(), game.getPlayerList().get(1).getUuid());
+        int playersNow = game.getPlayer().size();
+
+        assertThat(playersBefore).isEqualTo(4);
+        assertThat(playersNow).isEqualTo(3);
+        assertThat(game.getCurrentPlayerIndex()).isEqualTo(1);
+    }
+
+    @Test
     public void shouldFailAddPlayerCausedByInvalidLifecycle(){
         int playersBefore = game.getPlayer().size();
         game.setGameLifecycle(GameLifecycle.RUNNING);
@@ -72,5 +86,64 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayer().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void shouldFailRemovePlayerCausedByInvalidLifecycle(){
+        prepareGame();
+        int playersBefore = game.getPlayer().size();
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+        Exception exception = null;
+
+        try {
+            playerService.removePlayer(game.getUuid(), game.getPlayerList().get(0).getUuid());
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayer().size();
+        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(exception).isInstanceOf(InvalidStateException.class);
+    }
+
+    @Test
+    public void shouldFailRemovePlayerCausedByInvalidGameUuid(){
+        prepareGame();
+        int playersBefore = game.getPlayer().size();
+        Exception exception = null;
+
+        try {
+            playerService.removePlayer("invalid uuid", game.getPlayerList().get(0).getUuid());
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayer().size();
+        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void shouldFailRemovePlayerCausedByInvalidPlayerUuid(){
+        prepareGame();
+        int playersBefore = game.getPlayer().size();
+        Exception exception = null;
+
+        try {
+            playerService.removePlayer(game.getUuid(), "invalid uuid");
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayer().size();
+        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private void prepareGame(){
+        playerService.addPlayer(game.getUuid(), "Max", false);
+        playerService.addPlayer(game.getUuid(), "Maria", false);
+        playerService.addPlayer(game.getUuid(), "", true);
+        playerService.addPlayer(game.getUuid(), "A Name", false);
     }
 }

@@ -22,7 +22,7 @@ public class GameStateService {
         Game game = gameService.getGame(gameUuid);
         Player player;
         switch (game.getGameLifecycle()){
-            case ADD_PLAYERS:
+            case SET_PLAYERS:
                 return new GameAddPlayersState(game.getPlayerList());
             case RUNNING:
                 player = playerService.getPlayer(playerUuid, game);

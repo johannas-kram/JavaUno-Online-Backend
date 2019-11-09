@@ -64,4 +64,11 @@ public class Player {
 	public int getCardCount(){
 		return cards.size();
 	}
+
+	public String getBotUuid(){
+		if(isBot()){
+			return uuid;
+		}
+		return "not a bot";
+	}
 }
