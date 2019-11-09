@@ -73,7 +73,7 @@ public class GameService {
         }
     }
 
-    private Game getGame(String gameUuid) throws IllegalArgumentException {
+    Game getGame(String gameUuid) throws IllegalArgumentException {
         if(!UnoState.getGames().containsKey(gameUuid)){
             throw new IllegalArgumentException("There is no game with uuid " +gameUuid);
         }

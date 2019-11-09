@@ -20,4 +20,8 @@ public class GameRunningState extends GameState {
     public Game getGame() {
         return game;
     }
+
+    public List<Card> getOwnCards() {
+        return ownCards;
+    }
 }
