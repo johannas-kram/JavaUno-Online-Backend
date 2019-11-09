@@ -23,7 +23,7 @@ public class GameService {
 
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
-        if(isGameInLivecycle(game, GameLifecycle.RUNNING)){
+        if(isGameInLifecycle(game, GameLifecycle.RUNNING)){
             throw new InvalidStateException("Current round is not finished. New round can not be started yet.");
         }
         resetGame(game);
@@ -69,7 +69,7 @@ public class GameService {
         return UnoState.getGames().get(gameUuid);
     }
 
-    boolean isGameInLivecycle(Game game, GameLifecycle gameLifecycle){
+    boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){
         return game.getGameLifecycle().equals(gameLifecycle);
     }
 }

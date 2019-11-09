@@ -15,7 +15,7 @@ public class PlayerService {
 
     public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, InvalidStateException {
         Game game = gameService.getGame(gameUuid);
-        if(!gameService.isGameInLivecycle(game, GameLifecycle.SET_PLAYERS)){
+        if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
             throw new InvalidStateException("Game is started. Players can not be added anymore.");
         }
         Player player = new Player(name, bot);
@@ -26,7 +26,7 @@ public class PlayerService {
 
     public void removePlayer(String gameUuid, String playerUuid){
         Game game = gameService.getGame(gameUuid);
-        if(!gameService.isGameInLivecycle(game, GameLifecycle.SET_PLAYERS)){
+        if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
             throw new InvalidStateException("Game is started. Players can not be removed anymore.");
         }
         Player player = getPlayer(playerUuid, game);
