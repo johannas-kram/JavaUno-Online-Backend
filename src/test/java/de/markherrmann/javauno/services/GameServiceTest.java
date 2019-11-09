@@ -1,16 +1,17 @@
 package de.markherrmann.javauno.services;
 
+import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.components.Game;
-import de.markherrmann.javauno.data.state.components.GameState;
 import de.markherrmann.javauno.data.state.components.Player;
-import de.markherrmann.javauno.data.state.components.RoundState;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,16 +58,15 @@ public class GameServiceTest {
     }
 
     @Test
-    public void shouldGetRoundState(){
+    public void shouldGetOwnCards(){
+        String uuid = gameService.createGame();
+        game = UnoState.getGames().get(uuid);
         prepareGame();
-        Player me = game.getPlayerList().get(0);
-        Player another = game.getPlayerList().get(1);
         gameService.startGame(game.getUuid());
 
-        RoundState roundStateForMe = gameService.getBeginningState(game.getUuid(), me.getUuid());
-        RoundState roundStateForAnother = gameService.getBeginningState(game.getUuid(), another.getUuid());
+        List<Card> ownCards = gameService.getOwnCards(game.getUuid(), game.getPlayerList().get(0).getUuid());
 
-        assertRoundState(roundStateForMe, roundStateForAnother);
+        assertThat(ownCards.size()).isEqualTo(7);
     }
 
     private void assertStartedGameState(){
@@ -75,22 +75,10 @@ public class GameServiceTest {
         }
         assertThat(game.getLayStack().size()).isEqualTo(1);
         assertThat(game.getTakeStack().size()).isEqualTo(86);
-        assertThat(game.getGameState()).isEqualTo(GameState.IN_ROUND);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
     }
 
-    private void assertRoundState(RoundState roundStateForMe, RoundState roundStateForAnother){
-        for(int cardsCount : roundStateForMe.getPlayerCardsCount()){
-            assertThat(cardsCount).isEqualTo(7);
-        }
-        assertThat(roundStateForMe.getOwnCards().size()).isEqualTo(7);
-        assertThat(roundStateForMe.isOwnTurn()).isTrue();
-        assertThat(roundStateForMe.getOwnCards().get(0)).isNotEqualTo(roundStateForAnother.getOwnCards().get(0));
-        assertThat(roundStateForAnother.isOwnTurn()).isFalse();
-    }
-
     private void prepareGame(){
-        gameService.stateAddPlayer(game.getUuid());
         gameService.addPlayer(game.getUuid(), "Max", false);
         gameService.addPlayer(game.getUuid(), "Maria", false);
         gameService.addPlayer(game.getUuid(), "", true);
