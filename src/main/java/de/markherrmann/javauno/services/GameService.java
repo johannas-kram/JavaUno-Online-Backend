@@ -21,17 +21,6 @@ public class GameService {
         return game.getUuid();
     }
 
-    public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, InvalidStateException {
-        Game game = getGame(gameUuid);
-        if(!isGameInLivecycle(game, GameLifecycle.ADD_PLAYERS)){
-            throw new InvalidStateException("Game is started. Players can not be added anymore.");
-        }
-        Player player = new Player(name, bot);
-        game.getPlayer().put(player.getUuid(), player);
-        game.getPlayerList().add(player);
-        return game.getUuid();
-    }
-
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
         if(isGameInLivecycle(game, GameLifecycle.RUNNING)){
@@ -80,7 +69,7 @@ public class GameService {
         return UnoState.getGames().get(gameUuid);
     }
 
-    private boolean isGameInLivecycle(Game game, GameLifecycle gameLifecycle){
+    boolean isGameInLivecycle(Game game, GameLifecycle gameLifecycle){
         return game.getGameLifecycle().equals(gameLifecycle);
     }
 }

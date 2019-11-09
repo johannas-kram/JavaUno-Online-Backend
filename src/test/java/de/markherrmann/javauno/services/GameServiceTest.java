@@ -23,6 +23,9 @@ public class GameServiceTest {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private PlayerService playerService;
+
     private Game game;
 
     @Before
@@ -37,49 +40,6 @@ public class GameServiceTest {
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.getGames()).containsKey(uuid);
-    }
-
-    @Test
-    public void shouldAddPlayer(){
-        int playersBefore = game.getPlayer().size();
-
-        gameService.addPlayer(game.getUuid(), "player name", false);
-
-        int playersNow = game.getPlayer().size();
-        assertThat(playersNow-playersBefore).isEqualTo(1);
-    }
-
-    @Test
-    public void shouldFailAddPlayerCausedByInvalidLifecycle(){
-        int playersBefore = game.getPlayer().size();
-        game.setGameLifecycle(GameLifecycle.RUNNING);
-        Exception exception = null;
-
-        try {
-            gameService.addPlayer(game.getUuid(), "player name", false);
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        int playersNow = game.getPlayer().size();
-        assertThat(playersNow-playersBefore).isEqualTo(0);
-        assertThat(exception).isInstanceOf(InvalidStateException.class);
-    }
-
-    @Test
-    public void shouldFailAddPlayerCausedByInvalidGameUuid(){
-        int playersBefore = game.getPlayer().size();
-        Exception exception = null;
-
-        try {
-            gameService.addPlayer("invalid uuid", "player name", false);
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        int playersNow = game.getPlayer().size();
-        assertThat(playersNow-playersBefore).isEqualTo(0);
-        assertThat(exception).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -133,9 +93,9 @@ public class GameServiceTest {
     }
 
     private void prepareGame(){
-        gameService.addPlayer(game.getUuid(), "Max", false);
-        gameService.addPlayer(game.getUuid(), "Maria", false);
-        gameService.addPlayer(game.getUuid(), "", true);
+        playerService.addPlayer(game.getUuid(), "Max", false);
+        playerService.addPlayer(game.getUuid(), "Maria", false);
+        playerService.addPlayer(game.getUuid(), "", true);
     }
 
 }

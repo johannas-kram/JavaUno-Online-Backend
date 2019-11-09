@@ -15,6 +15,9 @@ public class GameStateService {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private PlayerService playerService;
+
     public GameState get(String gameUuid, String playerUuid) throws IllegalArgumentException {
         Game game = gameService.getGame(gameUuid);
         Player player;
@@ -22,19 +25,12 @@ public class GameStateService {
             case ADD_PLAYERS:
                 return new GameAddPlayersState(game.getPlayerList());
             case RUNNING:
-                player = getPlayer(playerUuid, game);
+                player = playerService.getPlayer(playerUuid, game);
                 return new GameRunningState(game, player);
             case BETWEEN_ROUNDS:
-                player = getPlayer(playerUuid, game);
+                player = playerService.getPlayer(playerUuid, game);
                 return new GameBetweenRoundsState(game, player);
         }
         return null;
-    }
-
-    private Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
-        if(!game.getPlayer().containsKey(playerUuid)){
-            throw new IllegalArgumentException("There is no player with uuid " +playerUuid + " in game with uuid " + game.getUuid());
-        }
-        return game.getPlayer().get(playerUuid);
     }
 }

@@ -24,6 +24,9 @@ public class GameStateServiceTest {
     private GameService gameService;
 
     @Autowired
+    private PlayerService playerService;
+
+    @Autowired
     private GameStateService gameStateService;
 
     private Game game;
@@ -97,8 +100,8 @@ public class GameStateServiceTest {
     }
 
     private void prepareGame(){
-        gameService.addPlayer(game.getUuid(), "Max", false);
-        gameService.addPlayer(game.getUuid(), "Maria", false);
-        gameService.addPlayer(game.getUuid(), "", true);
+        playerService.addPlayer(game.getUuid(), "Max", false);
+        playerService.addPlayer(game.getUuid(), "Maria", false);
+        playerService.addPlayer(game.getUuid(), "", true);
     }
 }
