@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.data.state.components;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Color;
 
@@ -13,31 +14,36 @@ public class Game{
 	private Stack<Card> layStack = new Stack<>();
 	private Stack<Card> takeStack = new Stack<>();
 	private boolean reversed;
-	private int take;
 	private Color desiredColor;
 	private int currentPlayerIndex;
+	private GameLifecycle gameLifecycle = GameLifecycle.ADD_PLAYERS;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
 	    this.currentPlayerIndex = 0;
     }
 
+    @JsonIgnore
 	public String getUuid(){
 		return uuid;
 	}
-	
+
+	@JsonIgnore
 	public Map<String, Player> getPlayer(){
 		return player;
 	}
 
+	@JsonIgnore
     public List<Player> getPlayerList() {
         return playerList;
     }
 
+	@JsonIgnore
     public Stack<Card> getLayStack(){
 		return layStack;
 	}
-	
+
+	@JsonIgnore
 	public Stack<Card> getTakeStack(){
 		return takeStack;
 	}
@@ -62,19 +68,26 @@ public class Game{
         return currentPlayerIndex;
     }
 
-	public int getTake() {
-		return take;
+    @JsonIgnore
+	public GameLifecycle getGameLifecycle() {
+		return gameLifecycle;
 	}
 
-	public void setTake(int take) {
-		this.take = take;
+	public void setGameLifecycle(GameLifecycle gameLifecycle) {
+		this.gameLifecycle = gameLifecycle;
 	}
 
+	@JsonIgnore
 	public boolean playersAddable() {
 		return layStack.isEmpty() && takeStack.isEmpty();
 	}
 
+	@JsonIgnore
 	public boolean gameStartable() {
 		return playerList.get(currentPlayerIndex).getCards().isEmpty();
+	}
+
+	public Card getTopCard(){
+		return layStack.peek();
 	}
 }
