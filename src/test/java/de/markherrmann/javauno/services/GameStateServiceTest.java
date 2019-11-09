@@ -3,9 +3,6 @@ package de.markherrmann.javauno.services;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.components.Game;
 import de.markherrmann.javauno.data.state.components.GameLifecycle;
-import de.markherrmann.javauno.data.state.responses.GameAddPlayersState;
-import de.markherrmann.javauno.data.state.responses.GameBetweenRoundsState;
-import de.markherrmann.javauno.data.state.responses.GameRunningState;
 import de.markherrmann.javauno.data.state.responses.GameState;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,11 +35,12 @@ public class GameStateServiceTest {
     }
 
     @Test
-    public void ShouldGetAddPlayersState(){
-        GameState state = gameStateService.get(game.getUuid(), "");
+    public void ShouldGetSetPlayersState(){
+        prepareGame();
 
-        assertThat(state).isInstanceOf(GameAddPlayersState.class);
-        assertThat(state.getPlayers()).isEmpty();
+        GameState state = gameStateService.get(game.getUuid(), game.getPlayerList().get(0).getUuid());
+
+        assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.SET_PLAYERS);
     }
 
     @Test
@@ -52,24 +50,10 @@ public class GameStateServiceTest {
 
         GameState state = gameStateService.get(game.getUuid(), game.getPlayerList().get(0).getUuid());
 
-        assertThat(state).isInstanceOf(GameRunningState.class);
-        assertThat(((GameRunningState)state).getGame()).isEqualTo(game);
+        assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.RUNNING);
+        assertThat(state.getGame()).isEqualTo(game);
         assertThat(state.getPlayers()).isEqualTo(game.getPlayerList());
-        assertThat(((GameRunningState)state).getOwnCards()).isEqualTo(game.getPlayerList().get(0).getCards());
-    }
-
-    @Test
-    public void ShouldGetBetweenRoundsState(){
-        prepareGame();
-        gameService.startGame(game.getUuid());
-        game.setGameLifecycle(GameLifecycle.BETWEEN_ROUNDS);
-
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayerList().get(0).getUuid());
-
-        assertThat(state).isInstanceOf(GameBetweenRoundsState.class);
-        assertThat(((GameBetweenRoundsState)state).getGame()).isEqualTo(game);
-        assertThat(state.getPlayers()).isEqualTo(game.getPlayerList());
-        assertThat(((GameBetweenRoundsState)state).getOwnCards()).isEqualTo(game.getPlayerList().get(0).getCards());
+        assertThat(state.getOwnCards()).isEqualTo(game.getPlayerList().get(0).getCards());
     }
 
     @Test
