@@ -96,7 +96,7 @@ public class GameServiceTest {
     }
 
     private void assertStartedGameState(){
-        for(Player player : game.getPlayerList()){
+        for(Player player : game.getPlayers()){
             assertThat(player.getCards().size()).isEqualTo(7);
         }
         assertThat(game.getLayStack().size()).isEqualTo(1);
