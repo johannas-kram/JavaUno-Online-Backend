@@ -12,6 +12,10 @@ public class GameState {
     private List<Player> players;
     private List<Card> ownCards;
 
+    public GameState(){
+
+    }
+
     public GameState(Game game, Player player) {
         this.players = game.getPlayerList();
         this.game = game;

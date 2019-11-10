@@ -10,11 +10,17 @@ import java.util.UUID;
 public class Player {
 
 	private String uuid;
+	private String botUuid;
 	private String name;
 	private List<Card> cards = new ArrayList<>();
+	private int cardCount ;
 	private boolean bot;
 	private boolean unoSaid;
 	private int take;
+
+	public Player(){
+
+	}
 
 	public Player(String name, boolean bot){
 	    this.uuid = UUID.randomUUID().toString();

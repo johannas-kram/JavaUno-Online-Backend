@@ -20,7 +20,7 @@ public class PlayerService {
         Player player = new Player(name, bot);
         game.getPlayer().put(player.getUuid(), player);
         game.getPlayerList().add(player);
-        return game.getUuid();
+        return player.getUuid();
     }
 
     public void removePlayer(String gameUuid, String playerUuid) throws IllegalStateException {
@@ -47,7 +47,7 @@ public class PlayerService {
 
     Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
         if(!game.getPlayer().containsKey(playerUuid)){
-            throw new IllegalArgumentException("There is no player with uuid " +playerUuid + " in game with uuid " + game.getUuid());
+            throw new IllegalArgumentException("There is no such player in this game.");
         }
         return game.getPlayer().get(playerUuid);
     }

@@ -17,6 +17,7 @@ public class Game{
 	private Color desiredColor;
 	private int currentPlayerIndex;
 	private GameLifecycle gameLifecycle = GameLifecycle.SET_PLAYERS;
+	private Card topCard;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -71,7 +72,6 @@ public class Game{
 		this.currentPlayerIndex = currentPlayerIndex;
 	}
 
-	@JsonIgnore
 	public GameLifecycle getGameLifecycle() {
 		return gameLifecycle;
 	}
@@ -91,6 +91,9 @@ public class Game{
 	}
 
 	public Card getTopCard(){
+		if(layStack.isEmpty()){
+			return null;
+		}
 		return layStack.peek();
 	}
 }
