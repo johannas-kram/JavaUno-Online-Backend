@@ -18,7 +18,7 @@ public class Deck {
             shuffled = new Stack<>();
             shuffled.addAll(cards);
             Collections.shuffle(shuffled);
-            numberCard = (shuffled.peek() instanceof NumberCard);
+            numberCard = (shuffled.peek().isNumberCard());
         } while(!numberCard);
         return shuffled;
     }
@@ -43,7 +43,7 @@ public class Deck {
     }
 
     private static void pushNumberCard(Color color, Number number){
-        cards.push(new NumberCard(color, number));
+        cards.push(new Card(CardType.NUMBER, color, number));
     }
 
     private static void pushActionCards(){
@@ -56,26 +56,26 @@ public class Deck {
 
     private static void pushSkipCards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new SkipCard(color));
+            cards.push(new Card(CardType.SKIP, color, null));
         }
     }
 
     private static void pushRetourCards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new RetourCard(color));
+            cards.push(new Card(CardType.RETOUR, color, null));
         }
     }
 
     private static void pushTake2Cards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new Take2Card(color));
+            cards.push(new Card(CardType.TAKE2, color, null));
         }
     }
 
     private static void pushJokerCards(){
         for(int i = 0; i < 4; i++){
-            cards.push(new JokerCard());
-            cards.push(new Take4Card());
+            cards.push(new Card(CardType.JOKER, null, null));
+            cards.push(new Card(CardType.TAKE4, null, null));
         }
     }
 }
