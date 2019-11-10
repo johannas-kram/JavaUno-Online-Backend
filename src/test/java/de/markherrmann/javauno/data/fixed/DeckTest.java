@@ -50,9 +50,9 @@ public class DeckTest {
     private void addNamesNormal(List<String> names){
         for(int value = 0; value <= 9; value++){
             for(Color color : Color.values()){
-                names.add("NumberCard:"+color+value);
+                names.add("NUMBER:"+color+":"+value);
                 if(value > 0){
-                    names.add("NumberCard:"+color+value);
+                    names.add("NUMBER:"+color+":"+value);
                 }
             }
         }
@@ -60,8 +60,8 @@ public class DeckTest {
 
     private void addNamesJoker(List<String> names){
         for(int i = 0; i < 4; i++){
-            names.add("JokerCard");
-            names.add("Take4Card");
+            names.add("JOKER");
+            names.add("TAKE4");
         }
     }
 
@@ -74,17 +74,17 @@ public class DeckTest {
     }
 
     private void addNamesSkip(List<String> names, Color color){
-        names.add("SkipCard:"+color);
-        names.add("SkipCard:"+color);
+        names.add("SKIP:"+color);
+        names.add("SKIP:"+color);
     }
 
     private void addNamesRetour(List<String> names, Color color){
-        names.add("RetourCard:"+color);
-        names.add("RetourCard:"+color);
+        names.add("RETOUR:"+color);
+        names.add("RETOUR:"+color);
     }
 
     private void addNamesTake(List<String> names, Color color){
-        names.add("Take2Card:"+color);
-        names.add("Take2Card:"+color);
+        names.add("TAKE2:"+color);
+        names.add("TAKE2:"+color);
     }
 }

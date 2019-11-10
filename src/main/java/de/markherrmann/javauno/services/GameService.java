@@ -7,7 +7,6 @@ import de.markherrmann.javauno.data.state.components.Game;
 import de.markherrmann.javauno.data.state.components.GameLifecycle;
 import de.markherrmann.javauno.data.state.components.Player;
 import org.springframework.stereotype.Service;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.List;
 import java.util.Stack;
@@ -24,7 +23,10 @@ public class GameService {
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
         if(isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            throw new InvalidStateException("Current round is not finished. New round can not be started yet.");
+            throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
+        }
+        if(game.getPlayerList().size() < 2){
+            throw new IllegalStateException("There are not enough players in the game.");
         }
         resetGame(game);
         Stack<Card> deck = Deck.getShuffled();
@@ -64,7 +66,7 @@ public class GameService {
 
     Game getGame(String gameUuid) throws IllegalArgumentException {
         if(!UnoState.getGames().containsKey(gameUuid)){
-            throw new IllegalArgumentException("There is no game with uuid " +gameUuid);
+            throw new IllegalArgumentException("There is no such game.");
         }
         return UnoState.getGames().get(gameUuid);
     }

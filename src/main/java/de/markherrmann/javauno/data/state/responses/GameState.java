@@ -8,14 +8,27 @@ import java.util.List;
 
 public class GameState {
 
+    private boolean success;
+    private String message;
     private Game game;
     private List<Player> players;
     private List<Card> ownCards;
+
+    public GameState(){
+
+    }
 
     public GameState(Game game, Player player) {
         this.players = game.getPlayerList();
         this.game = game;
         this.ownCards = player.getCards();
+        this.success = true;
+        this.message = "success";
+    }
+
+    public GameState(Exception exception) {
+        this.success = false;
+        this.message = "failure: " + exception;
     }
 
     public Game getGame() {
@@ -28,5 +41,13 @@ public class GameState {
 
     public List<Card> getOwnCards() {
         return ownCards;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
