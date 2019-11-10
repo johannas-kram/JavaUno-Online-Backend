@@ -9,8 +9,9 @@ import java.util.*;
 public class Game{
 	
 	private String uuid;
-	private Map<String, Player> player = new HashMap<>();
-	private List<Player> playerList = new ArrayList<>();
+	private Map<String, Player> humans = new HashMap<>();
+	private Map<String, Player> bots = new HashMap<>();
+	private List<Player> players = new ArrayList<>();
 	private Stack<Card> layStack = new Stack<>();
 	private Stack<Card> takeStack = new Stack<>();
 	private boolean reversed;
@@ -18,6 +19,7 @@ public class Game{
 	private int currentPlayerIndex;
 	private GameLifecycle gameLifecycle = GameLifecycle.SET_PLAYERS;
 	private Card topCard;
+	private long lastAction;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -29,13 +31,38 @@ public class Game{
 	}
 
 	@JsonIgnore
-	public Map<String, Player> getPlayer(){
-		return player;
+	public synchronized Map<String, Player> getHumans(){
+		return humans;
 	}
 
+	public synchronized void putHuman(Player player){
+	    humans.put(player.getUuid(), player);
+	    addPlayer(player);
+    }
+
+    public synchronized void removeHuman(Player player){
+        humans.remove(player.getUuid());
+        removePlayer(player);
+    }
+
+    @JsonIgnore
+    public synchronized Map<String, Player> getBots(){
+        return bots;
+    }
+
+    public synchronized void putBot(Player player){
+        bots.put(player.getBotUuid(), player);
+        addPlayer(player);
+    }
+
+    public synchronized void removeBot(Player player){
+        bots.remove(player.getBotUuid());
+        removePlayer(player);
+    }
+
 	@JsonIgnore
-    public List<Player> getPlayerList() {
-        return playerList;
+    public synchronized List<Player> getPlayers() {
+        return players;
     }
 
 	@JsonIgnore
@@ -80,15 +107,13 @@ public class Game{
 		this.gameLifecycle = gameLifecycle;
 	}
 
-	@JsonIgnore
-	public boolean playersAddable() {
-		return layStack.isEmpty() && takeStack.isEmpty();
-	}
+    public void setLastAction(long lastAction) {
+        this.lastAction = lastAction;
+    }
 
-	@JsonIgnore
-	public boolean gameStartable() {
-		return playerList.get(currentPlayerIndex).getCards().isEmpty();
-	}
+    public long getLastAction(){
+	    return lastAction;
+    }
 
 	public Card getTopCard(){
 		if(layStack.isEmpty()){
@@ -96,4 +121,12 @@ public class Game{
 		}
 		return layStack.peek();
 	}
+
+	private void addPlayer(Player player){
+	    players.add(player);
+    }
+
+    private void removePlayer(Player player){
+        players.remove(player);
+    }
 }

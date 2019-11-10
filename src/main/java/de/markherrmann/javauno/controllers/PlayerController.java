@@ -28,8 +28,17 @@ public class PlayerController {
 
     @DeleteMapping(value="/remove/{gameUuid}/{playerUuid}")
     public @ResponseBody SetPlayerResponse removePlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        return removePlayer(gameUuid, playerUuid, false);
+    }
+
+    @DeleteMapping(value="/removeBot/{gameUuid}/{playerUuid}")
+    public @ResponseBody SetPlayerResponse removeBot(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        return removePlayer(gameUuid, playerUuid, true);
+    }
+
+    private SetPlayerResponse removePlayer(String gameUuid, String playerUuid, boolean bot){
         try {
-            playerService.removePlayer(gameUuid, playerUuid);
+            playerService.removePlayer(gameUuid, playerUuid, bot);
             return new SetPlayerResponse(true, "success", playerUuid);
         } catch (Exception ex){
             return new SetPlayerResponse(false, "failure: " + ex, playerUuid);
