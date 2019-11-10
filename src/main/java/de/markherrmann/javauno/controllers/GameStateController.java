@@ -14,7 +14,12 @@ public class GameStateController {
 
     @GetMapping(value = "/get/{gameUuid}/{playerUuid}")
     public @ResponseBody GameState getGameState(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return gameStateService.get(gameUuid, playerUuid);
+        try {
+            return gameStateService.get(gameUuid, playerUuid);
+        } catch(Exception ex){
+            return new GameState(ex);
+        }
+
     }
 
 }

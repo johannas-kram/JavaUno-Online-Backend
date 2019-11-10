@@ -62,12 +62,50 @@ public class GameStateControllerTest {
         assertGameState(mvcResult, GameLifecycle.RUNNING);
     }
 
+    @Test
+    public void shouldFailGetStateCausedByInvalidGameUuid() throws Exception {
+        addPlayer();
+        gameController.startGame(game.getUuid());
+
+        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertFailure(mvcResult, "There is no such game.");
+    }
+
+    @Test
+    public void shouldFailGetStateCausedByInvalidPlayerUuid() throws Exception {
+        addPlayer();
+        gameController.startGame(game.getUuid());
+
+        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertFailure(mvcResult, "There is no such player in this game.");
+    }
+
     private void assertGameState(MvcResult mvcResult, GameLifecycle gameLifecycle) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
         GameState gameState = jsonToObject(response);
 
+        assertThat(gameState.isSuccess()).isTrue();
+        assertThat(gameState.getMessage()).isEqualTo("success");
         assertThat(gameState.getGame().getGameLifecycle()).isEqualTo(gameLifecycle);
         assertThat(gameState.getPlayers()).isNotEmpty();
+
+        if(gameLifecycle.equals(GameLifecycle.RUNNING)){
+            assertThat(gameState.getOwnCards().size()).isEqualTo(7);
+        }
+    }
+
+    private void assertFailure(MvcResult mvcResult, String message) throws Exception {
+        String response = mvcResult.getResponse().getContentAsString();
+        GameState gameState = jsonToObject(response);
+        String expectedMessage = "failure: java.lang.IllegalArgumentException: " + message;
+        assertThat(gameState.isSuccess()).isFalse();
+        assertThat(gameState.getMessage()).isEqualTo(expectedMessage);
     }
 
     private static String asJsonString(final Object obj) {
