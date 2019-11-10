@@ -25,8 +25,8 @@ public class GameService {
         if(isGameInLifecycle(game, GameLifecycle.RUNNING)){
             throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
         }
-        if(game.getPlayerList().isEmpty()){
-            throw new IllegalStateException("There are no players in the game.");
+        if(game.getPlayerList().size() < 2){
+            throw new IllegalStateException("There are not enough players in the game.");
         }
         resetGame(game);
         Stack<Card> deck = Deck.getShuffled();
@@ -66,7 +66,7 @@ public class GameService {
 
     Game getGame(String gameUuid) throws IllegalArgumentException {
         if(!UnoState.getGames().containsKey(gameUuid)){
-            throw new IllegalArgumentException("There is no game with uuid " +gameUuid);
+            throw new IllegalArgumentException("There is no such game.");
         }
         return UnoState.getGames().get(gameUuid);
     }
