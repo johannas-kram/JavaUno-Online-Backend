@@ -66,6 +66,20 @@ public class GameServiceTest {
     }
 
     @Test
+    public void shouldFailStartGameCausedByNoPlayers(){
+        Exception exception = null;
+
+        try {
+            gameService.startGame(game.getUuid());
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(game.getTakeStack()).isEmpty();
+    }
+
+    @Test
     public void shouldFailStartGameCausedByInvalidGameUuid(){
         prepareGame();
         game.setGameLifecycle(GameLifecycle.RUNNING);
