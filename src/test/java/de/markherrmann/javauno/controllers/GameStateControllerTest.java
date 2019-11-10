@@ -108,14 +108,6 @@ public class GameStateControllerTest {
         assertThat(gameState.getMessage()).isEqualTo(expectedMessage);
     }
 
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static GameState jsonToObject(final String json) {
         try {
             return new ObjectMapper().readValue(json, GameState.class);

@@ -166,13 +166,6 @@ public class PlayerControllerTest {
         assertThat(setPlayerResponse.getMessage()).isEqualTo(expectedMessage);
     }
 
-    /*private void prepareGame(){
-        playerService.addPlayer(game.getUuid(), "Max", false);
-        playerService.addPlayer(game.getUuid(), "Maria", false);
-        playerService.addPlayer(game.getUuid(), "", true);
-        playerService.addPlayer(game.getUuid(), "A Name", false);
-    }*/
-
     private String getAddPlayerRequestAsJson(String name, boolean bot){
         AddPlayerRequest addPlayerRequest = getAddPlayerRequest(name, bot);
         return asJsonString(addPlayerRequest);
