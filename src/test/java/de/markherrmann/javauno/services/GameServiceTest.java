@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.plugin.dom.exception.InvalidStateException;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,7 +61,7 @@ public class GameServiceTest {
             exception = ex;
         }
 
-        assertThat(exception).isInstanceOf(InvalidStateException.class);
+        assertThat(exception).isInstanceOf(IllegalStateException.class);
         assertThat(game.getTakeStack()).isEmpty();
     }
 

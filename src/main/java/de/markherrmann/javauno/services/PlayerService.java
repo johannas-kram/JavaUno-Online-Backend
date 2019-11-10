@@ -5,7 +5,6 @@ import de.markherrmann.javauno.data.state.components.GameLifecycle;
 import de.markherrmann.javauno.data.state.components.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.plugin.dom.exception.InvalidStateException;
 
 @Service
 public class PlayerService {
@@ -13,10 +12,10 @@ public class PlayerService {
     @Autowired
     private GameService gameService;
 
-    public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, InvalidStateException {
+    public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
-            throw new InvalidStateException("Game is started. Players can not be added anymore.");
+            throw new IllegalStateException("Game is started. Players can not be added anymore.");
         }
         Player player = new Player(name, bot);
         game.getPlayer().put(player.getUuid(), player);
@@ -24,10 +23,10 @@ public class PlayerService {
         return game.getUuid();
     }
 
-    public void removePlayer(String gameUuid, String playerUuid){
+    public void removePlayer(String gameUuid, String playerUuid) throws IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
-            throw new InvalidStateException("Game is started. Players can not be removed anymore.");
+            throw new IllegalStateException("Game is started. Players can not be removed anymore.");
         }
         Player player = getPlayer(playerUuid, game);
         fixCurrentPlayerIndex(game, player);
