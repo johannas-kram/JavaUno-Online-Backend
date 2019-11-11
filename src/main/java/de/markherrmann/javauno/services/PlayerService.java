@@ -35,9 +35,7 @@ public class PlayerService {
             throw new IllegalStateException("Game is started. Players can not be removed anymore.");
         }
         remove(game, playerUuid, bot);
-        if(game.getHumans().isEmpty()){
-            housekeepingService.removeGame(gameUuid);
-        }
+        housekeepingService.removeGameIfNoHumans(game);
     }
 
     private void remove(Game game, String playerUuid, boolean bot){

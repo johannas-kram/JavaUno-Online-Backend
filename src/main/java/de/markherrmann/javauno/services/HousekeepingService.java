@@ -32,8 +32,10 @@ public class HousekeepingService {
         }
     }
 
-    void removeGame(String uuid){
-        UnoState.removeGame(uuid);
+    void removeGameIfNoHumans(Game game){
+        if(game.getHumans().isEmpty()){
+            UnoState.removeGame(game.getUuid());
+        }
     }
 
 }

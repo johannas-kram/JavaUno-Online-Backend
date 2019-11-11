@@ -19,6 +19,9 @@ public class HousekeepingServiceTest {
     private GameService gameService;
 
     @Autowired
+    private PlayerService playerService;
+
+    @Autowired
     private HousekeepingService housekeepingService;
 
     private Game game;
@@ -42,7 +45,9 @@ public class HousekeepingServiceTest {
 
     @Test
     public void shouldRemoveGame(){
-        housekeepingService.removeGame(game.getUuid());
+        playerService.addPlayer(game.getUuid(), "i am a bot", true);
+
+        housekeepingService.removeGameIfNoHumans(game);
 
         assertThat(UnoState.getGames().containsKey(game.getUuid())).isFalse();
     }
@@ -55,4 +60,6 @@ public class HousekeepingServiceTest {
 
         assertThat(UnoState.getGames().containsKey(game.getUuid())).isFalse();
     }
+
+
 }
