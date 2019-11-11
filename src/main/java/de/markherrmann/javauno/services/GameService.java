@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.components.Game;
 import de.markherrmann.javauno.data.state.components.GameLifecycle;
 import de.markherrmann.javauno.data.state.components.Player;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,14 @@ import java.util.Stack;
 @Service
 public class GameService {
 
+    @Autowired
+    private HousekeepingService housekeepingService;
+
     public String createGame(){
+        housekeepingService.removeOldGames();
         Game game = new Game();
-        UnoState.getGames().put(game.getUuid(), game);
+        UnoState.putGame(game);
+        housekeepingService.updateGameLastAction(game);
         return game.getUuid();
     }
 
@@ -25,19 +31,20 @@ public class GameService {
         if(isGameInLifecycle(game, GameLifecycle.RUNNING)){
             throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
         }
-        if(game.getPlayerList().size() < 2){
+        if(game.getPlayers().size() < 2){
             throw new IllegalStateException("There are not enough players in the game.");
         }
         resetGame(game);
         Stack<Card> deck = Deck.getShuffled();
         game.getLayStack().push(deck.pop());
-        giveCards(game.getPlayerList(), deck);
+        giveCards(game.getPlayers(), deck);
         game.getTakeStack().addAll(deck);
         game.setGameLifecycle(GameLifecycle.RUNNING);
+        housekeepingService.updateGameLastAction(game);
     }
 
     private void resetGame(Game game){
-        for(Player player : game.getPlayerList()){
+        for(Player player : game.getPlayers()){
             player.getCards().clear();
         }
         game.getTakeStack().clear();
@@ -50,7 +57,7 @@ public class GameService {
     }
 
     private void resetPlayers(Game game){
-        for(Player player : game.getPlayerList()){
+        for(Player player : game.getPlayers()){
             player.setTake(0);
             player.setUnoSaid(false);
         }

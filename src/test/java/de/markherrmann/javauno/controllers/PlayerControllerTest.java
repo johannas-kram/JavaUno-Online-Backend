@@ -48,7 +48,7 @@ public class PlayerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", false)))
                 .andExpect(status().isOk()).andReturn();
-        Player player = game.getPlayerList().get(0);
+        Player player = game.getPlayers().get(0);
 
         assertThat(player).isNotNull();
         assertThat(player.isBot()).isFalse();
@@ -61,7 +61,7 @@ public class PlayerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", true)))
                 .andExpect(status().isOk()).andReturn();
-        Player player = game.getPlayerList().get(0);
+        Player player = game.getPlayers().get(0);
 
         assertThat(player).isNotNull();
         assertThat(player.isBot()).isTrue();
@@ -101,7 +101,19 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk()).andReturn();
 
 
-        assertThat(game.getPlayerList()).isEmpty();
+        assertThat(game.getPlayers()).isEmpty();
+        assertRemovePlayerResponse(mvcResult);
+    }
+
+    @Test
+    public void shouldRemoveBot() throws Exception {
+        Player bot = addBot();
+
+        MvcResult mvcResult = this.mockMvc.perform(delete("/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getBotUuid()))
+                .andExpect(status().isOk()).andReturn();
+
+
+        assertThat(game.getPlayers()).isEmpty();
         assertRemovePlayerResponse(mvcResult);
     }
 
@@ -113,7 +125,7 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk()).andReturn();
 
 
-        assertThat(game.getPlayerList()).isNotEmpty();
+        assertThat(game.getPlayers()).isNotEmpty();
         assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such game.");
     }
 
@@ -125,8 +137,20 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk()).andReturn();
 
 
-        assertThat(game.getPlayerList()).isNotEmpty();
+        assertThat(game.getPlayers()).isNotEmpty();
         assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such player in this game.");
+    }
+
+    @Test
+    public void shouldFailRemoveBotCausedByInvalidBotUuid() throws Exception {
+        addBot();
+
+        MvcResult mvcResult = this.mockMvc.perform(delete("/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+                .andExpect(status().isOk()).andReturn();
+
+
+        assertThat(game.getPlayers()).isNotEmpty();
+        assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such bot in this game.");
     }
 
     @Test
@@ -138,7 +162,7 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk()).andReturn();
 
 
-        assertThat(game.getPlayerList()).isNotEmpty();
+        assertThat(game.getPlayers()).isNotEmpty();
         assertFailure(mvcResult, "java.lang.IllegalStateException", "Game is started. Players can not be removed anymore.");
     }
 
@@ -150,7 +174,7 @@ public class PlayerControllerTest {
     }
 
     private void assertAddPlayerResponse(MvcResult mvcResult) throws Exception {
-        Player player = game.getPlayerList().get(0);
+        Player player = game.getPlayers().get(0);
         String response = mvcResult.getResponse().getContentAsString();
         SetPlayerResponse setPlayerResponse = jsonToObject(response);
         assertThat(setPlayerResponse.isSuccess()).isTrue();
@@ -197,8 +221,13 @@ public class PlayerControllerTest {
 
     private Player addPlayer(){
         Player player = new Player("player name", false);
-        game.getPlayerList().add(player);
-        game.getPlayer().put(player.getUuid(), player);
+        game.putHuman(player);
         return player;
+    }
+
+    private Player addBot(){
+        Player bot = new Player("bot name", true);
+        game.putBot(bot);
+        return bot;
     }
 }

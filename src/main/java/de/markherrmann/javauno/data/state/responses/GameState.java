@@ -19,7 +19,7 @@ public class GameState {
     }
 
     public GameState(Game game, Player player) {
-        this.players = game.getPlayerList();
+        this.players = game.getPlayers();
         this.game = game;
         this.ownCards = player.getCards();
         this.success = true;

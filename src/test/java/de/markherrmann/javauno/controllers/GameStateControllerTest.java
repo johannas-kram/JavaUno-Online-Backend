@@ -118,7 +118,6 @@ public class GameStateControllerTest {
 
     private void addPlayer(){
         player = new Player("player name", false);
-        game.getPlayerList().add(player);
-        game.getPlayer().put(player.getUuid(), player);
+        game.putHuman(player);
     }
 }

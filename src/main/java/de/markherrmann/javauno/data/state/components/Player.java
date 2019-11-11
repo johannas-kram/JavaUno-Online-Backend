@@ -13,7 +13,7 @@ public class Player {
 	private String botUuid;
 	private String name;
 	private List<Card> cards = new ArrayList<>();
-	private int cardCount ;
+	private int cardCount;
 	private boolean bot;
 	private boolean unoSaid;
 	private int take;
@@ -26,6 +26,9 @@ public class Player {
 	    this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.bot = bot;
+		if(bot){
+		    botUuid = UUID.randomUUID().toString();
+        }
 	}
 
 
@@ -72,9 +75,6 @@ public class Player {
 	}
 
 	public String getBotUuid(){
-		if(isBot()){
-			return uuid;
-		}
-		return "not a bot";
+		return botUuid;
 	}
 }

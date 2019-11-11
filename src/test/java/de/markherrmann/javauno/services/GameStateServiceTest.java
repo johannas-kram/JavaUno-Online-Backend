@@ -38,7 +38,7 @@ public class GameStateServiceTest {
     public void ShouldGetSetPlayersState(){
         prepareGame();
 
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayerList().get(0).getUuid());
+        GameState state = gameStateService.get(game.getUuid(), game.getPlayers().get(0).getUuid());
 
         assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.SET_PLAYERS);
     }
@@ -48,12 +48,12 @@ public class GameStateServiceTest {
         prepareGame();
         gameService.startGame(game.getUuid());
 
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayerList().get(0).getUuid());
+        GameState state = gameStateService.get(game.getUuid(), game.getPlayers().get(0).getUuid());
 
         assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.RUNNING);
         assertThat(state.getGame()).isEqualTo(game);
-        assertThat(state.getPlayers()).isEqualTo(game.getPlayerList());
-        assertThat(state.getOwnCards()).isEqualTo(game.getPlayerList().get(0).getCards());
+        assertThat(state.getPlayers()).isEqualTo(game.getPlayers());
+        assertThat(state.getOwnCards()).isEqualTo(game.getPlayers().get(0).getCards());
     }
 
     @Test
