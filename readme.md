@@ -1,4 +1,4 @@
-# JavaOnline - Online Version - Backend
+# JavaUno - Online Version - Backend
 
 The backend is the game itself.\
 It holds the full state of all games\
