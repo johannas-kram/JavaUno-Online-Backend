@@ -3,7 +3,7 @@ package de.markherrmann.javauno.data.fixed;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Card {
+public final class Card {
 
     private CardType cardType;
     private Color color;
