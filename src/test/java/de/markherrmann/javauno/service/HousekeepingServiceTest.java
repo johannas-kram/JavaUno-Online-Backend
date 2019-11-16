@@ -1,7 +1,7 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.Game;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

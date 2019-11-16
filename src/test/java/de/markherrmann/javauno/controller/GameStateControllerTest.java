@@ -2,7 +2,7 @@ package de.markherrmann.javauno.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.controller.response.GameState;

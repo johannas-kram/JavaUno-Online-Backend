@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.controller.request.AddPlayerRequest;
 import de.markherrmann.javauno.controller.response.SetPlayerResponse;
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import org.junit.Before;

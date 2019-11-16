@@ -1,6 +1,6 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import org.springframework.beans.factory.annotation.Autowired;
