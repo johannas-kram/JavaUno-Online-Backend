@@ -1,47 +1,64 @@
 package de.markherrmann.javauno.data.fixed;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public final class Card {
 
     private CardType cardType;
-    private Color color;
-    private Number number;
+    private String color;
     private int value;
     private boolean numberCard;
     private boolean jokerCard;
     private boolean takeCard;
     private int take;
 
-	public Card(){
+    private Card(){}
 
-    }
-
-    public Card(CardType cardType, Color color, Number number){
+    private Card(CardType cardType, Color color, int value){
         this.cardType = cardType;
-	    this.color = color;
-        this.number = number;
+	    this.color = color.name();
+        this.value = value;
     }
 
-    public Color getColor() {
+    private Card(CardType cardType, int value){
+        this.cardType = cardType;
+        this.value = value;
+        this.color = "joker";
+    }
+
+    static Card createNumberCard(Color color, int value){
+        value = Math.abs(value) % 10;
+	    return new Card(CardType.NUMBER, color, value);
+    }
+
+    static Card createSkipCard(Color color){
+        return new Card(CardType.SKIP, color, 20);
+    }
+
+    static Card createRetourCard(Color color){
+        return new Card(CardType.RETOUR, color, 20);
+    }
+
+    static Card createTake2Card(Color color){
+        return new Card(CardType.TAKE2, color, 20);
+    }
+
+    static Card createTake4Card(){
+        return new Card(CardType.TAKE4, 50);
+    }
+
+    static Card createJokerCard(){
+        return new Card(CardType.JOKER, 50);
+    }
+
+    public String getColor() {
         return color;
-    }
-
-    @JsonIgnore
-    public Number getNumber() {
-        return number;
-    }
-
-    public int getValue() {
-	    if(number == null){
-	        return -1;
-        }
-        return number.getValue();
     }
 
     public CardType getCardType(){
         return cardType;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public boolean isNumberCard() {
@@ -69,11 +86,11 @@ public final class Card {
     @Override
     public String toString(){
 	    String str = cardType.toString();
-	    if(color != null){
+	    if(!isJokerCard()){
 	        str += ":" + color;
         }
-        if(getValue() != -1){
-            str += ":" + getValue();
+        if(isNumberCard()){
+            str += ":" + value;
         }
 	    return str;
     }
