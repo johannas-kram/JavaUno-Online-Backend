@@ -1,4 +1,4 @@
-package de.markherrmann.javauno.service;
+package de.markherrmann.javauno.service.turn;
 
 import org.springframework.stereotype.Service;
 
