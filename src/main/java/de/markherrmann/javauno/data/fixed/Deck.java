@@ -32,18 +32,19 @@ public class Deck {
 
 
     private static void pushNumberCards(){
-        for(Number number : Number.values()){
+        for(int value = 0; value <= 9; value++){
             for(Color color : Color.values()){
-                pushNumberCard(color, number);
-                if(number.getValue() > 0){
-                    pushNumberCard(color, number);
+                pushNumberCard(color, value);
+                if(value > 0){
+                    pushNumberCard(color, value);
                 }
             }
         }
     }
 
-    private static void pushNumberCard(Color color, Number number){
-        cards.push(new Card(CardType.NUMBER, color, number));
+    private static void pushNumberCard(Color color, int value){
+        Card numberCard = Card.createNumberCard(color, value);
+        cards.push(numberCard);
     }
 
     private static void pushActionCards(){
@@ -56,26 +57,31 @@ public class Deck {
 
     private static void pushSkipCards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new Card(CardType.SKIP, color, null));
+            Card skipCard = Card.createSkipCard(color);
+            cards.push(skipCard);
         }
     }
 
     private static void pushRetourCards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new Card(CardType.RETOUR, color, null));
+            Card retourCard = Card.createRetourCard(color);
+            cards.push(retourCard);
         }
     }
 
     private static void pushTake2Cards(Color color){
         for (int i = 0; i < 2; i++){
-            cards.push(new Card(CardType.TAKE2, color, null));
+            Card take2Card = Card.createTake2Card(color);
+            cards.push(take2Card);
         }
     }
 
     private static void pushJokerCards(){
         for(int i = 0; i < 4; i++){
-            cards.push(new Card(CardType.JOKER, null, null));
-            cards.push(new Card(CardType.TAKE4, null, null));
+            Card take4Card = Card.createTake4Card();
+            Card jokerCard = Card.createJokerCard();
+            cards.push(take4Card);
+            cards.push(jokerCard);
         }
     }
 }
