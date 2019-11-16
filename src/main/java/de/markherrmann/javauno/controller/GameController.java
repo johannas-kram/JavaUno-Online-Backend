@@ -1,6 +1,6 @@
-package de.markherrmann.javauno.controllers;
+package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.services.GameService;
+import de.markherrmann.javauno.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

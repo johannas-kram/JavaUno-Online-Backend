@@ -1,4 +1,4 @@
-package de.markherrmann.javauno.controllers.response;
+package de.markherrmann.javauno.controller.response;
 
 public class SetPlayerResponse {
 

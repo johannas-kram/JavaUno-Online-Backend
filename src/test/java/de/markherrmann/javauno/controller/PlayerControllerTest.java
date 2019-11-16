@@ -1,12 +1,12 @@
-package de.markherrmann.javauno.controllers;
+package de.markherrmann.javauno.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.markherrmann.javauno.controllers.request.AddPlayerRequest;
-import de.markherrmann.javauno.controllers.response.SetPlayerResponse;
+import de.markherrmann.javauno.controller.request.AddPlayerRequest;
+import de.markherrmann.javauno.controller.response.SetPlayerResponse;
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.components.Game;
-import de.markherrmann.javauno.data.state.components.GameLifecycle;
-import de.markherrmann.javauno.data.state.components.Player;
+import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
+import de.markherrmann.javauno.data.state.component.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

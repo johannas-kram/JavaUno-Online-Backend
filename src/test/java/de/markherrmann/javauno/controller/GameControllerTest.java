@@ -1,9 +1,9 @@
-package de.markherrmann.javauno.controllers;
+package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.components.Game;
-import de.markherrmann.javauno.data.state.components.GameLifecycle;
-import de.markherrmann.javauno.data.state.components.Player;
+import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
+import de.markherrmann.javauno.data.state.component.Player;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

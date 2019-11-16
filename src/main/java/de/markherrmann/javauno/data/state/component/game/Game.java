@@ -1,8 +1,10 @@
-package de.markherrmann.javauno.data.state.components;
+package de.markherrmann.javauno.data.state.component.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Color;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
+import de.markherrmann.javauno.data.state.component.Player;
 
 import java.util.*;
 

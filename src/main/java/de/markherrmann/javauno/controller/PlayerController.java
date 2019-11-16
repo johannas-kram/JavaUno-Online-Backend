@@ -1,8 +1,8 @@
-package de.markherrmann.javauno.controllers;
+package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.controllers.request.AddPlayerRequest;
-import de.markherrmann.javauno.controllers.response.SetPlayerResponse;
-import de.markherrmann.javauno.services.PlayerService;
+import de.markherrmann.javauno.controller.request.AddPlayerRequest;
+import de.markherrmann.javauno.controller.response.SetPlayerResponse;
+import de.markherrmann.javauno.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

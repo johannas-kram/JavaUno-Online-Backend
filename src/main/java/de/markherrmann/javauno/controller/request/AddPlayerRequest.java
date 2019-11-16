@@ -1,4 +1,4 @@
-package de.markherrmann.javauno.controllers.request;
+package de.markherrmann.javauno.controller.request;
 
 public class AddPlayerRequest {
 

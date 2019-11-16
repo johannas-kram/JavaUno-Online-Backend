@@ -1,9 +1,9 @@
-package de.markherrmann.javauno.services;
+package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.components.Game;
-import de.markherrmann.javauno.data.state.components.GameLifecycle;
-import de.markherrmann.javauno.data.state.responses.GameState;
+import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
+import de.markherrmann.javauno.controller.response.GameState;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

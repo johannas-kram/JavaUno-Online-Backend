@@ -1,4 +1,4 @@
-package de.markherrmann.javauno.data.state.components;
+package de.markherrmann.javauno.data.state.component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.markherrmann.javauno.data.fixed.Card;

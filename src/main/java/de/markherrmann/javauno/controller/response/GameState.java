@@ -1,8 +1,8 @@
-package de.markherrmann.javauno.data.state.responses;
+package de.markherrmann.javauno.controller.response;
 
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.state.components.Game;
-import de.markherrmann.javauno.data.state.components.Player;
+import de.markherrmann.javauno.data.state.component.game.Game;
+import de.markherrmann.javauno.data.state.component.Player;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package de.markherrmann.javauno.data.state;
 
-import de.markherrmann.javauno.data.state.components.Game;
+import de.markherrmann.javauno.data.state.component.game.Game;
 
 import java.util.HashMap;
 import java.util.Map;
