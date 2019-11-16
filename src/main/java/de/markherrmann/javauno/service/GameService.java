@@ -45,7 +45,7 @@ public class GameService {
 
     private void resetGame(Game game){
         for(Player player : game.getPlayers()){
-            player.getCards().clear();
+            player.clearCards();
         }
         game.getTakeStack().clear();
         game.getLayStack().clear();
@@ -66,7 +66,7 @@ public class GameService {
     private void giveCards(List<Player> playerList, Stack<Card> deck){
         for(int cards = 0; cards < 7; cards++){
             for(Player player : playerList){
-                player.getCards().add(deck.pop());
+                player.addCard(deck.pop());
             }
         }
     }

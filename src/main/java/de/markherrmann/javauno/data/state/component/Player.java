@@ -46,6 +46,18 @@ public class Player {
 		return cards;
 	}
 
+	public synchronized void removeCard(Card card){
+	    cards.remove(card);
+    }
+
+    public synchronized void addCard(Card card){
+        cards.add(card);
+    }
+
+    public synchronized void clearCards(){
+	    cards.clear();
+    }
+
 	public boolean isBot() {
 		return bot;
 	}
