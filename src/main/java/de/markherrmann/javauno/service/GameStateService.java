@@ -9,22 +9,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameStateService {
 
-    @Autowired
-    private GameService gameService;
+    private final GameService gameService;
+    private final PlayerService playerService;
+    private final TurnService turnService;
 
     @Autowired
-    private PlayerService playerService;
+    public GameStateService(GameService gameService, PlayerService playerService, TurnService turnService) {
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.turnService = turnService;
+    }
 
     public GameState get(String gameUuid, String playerUuid) throws IllegalArgumentException {
         Game game = gameService.getGame(gameUuid);
         Player player = playerService.getPlayer(playerUuid, game);
-        boolean playersTurn = isPlayersTurn(game, player);
+        boolean playersTurn = turnService.isPlayersTurn(game, player);
         return new GameState(game, player, playersTurn);
-    }
-
-    private boolean isPlayersTurn(Game game, Player player){
-        int currentIndex = game.getCurrentPlayerIndex();
-        Player current = game.getPlayers().get(currentIndex);
-        return current.equals(player);
     }
 }
