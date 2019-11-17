@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.data.state.component.TurnState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,7 @@ public class GameService {
         if(game.isReversed()){
             game.toggleReversed();
         }
+        game.setTurnState(TurnState.LAY_OR_TAKE);
     }
 
     private void resetPlayers(Game game){
