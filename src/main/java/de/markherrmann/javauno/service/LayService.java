@@ -117,7 +117,7 @@ public class LayService {
     }
 
     private void failIfInvalidCard(Card card, Player player) throws IllegalArgumentException {
-        if(player.getCards().contains(card)){
+        if(!player.getCards().contains(card)){
             throw new IllegalArgumentException("The Player has no such card.");
         }
     }
