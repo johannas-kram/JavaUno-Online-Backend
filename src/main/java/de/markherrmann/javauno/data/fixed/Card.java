@@ -97,10 +97,6 @@ public final class Card {
 
     @Override
     public boolean equals(Object o){
-        if(o instanceof  Card){
-            Card c = (Card) o;
-            return this.cardType.equals(c.cardType) && this.color.equals(c.color) && this.value == c.value;
-        }
-        return false;
+        return this.toString().equals(o.toString());
     }
 }
