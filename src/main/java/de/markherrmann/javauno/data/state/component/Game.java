@@ -15,11 +15,14 @@ public class Game{
 	private Stack<Card> layStack = new Stack<>();
 	private Stack<Card> takeStack = new Stack<>();
 	private boolean reversed;
-	private Color desiredColor;
+	private String desiredColor;
 	private int currentPlayerIndex;
 	private GameLifecycle gameLifecycle = GameLifecycle.SET_PLAYERS;
 	private Card topCard;
 	private long lastAction;
+    private TurnState turnState;
+    private int take;
+    private boolean skip;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -79,7 +82,7 @@ public class Game{
         return reversed;
     }
 
-    public Color getDesiredColor(){
+    public String getDesiredColor(){
 		return desiredColor;
 	}
 
@@ -87,7 +90,7 @@ public class Game{
 	    reversed = !reversed;
     }
 
-    public void setDesiredColor(Color desiredColor) {
+    public void setDesiredColor(String desiredColor) {
         this.desiredColor = desiredColor;
     }
 
@@ -130,4 +133,30 @@ public class Game{
     private void removePlayer(Player player){
         players.remove(player);
     }
+
+
+    @JsonIgnore
+    public TurnState getTurnState() {
+        return turnState;
+    }
+
+    public void setTurnState(TurnState turnState) {
+        this.turnState = turnState;
+    }
+
+	public int getTake() {
+		return take;
+	}
+
+	public void setTake(int take) {
+		this.take = take;
+	}
+
+	public boolean isSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
+	}
 }
