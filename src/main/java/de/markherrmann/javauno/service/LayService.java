@@ -15,12 +15,14 @@ public class LayService {
     private final GameService gameService;
     private final PlayerService playerService;
     private final TurnService turnService;
+    private final HousekeepingService housekeepingService;
 
     @Autowired
-    public LayService(GameService gameService, PlayerService playerService, TurnService turnService){
+    public LayService(GameService gameService, PlayerService playerService, TurnService turnService, HousekeepingService housekeepingService){
         this.gameService = gameService;
         this.playerService = playerService;
         this.turnService = turnService;
+        this.housekeepingService = housekeepingService;
     }
 
     public String lay(String gameUuid, String playerUuid, Card card, int cardIndex){
@@ -31,13 +33,14 @@ public class LayService {
         }
         turnService.failIfInvalidTurnState(game, TurnState.TAKE_DUTIES_OR_CUMULATE, TurnState.LAY_OR_TAKE, TurnState.LAY_TAKEN);
         if(!turnService.isPlayersTurn(game, player)){
-            return "failure: it's not your turn";
+            return "failure: it's not your turn.";
         }
         failIfInvalidCard(card, player, cardIndex);
         if(!isPlayableCard(game, player, card, cardIndex)){
-            return "failure: card does not match";
+            return "failure: card does not match.";
         }
         layCard(game, player, card, cardIndex);
+        housekeepingService.updateGameLastAction(game);
         return "success";
     }
 
@@ -119,12 +122,13 @@ public class LayService {
     }
 
     private void failIfInvalidCard(Card card, Player player, int cardIndex) throws IllegalArgumentException {
+        String message = "The Player has no such card at this position.";
         if(player.getCards().size() < cardIndex+1){
-            throw new IllegalArgumentException("The Player has no such card at this position.");
+            throw new IllegalArgumentException(message);
         }
         Card foundCard = player.getCards().get(cardIndex);
         if(!foundCard.equals(card)){
-            throw new IllegalArgumentException("The Player has no such card at this position.");
+            throw new IllegalArgumentException(message);
         }
     }
 
