@@ -1,9 +1,8 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.state.UnoState;
+import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
-import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +32,7 @@ public class LayServiceStateTest {
 
     @Before
     public void setup(){
-        prepareGame();
+        game = LayServiceTestHelper.prepareGame(gameService, playerService);
     }
 
     @Test
@@ -79,22 +80,10 @@ public class LayServiceStateTest {
 
         String result = layService.lay(gameUuid, playerUuid, card, 0);
 
-        assertLaidCard(game, card, result);
+        LayServiceTestHelper.assertLaidCard(game, card, result);
     }
 
-    private void assertLaidCard(Game game, Card card, String result){
-        assertThat(result).isEqualTo("success");
-        assertThat(game.getTopCard()).isEqualTo(card);
-        game.getLayStack().pop();
-        assertThat(game.getLayStack()).isNotEmpty();
-        assertThat(game.getTopCard()).isEqualTo(card);
-        assertThat(game.getPlayers().get(0).getCards()).isEmpty();
-        if(card.isJokerCard()){
-            assertThat(game.getTurnState()).isEqualTo(TurnState.SELECT_COLOR);
-        } else {
-            assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
-        }
-    }
+
 
     private void shouldFailCausedByInvalidState(){
         String gameUuid = game.getUuid();
@@ -115,6 +104,12 @@ public class LayServiceStateTest {
         assertNotLaid(game, card, result, exception, "IllegalStateException", "Turn is in wrong state for this action.", turnState);
     }
 
+    private void assertLaid(Game game, Card card, String result){
+        LayServiceTestHelper.assertLaidCard(game, card, result);
+        game.getLayStack().pop();
+        assertThat(game.getTopCard()).isEqualTo(card);
+    }
+
     private void assertNotLaid(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){
         assertThat(result).isEqualTo("");
         game.getLayStack().pop();
@@ -130,34 +125,13 @@ public class LayServiceStateTest {
         assertThat(exception.getMessage()).isEqualTo(message);
     }
 
-    private void prepareGame(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
-        playerService.addPlayer(game.getUuid(), "Max", false);
-        playerService.addPlayer(game.getUuid(), "Maria", false);
-        playerService.addPlayer(game.getUuid(), "Jana", false);
-        playerService.addPlayer(game.getUuid(), "A Name", false);
-        gameService.startGame(game.getUuid());
-    }
-
     private Card findTake2Card(){
-        for(Card card : game.getTakeStack()){
+        Stack<Card> cards = Deck.getShuffled();
+        for(Card card : cards){
             if(card.isTakeCard() && card.getTake() == 2){
                 return card;
             }
         }
-        for(Card card : game.getLayStack()){
-            if(card.isTakeCard() && card.getTake() == 2){
-                return card;
-            }
-        }
-        for(Player player : game.getPlayers()){
-            for(Card card : player.getCards()){
-                if(card.isTakeCard() && card.getTake() == 2){
-                    return card;
-                }
-            }
-        }
-        return null; //should never happen
+        return null;
     }
 }

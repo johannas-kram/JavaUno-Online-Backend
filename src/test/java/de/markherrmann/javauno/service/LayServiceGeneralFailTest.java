@@ -1,7 +1,6 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
@@ -31,7 +30,7 @@ public class LayServiceGeneralFailTest {
 
     @Before
     public void setup(){
-        prepareGame();
+        game = LayServiceTestHelper.prepareGame(gameService, playerService);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class LayServiceGeneralFailTest {
 
         String result = layService.lay(gameUuid, playerUuid, card, 0);
 
-        assertNotLaid(game, card, result, "failure: it's not your turn");
+        assertNotLaid(game, card, result, "failure: it's not your turn.");
     }
 
     @Test
@@ -81,7 +80,7 @@ public class LayServiceGeneralFailTest {
         }
 
         assertNotLaid(game, wrongCard, result, "");
-        assertException(exception, "IllegalArgumentException", "The Player has no such card.");
+        assertException(exception, "IllegalArgumentException", "The Player has no such card at this position.");
     }
 
     private void assertNotLaid(Game game, Card card, String result, String expextedResult){
@@ -98,15 +97,6 @@ public class LayServiceGeneralFailTest {
         assertThat(exception.getMessage()).isEqualTo(message);
     }
 
-    private void prepareGame(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
-        playerService.addPlayer(game.getUuid(), "Max", false);
-        playerService.addPlayer(game.getUuid(), "Maria", false);
-        playerService.addPlayer(game.getUuid(), "Jana", false);
-        playerService.addPlayer(game.getUuid(), "A Name", false);
-        gameService.startGame(game.getUuid());
-    }
 
     private Card findWrongCard(Card rightCard){
         Card card = rightCard;
