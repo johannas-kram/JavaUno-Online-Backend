@@ -50,6 +50,10 @@ public class Player {
 	    cards.remove(card);
     }
 
+	public synchronized void removeCard(int index){
+		cards.remove(index);
+	}
+
     public synchronized void addCard(Card card){
         cards.add(card);
     }

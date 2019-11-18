@@ -3,6 +3,7 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.CardType;
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +23,26 @@ public class LayService {
         this.turnService = turnService;
     }
 
-    public String lay(String gameUuid, String playerUuid, Card card){
+    public String lay(String gameUuid, String playerUuid, Card card, int cardIndex){
         Game game = gameService.getGame(gameUuid);
         Player player = playerService.getPlayer(playerUuid, game);
+        if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+            return "failure: game is in wrong lifecycle.";
+        }
         turnService.failIfInvalidTurnState(game, TurnState.TAKE_DUTIES_OR_CUMULATE, TurnState.LAY_OR_TAKE, TurnState.LAY_TAKEN);
         if(!turnService.isPlayersTurn(game, player)){
             return "failure: it's not your turn";
         }
-        failIfInvalidCard(card, player);
-        if(!isPlayableCard(game, player, card)){
+        failIfInvalidCard(card, player, cardIndex);
+        if(!isPlayableCard(game, player, card, cardIndex)){
             return "failure: card does not match";
         }
-        layCard(game, player, card);
+        layCard(game, player, card, cardIndex);
         return "success";
     }
 
-    private void layCard(Game game, Player player, Card card){
-        player.removeCard(card);
+    private void layCard(Game game, Player player, Card card, int cardIndex){
+        player.removeCard(cardIndex);
         game.getLayStack().push(card);
         setGameVars(game, card);
         switchTurnState(game);
@@ -77,11 +81,11 @@ public class LayService {
         }
     }
 
-    private boolean isPlayableCard(Game game, Player player, Card card) {
+    private boolean isPlayableCard(Game game, Player player, Card card, int cardIndex) {
         if(TurnState.TAKE_DUTIES_OR_CUMULATE.equals(game.getTurnState()) && !isCumulative(game.getTopCard(), card)){
             return false;
         }
-        if(TurnState.LAY_TAKEN.equals(game.getTurnState()) && !isLastCard(player, card)){
+        if(TurnState.LAY_TAKEN.equals(game.getTurnState()) && !isLastCard(player, cardIndex)){
             return false;
         }
         if(card.isJokerCard()){
@@ -94,10 +98,8 @@ public class LayService {
         return topCard.getTake() == playersCard.getTake();
     }
 
-    private boolean isLastCard(Player player, Card card){
-        int index = player.getCards().lastIndexOf(card);
-        int lastIndex = player.getCardCount()-1;
-        return index == lastIndex;
+    private boolean isLastCard(Player player, int index){
+        return index == player.getCards().size()-1;
     }
 
     private boolean isMatch(Game game, Card playersCard){
@@ -116,9 +118,13 @@ public class LayService {
         return false;
     }
 
-    private void failIfInvalidCard(Card card, Player player) throws IllegalArgumentException {
-        if(!player.getCards().contains(card)){
-            throw new IllegalArgumentException("The Player has no such card.");
+    private void failIfInvalidCard(Card card, Player player, int cardIndex) throws IllegalArgumentException {
+        if(player.getCards().size() < cardIndex+1){
+            throw new IllegalArgumentException("The Player has no such card at this position.");
+        }
+        Card foundCard = player.getCards().get(cardIndex);
+        if(!foundCard.equals(card)){
+            throw new IllegalArgumentException("The Player has no such card at this position.");
         }
     }
 

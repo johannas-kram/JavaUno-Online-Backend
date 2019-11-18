@@ -3,6 +3,7 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,9 +43,24 @@ public class LayServiceGeneralFailTest {
         game.getPlayers().get(0).addCard(card);
         game.setCurrentPlayerIndex(1);
 
-        String result = layService.lay(gameUuid, playerUuid, card);
+        String result = layService.lay(gameUuid, playerUuid, card, 0);
 
         assertNotLaid(game, card, result, "failure: it's not your turn");
+    }
+
+    @Test
+    public void shouldFailCausedByInvalidLifecycle(){
+        String gameUuid = game.getUuid();
+        String playerUuid = game.getPlayers().get(0).getUuid();
+        Card card = game.getTopCard();
+        game.getPlayers().get(0).clearCards();
+        game.getPlayers().get(0).addCard(card);
+        game.setCurrentPlayerIndex(1);
+        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+
+        String result = layService.lay(gameUuid, playerUuid, card, 0);
+
+        assertNotLaid(game, card, result, "failure: game is in wrong lifecycle.");
     }
 
     @Test
@@ -59,7 +75,7 @@ public class LayServiceGeneralFailTest {
         String result = "";
 
         try {
-            result = layService.lay(gameUuid, playerUuid, card);
+            result = layService.lay(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
