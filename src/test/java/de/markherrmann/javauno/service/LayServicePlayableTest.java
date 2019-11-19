@@ -176,7 +176,7 @@ public class LayServicePlayableTest {
         game.getLayStack().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
 
-        String result = layService.lay(gameUuid, playerUuid, playersCard, 0);
+        String result = layService.lay(gameUuid, playerUuid, playersCard.toString(), 0);
 
         LayServiceTestHelper.assertLaidCard(game, playersCard, result);
     }
@@ -189,7 +189,7 @@ public class LayServicePlayableTest {
         game.getPlayers().get(0).getCards().add(0, playersCard);
 
 
-        String result = layService.lay(gameUuid, playerUuid, playersCard, 0);
+        String result = layService.lay(gameUuid, playerUuid, playersCard.toString(), 0);
 
         assertNotLaidCard(game, playersCard, result, turnState);
     }

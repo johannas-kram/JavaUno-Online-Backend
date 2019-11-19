@@ -42,7 +42,7 @@ public class LayServiceGeneralFailTest {
         game.getPlayers().get(0).addCard(card);
         game.setCurrentPlayerIndex(1);
 
-        String result = layService.lay(gameUuid, playerUuid, card, 0);
+        String result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
 
         assertNotLaid(game, card, result, "failure: it's not your turn.");
     }
@@ -57,7 +57,7 @@ public class LayServiceGeneralFailTest {
         game.setCurrentPlayerIndex(1);
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
 
-        String result = layService.lay(gameUuid, playerUuid, card, 0);
+        String result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
 
         assertNotLaid(game, card, result, "failure: game is in wrong lifecycle.");
     }
@@ -74,7 +74,28 @@ public class LayServiceGeneralFailTest {
         String result = "";
 
         try {
-            result = layService.lay(gameUuid, playerUuid, card, 0);
+            result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
+        } catch (Exception ex){
+            exception = ex;
+        }
+
+        assertNotLaid(game, wrongCard, result, "");
+        assertException(exception, "IllegalArgumentException", "The Player has no such card at this position.");
+    }
+
+    @Test
+    public void shouldFailCausedByIllegalCardString(){
+        String gameUuid = game.getUuid();
+        String playerUuid = game.getPlayers().get(0).getUuid();
+        Card card = game.getTopCard();
+        Card wrongCard = findWrongCard(card);
+        game.getPlayers().get(0).clearCards();
+        game.getPlayers().get(0).addCard(wrongCard);
+        Exception exception = new Exception("");
+        String result = "";
+
+        try {
+            result = layService.lay(gameUuid, playerUuid, "illegal card string", 0);
         } catch (Exception ex){
             exception = ex;
         }

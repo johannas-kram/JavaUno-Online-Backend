@@ -78,7 +78,7 @@ public class LayServiceStateTest {
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
 
-        String result = layService.lay(gameUuid, playerUuid, card, 0);
+        String result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
 
         LayServiceTestHelper.assertLaidCard(game, card, result);
     }
@@ -96,7 +96,7 @@ public class LayServiceStateTest {
         TurnState turnState = game.getTurnState();
 
         try {
-            result = layService.lay(gameUuid, playerUuid, card, 0);
+            result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
         } catch (Exception ex){
             exception = ex;
         }
