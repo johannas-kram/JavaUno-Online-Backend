@@ -97,6 +97,9 @@ public final class Card {
 
     @Override
     public boolean equals(Object o){
-        return this.toString().equals(o.toString());
+        if(o instanceof Card){
+            return this.toString().equals(o.toString());
+        }
+        return false;
     }
 }
