@@ -11,7 +11,7 @@ public class Deck {
         initStack();
     }
 
-    public static synchronized Stack<Card> getShuffled(){
+    public static Stack<Card> getShuffled(){
         Stack<Card> shuffled;
         boolean numberCard;
         do {
