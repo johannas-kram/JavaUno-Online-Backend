@@ -18,9 +18,15 @@ public final class Card {
         this.value = value;
     }
 
-    private Card(CardType cardType, int value){
+    private Card(CardType cardType, Color color){
         this.cardType = cardType;
-        this.value = value;
+        this.color = color.name();
+        this.value = 20;
+    }
+
+    private Card(CardType cardType){
+        this.cardType = cardType;
+        this.value = 50;
         this.color = "joker";
     }
 
@@ -34,19 +40,19 @@ public final class Card {
     }
 
     static Card createRetourCard(Color color){
-        return new Card(CardType.RETOUR, color, 20);
+        return new Card(CardType.RETOUR, color);
     }
 
     static Card createTake2Card(Color color){
-        return new Card(CardType.TAKE2, color, 20);
+        return new Card(CardType.TAKE2, color);
     }
 
     static Card createTake4Card(){
-        return new Card(CardType.TAKE4, 50);
+        return new Card(CardType.TAKE4);
     }
 
     static Card createJokerCard(){
-        return new Card(CardType.JOKER, 50);
+        return new Card(CardType.JOKER);
     }
 
     public String getColor() {
@@ -93,5 +99,13 @@ public final class Card {
             str += ":" + value;
         }
 	    return str;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Card){
+            return this.toString().equals(o.toString());
+        }
+        return false;
     }
 }
