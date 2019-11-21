@@ -46,19 +46,19 @@ public class Player {
 		return cards;
 	}
 
-	public synchronized void removeCard(Card card){
+	public void removeCard(Card card){
 	    cards.remove(card);
     }
 
-	public synchronized void removeCard(int index){
+	public void removeCard(int index){
 		cards.remove(index);
 	}
 
-    public synchronized void addCard(Card card){
+    public void addCard(Card card){
         cards.add(card);
     }
 
-    public synchronized void clearCards(){
+    public void clearCards(){
 	    cards.clear();
     }
 
