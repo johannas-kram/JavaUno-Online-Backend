@@ -34,37 +34,37 @@ public class Game{
 	}
 
 	@JsonIgnore
-	public synchronized Map<String, Player> getHumans(){
+	public Map<String, Player> getHumans(){
 		return humans;
 	}
 
-	public synchronized void putHuman(Player player){
+	public void putHuman(Player player){
 	    humans.put(player.getUuid(), player);
 	    addPlayer(player);
     }
 
-    public synchronized void removeHuman(Player player){
+    public void removeHuman(Player player){
         humans.remove(player.getUuid());
         removePlayer(player);
     }
 
     @JsonIgnore
-    public synchronized Map<String, Player> getBots(){
+    public Map<String, Player> getBots(){
         return bots;
     }
 
-    public synchronized void putBot(Player player){
+    public void putBot(Player player){
         bots.put(player.getBotUuid(), player);
         addPlayer(player);
     }
 
-    public synchronized void removeBot(Player player){
+    public void removeBot(Player player){
         bots.remove(player.getBotUuid());
         removePlayer(player);
     }
 
 	@JsonIgnore
-    public synchronized List<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 

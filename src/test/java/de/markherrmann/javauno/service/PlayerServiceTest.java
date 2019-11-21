@@ -28,7 +28,7 @@ public class PlayerServiceTest {
     @Before
     public void setup(){
         String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class PlayerServiceTest {
         }
 
         assertThat(game.getPlayers().size()).isEqualTo(1);
-        assertThat(UnoState.getGames().containsKey(game.getUuid())).isFalse();
+        assertThat(UnoState.containsGame(game.getUuid())).isFalse();
     }
 
     @Test

@@ -31,7 +31,7 @@ public class GameStateServiceTest {
     @Before
     public void setup(){
         String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
     }
 
     @Test

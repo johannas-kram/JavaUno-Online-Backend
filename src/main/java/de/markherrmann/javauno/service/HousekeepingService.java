@@ -18,9 +18,8 @@ public class HousekeepingService {
     }
 
     void removeOldGames(){
-        Map<String, Game> games = UnoState.getGames();
         List<String> uuidsToRemove = new ArrayList<>();
-        for(Map.Entry<String, Game> gameEntry : games.entrySet()){
+        for(Map.Entry<String, Game> gameEntry : UnoState.getGamesEntrySet()){
             long lastAction = gameEntry.getValue().getLastAction();
             long now = System.currentTimeMillis();
             if((now - lastAction) > MAX_DURATION_WITHOUT_ACTION){
@@ -28,7 +27,7 @@ public class HousekeepingService {
             }
         }
         for(String uuidToRemove : uuidsToRemove){
-            games.remove(uuidToRemove);
+            UnoState.removeGame(uuidToRemove);
         }
     }
 

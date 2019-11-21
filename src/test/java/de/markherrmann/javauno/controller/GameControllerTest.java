@@ -33,7 +33,7 @@ public class GameControllerTest {
         this.mockMvc.perform(post("/game/create"))
                 .andExpect(status().isOk());
 
-        assertThat(UnoState.getGames()).isNotEmpty();
+        assertThat(UnoState.getGamesEntrySet()).isNotEmpty();
     }
 
     @Test
@@ -87,7 +87,7 @@ public class GameControllerTest {
 
     private Game createGame(){
         String gameUuid = gameController.createGame();
-        return UnoState.getGames().get(gameUuid);
+        return UnoState.getGame(gameUuid);
     }
 
     private void addPlayer(Game game){
