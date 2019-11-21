@@ -74,10 +74,7 @@ public class GameService {
     }
 
     Game getGame(String gameUuid) throws IllegalArgumentException {
-        if(!UnoState.getGames().containsKey(gameUuid)){
-            throw new IllegalArgumentException("There is no such game.");
-        }
-        return UnoState.getGames().get(gameUuid);
+        return UnoState.getGame(gameUuid);
     }
 
     boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){

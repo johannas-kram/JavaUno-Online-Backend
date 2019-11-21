@@ -29,7 +29,7 @@ public class GameServiceTest {
     @Before
     public void setup(){
         String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class GameServiceTest {
         String uuid = gameService.createGame();
 
         assertThat(uuid).isNotNull();
-        assertThat(UnoState.getGames()).containsKey(uuid);
+        assertThat(UnoState.containsGame(uuid)).isTrue();
     }
 
     @Test

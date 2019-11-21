@@ -40,7 +40,7 @@ public class ActionControllerLayTest {
     @Before
     public void setup(){
         String uuid = gameController.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
     }

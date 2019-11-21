@@ -11,7 +11,7 @@ class LayServiceTestHelper {
 
     static Game prepareGame(GameService gameService, PlayerService playerService){
         String uuid = gameService.createGame();
-        Game game = UnoState.getGames().get(uuid);
+        Game game = UnoState.getGame(uuid);
         playerService.addPlayer(game.getUuid(), "Max", false);
         playerService.addPlayer(game.getUuid(), "Maria", false);
         playerService.addPlayer(game.getUuid(), "Jana", false);

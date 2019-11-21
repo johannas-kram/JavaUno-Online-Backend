@@ -29,7 +29,7 @@ public class HousekeepingServiceTest {
     @Before
     public void setup(){
         String uuid = gameService.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class HousekeepingServiceTest {
 
         housekeepingService.removeGameIfNoHumans(game);
 
-        assertThat(UnoState.getGames().containsKey(game.getUuid())).isFalse();
+        assertThat(UnoState.containsGame(game.getUuid())).isFalse();
     }
 
     @Test
@@ -58,7 +58,7 @@ public class HousekeepingServiceTest {
 
         housekeepingService.removeOldGames();
 
-        assertThat(UnoState.getGames().containsKey(game.getUuid())).isFalse();
+        assertThat(UnoState.containsGame(game.getUuid())).isFalse();
     }
 
 

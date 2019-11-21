@@ -37,7 +37,7 @@ public class GameStateControllerTest {
     @Before
     public void setup(){
         String uuid = gameController.createGame();
-        game = UnoState.getGames().get(uuid);
+        game = UnoState.getGame(uuid);
         addPlayer();
     }
 
