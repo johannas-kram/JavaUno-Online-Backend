@@ -30,12 +30,28 @@ public class LayService {
 
     public String lay(String gameUuid, String playerUuid, String cardString, int cardIndex) throws IllegalArgumentException, IllegalStateException {
         Game game = gameService.getGame(gameUuid);
-        Player player = playerService.getPlayer(playerUuid, game);
-        Card card = giveCardByString(cardString);
+        synchronized (game){
+            Player player = playerService.getPlayer(playerUuid, game);
+            Card card = giveCardByString(cardString);
+            String preChecksResult = preChecks(game, player, card, cardIndex);
+            if(!"ok".equals(preChecksResult)){
+                return preChecksResult;
+            }
+            layCard(game, player, card, cardIndex);
+            housekeepingService.updateGameLastAction(game);
+        }
+        return "success";
+    }
+
+    private String preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException {
         if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
             return "failure: game is in wrong lifecycle.";
         }
-        turnService.failIfInvalidTurnState(game, TurnState.TAKE_DUTIES_OR_CUMULATE, TurnState.LAY_OR_TAKE, TurnState.LAY_TAKEN);
+        turnService.failIfInvalidTurnState(
+                game,
+                TurnState.TAKE_DUTIES_OR_CUMULATE,
+                TurnState.LAY_OR_TAKE,
+                TurnState.LAY_TAKEN);
         if(!turnService.isPlayersTurn(game, player)){
             return "failure: it's not your turn.";
         }
@@ -43,9 +59,7 @@ public class LayService {
         if(!isPlayableCard(game, player, card, cardIndex)){
             return "failure: card does not match.";
         }
-        layCard(game, player, card, cardIndex);
-        housekeepingService.updateGameLastAction(game);
-        return "success";
+        return "ok";
     }
 
     private void layCard(Game game, Player player, Card card, int cardIndex){

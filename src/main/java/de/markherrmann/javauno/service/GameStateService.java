@@ -22,8 +22,10 @@ public class GameStateService {
 
     public GameState get(String gameUuid, String playerUuid) throws IllegalArgumentException {
         Game game = gameService.getGame(gameUuid);
-        Player player = playerService.getPlayer(playerUuid, game);
-        boolean playersTurn = turnService.isPlayersTurn(game, player);
-        return new GameState(game, player, playersTurn);
+        synchronized (game) {
+            Player player = playerService.getPlayer(playerUuid, game);
+            boolean playersTurn = turnService.isPlayersTurn(game, player);
+            return new GameState(game, player, playersTurn);
+        }
     }
 }

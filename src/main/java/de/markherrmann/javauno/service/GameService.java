@@ -29,19 +29,21 @@ public class GameService {
 
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
-        if(isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
+        synchronized (game) {
+            if (isGameInLifecycle(game, GameLifecycle.RUNNING)) {
+                throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
+            }
+            if (game.getPlayers().size() < 2) {
+                throw new IllegalStateException("There are not enough players in the game.");
+            }
+            resetGame(game);
+            Stack<Card> deck = Deck.getShuffled();
+            game.getLayStack().push(deck.pop());
+            giveCards(game.getPlayers(), deck);
+            game.getTakeStack().addAll(deck);
+            game.setGameLifecycle(GameLifecycle.RUNNING);
+            housekeepingService.updateGameLastAction(game);
         }
-        if(game.getPlayers().size() < 2){
-            throw new IllegalStateException("There are not enough players in the game.");
-        }
-        resetGame(game);
-        Stack<Card> deck = Deck.getShuffled();
-        game.getLayStack().push(deck.pop());
-        giveCards(game.getPlayers(), deck);
-        game.getTakeStack().addAll(deck);
-        game.setGameLifecycle(GameLifecycle.RUNNING);
-        housekeepingService.updateGameLastAction(game);
     }
 
     private void resetGame(Game game){
