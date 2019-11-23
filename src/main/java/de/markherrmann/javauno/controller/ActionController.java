@@ -1,7 +1,7 @@
 package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.controller.request.LayCardRequest;
-import de.markherrmann.javauno.service.LayService;
+import de.markherrmann.javauno.controller.request.PutCardRequest;
+import de.markherrmann.javauno.service.PutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/action")
 public class ActionController {
 
-    private final LayService layService;
+    private final PutService putService;
 
     @Autowired
-    public ActionController(LayService layService) {
-        this.layService = layService;
+    public ActionController(PutService putService) {
+        this.putService = putService;
     }
 
-    @PostMapping(value = "/lay")
-    public @ResponseBody String layCard(@RequestBody LayCardRequest layCardRequest){
+    @PostMapping(value = "/put")
+    public @ResponseBody String putCard(@RequestBody PutCardRequest putCardRequest){
         try {
-            return layService.lay(layCardRequest.getGameUuid(), layCardRequest.getPlayerUuid(), layCardRequest.getCardString(), layCardRequest.getCardIndex());
+            return putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCardString(), putCardRequest.getCardIndex());
         } catch(Exception ex){
             return "failure: " + ex;
         }

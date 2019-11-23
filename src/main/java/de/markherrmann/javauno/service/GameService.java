@@ -38,9 +38,9 @@ public class GameService {
             }
             resetGame(game);
             Stack<Card> deck = Deck.getShuffled();
-            game.getLayStack().push(deck.pop());
+            game.getDiscardPile().push(deck.pop());
             giveCards(game.getPlayers(), deck);
-            game.getTakeStack().addAll(deck);
+            game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
             housekeepingService.updateGameLastAction(game);
         }
@@ -50,19 +50,18 @@ public class GameService {
         for(Player player : game.getPlayers()){
             player.clearCards();
         }
-        game.getTakeStack().clear();
-        game.getLayStack().clear();
+        game.getDrawPile().clear();
+        game.getDiscardPile().clear();
         game.setDesiredColor(null);
         resetPlayers(game);
         if(game.isReversed()){
             game.toggleReversed();
         }
-        game.setTurnState(TurnState.LAY_OR_TAKE);
+        game.setTurnState(TurnState.PUT_OR_DRAW);
     }
 
     private void resetPlayers(Game game){
         for(Player player : game.getPlayers()){
-            player.setTake(0);
             player.setUnoSaid(false);
         }
     }

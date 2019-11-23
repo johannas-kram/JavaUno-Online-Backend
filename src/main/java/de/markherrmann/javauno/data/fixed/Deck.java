@@ -49,9 +49,9 @@ public class Deck {
 
     private static void pushActionCards(){
         for(Color color : Color.values()) {
-            pushRetourCards(color);
+            pushReverseCards(color);
             pushSkipCards(color);
-            pushTake2Cards(color);
+            pushDraw2Cards(color);
         }
     }
 
@@ -62,25 +62,25 @@ public class Deck {
         }
     }
 
-    private static void pushRetourCards(Color color){
+    private static void pushReverseCards(Color color){
         for (int i = 0; i < 2; i++){
-            Card retourCard = Card.createRetourCard(color);
-            cards.push(retourCard);
+            Card reverseCard = Card.createReverseCard(color);
+            cards.push(reverseCard);
         }
     }
 
-    private static void pushTake2Cards(Color color){
+    private static void pushDraw2Cards(Color color){
         for (int i = 0; i < 2; i++){
-            Card take2Card = Card.createTake2Card(color);
-            cards.push(take2Card);
+            Card draw2Card = Card.createDraw2Card(color);
+            cards.push(draw2Card);
         }
     }
 
     private static void pushJokerCards(){
         for(int i = 0; i < 4; i++){
-            Card take4Card = Card.createTake4Card();
+            Card draw4Card = Card.createDraw4Card();
             Card jokerCard = Card.createJokerCard();
-            cards.push(take4Card);
+            cards.push(draw4Card);
             cards.push(jokerCard);
         }
     }

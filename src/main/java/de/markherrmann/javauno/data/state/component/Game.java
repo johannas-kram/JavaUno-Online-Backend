@@ -2,7 +2,6 @@ package de.markherrmann.javauno.data.state.component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.fixed.Color;
 
 import java.util.*;
 
@@ -12,8 +11,8 @@ public class Game{
 	private Map<String, Player> humans = new HashMap<>();
 	private Map<String, Player> bots = new HashMap<>();
 	private List<Player> players = new ArrayList<>();
-	private Stack<Card> layStack = new Stack<>();
-	private Stack<Card> takeStack = new Stack<>();
+	private Stack<Card> discardPile = new Stack<>();
+	private Stack<Card> drawPile = new Stack<>();
 	private boolean reversed;
 	private String desiredColor;
 	private int currentPlayerIndex;
@@ -21,7 +20,7 @@ public class Game{
 	private Card topCard;
 	private long lastAction;
     private TurnState turnState;
-    private int take;
+    private int drawDuties;
     private boolean skip;
 
 	public Game(){
@@ -69,13 +68,13 @@ public class Game{
     }
 
 	@JsonIgnore
-    public Stack<Card> getLayStack(){
-		return layStack;
+    public Stack<Card> getDiscardPile(){
+		return discardPile;
 	}
 
 	@JsonIgnore
-	public Stack<Card> getTakeStack(){
-		return takeStack;
+	public Stack<Card> getDrawPile(){
+		return drawPile;
 	}
 
     public boolean isReversed() {
@@ -120,10 +119,10 @@ public class Game{
     }
 
 	public Card getTopCard(){
-		if(layStack.isEmpty()){
+		if(discardPile.isEmpty()){
 			return null;
 		}
-		return layStack.peek();
+		return discardPile.peek();
 	}
 
 	private void addPlayer(Player player){
@@ -144,12 +143,12 @@ public class Game{
         this.turnState = turnState;
     }
 
-	public int getTake() {
-		return take;
+	public int getDrawDuties() {
+		return drawDuties;
 	}
 
-	public void setTake(int take) {
-		this.take = take;
+	public void setDrawDuties(int drawDuties) {
+		this.drawDuties = drawDuties;
 	}
 
 	public boolean isSkip() {

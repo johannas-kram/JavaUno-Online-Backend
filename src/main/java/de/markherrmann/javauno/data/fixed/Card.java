@@ -7,8 +7,8 @@ public final class Card {
     private int value;
     private boolean numberCard;
     private boolean jokerCard;
-    private boolean takeCard;
-    private int take;
+    private boolean drawCard;
+    private int drawValue;
 
     private Card(){}
 
@@ -39,16 +39,16 @@ public final class Card {
         return new Card(CardType.SKIP, color, 20);
     }
 
-    static Card createRetourCard(Color color){
-        return new Card(CardType.RETOUR, color);
+    static Card createReverseCard(Color color){
+        return new Card(CardType.REVERSE, color);
     }
 
-    static Card createTake2Card(Color color){
-        return new Card(CardType.TAKE2, color);
+    static Card createDraw2Card(Color color){
+        return new Card(CardType.DRAW_2, color);
     }
 
-    static Card createTake4Card(){
-        return new Card(CardType.TAKE4);
+    static Card createDraw4Card(){
+        return new Card(CardType.DRAW_4);
     }
 
     static Card createJokerCard(){
@@ -72,18 +72,18 @@ public final class Card {
     }
 
     public boolean isJokerCard() {
-        return CardType.JOKER.equals(cardType) || CardType.TAKE4.equals(cardType);
+        return CardType.JOKER.equals(cardType) || CardType.DRAW_4.equals(cardType);
     }
 
-    public boolean isTakeCard() {
-        return CardType.TAKE2.equals(cardType) || CardType.TAKE4.equals(cardType);
+    public boolean isDrawCard() {
+        return CardType.DRAW_2.equals(cardType) || CardType.DRAW_4.equals(cardType);
     }
 
-    public int getTake() {
-        if(CardType.TAKE2.equals(cardType)){
+    public int getDrawValue() {
+        if(CardType.DRAW_2.equals(cardType)){
             return 2;
         }
-        if(CardType.TAKE4.equals(cardType)){
+        if(CardType.DRAW_4.equals(cardType)){
             return 4;
         }
         return 0;

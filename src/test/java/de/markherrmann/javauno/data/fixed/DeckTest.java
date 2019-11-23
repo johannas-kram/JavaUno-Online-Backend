@@ -61,15 +61,15 @@ public class DeckTest {
     private void addNamesJoker(List<String> names){
         for(int i = 0; i < 4; i++){
             names.add("JOKER");
-            names.add("TAKE4");
+            names.add("DRAW_4");
         }
     }
 
     private void addNamesAction(List<String> names){
         for(Color color : Color.values()){
             addNamesSkip(names, color);
-            addNamesRetour(names, color);
-            addNamesTake(names, color);
+            addNamesReverse(names, color);
+            addNamesDraw(names, color);
         }
     }
 
@@ -78,13 +78,13 @@ public class DeckTest {
         names.add("SKIP:"+color);
     }
 
-    private void addNamesRetour(List<String> names, Color color){
-        names.add("RETOUR:"+color);
-        names.add("RETOUR:"+color);
+    private void addNamesReverse(List<String> names, Color color){
+        names.add("REVERSE:"+color);
+        names.add("REVERSE:"+color);
     }
 
-    private void addNamesTake(List<String> names, Color color){
-        names.add("TAKE2:"+color);
-        names.add("TAKE2:"+color);
+    private void addNamesDraw(List<String> names, Color color){
+        names.add("DRAW_2:"+color);
+        names.add("DRAW_2:"+color);
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Stack;
 
 @Service
-public class LayService {
+public class PutService {
 
     private final GameService gameService;
     private final PlayerService playerService;
@@ -21,14 +21,14 @@ public class LayService {
     private final HousekeepingService housekeepingService;
 
     @Autowired
-    public LayService(GameService gameService, PlayerService playerService, TurnService turnService, HousekeepingService housekeepingService){
+    public PutService(GameService gameService, PlayerService playerService, TurnService turnService, HousekeepingService housekeepingService){
         this.gameService = gameService;
         this.playerService = playerService;
         this.turnService = turnService;
         this.housekeepingService = housekeepingService;
     }
 
-    public String lay(String gameUuid, String playerUuid, String cardString, int cardIndex) throws IllegalArgumentException, IllegalStateException {
+    public String put(String gameUuid, String playerUuid, String cardString, int cardIndex) throws IllegalArgumentException, IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         synchronized (game){
             Player player = playerService.getPlayer(playerUuid, game);
@@ -37,7 +37,7 @@ public class LayService {
             if(!"ok".equals(preChecksResult)){
                 return preChecksResult;
             }
-            layCard(game, player, card, cardIndex);
+            putCard(game, player, card, cardIndex);
             housekeepingService.updateGameLastAction(game);
         }
         return "success";
@@ -49,9 +49,9 @@ public class LayService {
         }
         turnService.failIfInvalidTurnState(
                 game,
-                TurnState.TAKE_DUTIES_OR_CUMULATE,
-                TurnState.LAY_OR_TAKE,
-                TurnState.LAY_TAKEN);
+                TurnState.DRAW_DUTIES_OR_CUMULATIVE,
+                TurnState.PUT_OR_DRAW,
+                TurnState.PUT_DRAWN);
         if(!turnService.isPlayersTurn(game, player)){
             return "failure: it's not your turn.";
         }
@@ -62,24 +62,22 @@ public class LayService {
         return "ok";
     }
 
-    private void layCard(Game game, Player player, Card card, int cardIndex){
+    private void putCard(Game game, Player player, Card card, int cardIndex){
         player.removeCard(cardIndex);
-        game.getLayStack().push(card);
+        game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
     }
 
     private void setGameVars(Game game, Card card){
-        setGameTake(game, card);
+        setGameDraw(game, card);
         setGameSkip(game, card);
         setGameReversed(game, card);
     }
 
-    private void setGameTake(Game game, Card card){
-        if(card.isTakeCard()){
-            int take = game.getTake() + card.getTake();
-            game.setTake(take);
-        }
+    private void setGameDraw(Game game, Card card){
+        int draw = game.getDrawDuties() + card.getDrawValue();
+        game.setDrawDuties(draw);
     }
 
     private void setGameSkip(Game game, Card card){
@@ -89,7 +87,7 @@ public class LayService {
     }
 
     private void setGameReversed(Game game, Card card){
-        if(CardType.RETOUR.equals(card.getCardType())){
+        if(CardType.REVERSE.equals(card.getCardType())){
             game.toggleReversed();
         }
     }
@@ -103,10 +101,10 @@ public class LayService {
     }
 
     private boolean isPlayableCard(Game game, Player player, Card card, int cardIndex) {
-        if(TurnState.TAKE_DUTIES_OR_CUMULATE.equals(game.getTurnState()) && !isCumulative(game.getTopCard(), card)){
+        if(TurnState.DRAW_DUTIES_OR_CUMULATIVE.equals(game.getTurnState()) && !isCumulative(game.getTopCard(), card)){
             return false;
         }
-        if(TurnState.LAY_TAKEN.equals(game.getTurnState()) && !isLastCard(player, cardIndex)){
+        if(TurnState.PUT_DRAWN.equals(game.getTurnState()) && !isLastCard(player, cardIndex)){
             return false;
         }
         if(card.isJokerCard()){
@@ -116,7 +114,7 @@ public class LayService {
     }
 
     private boolean isCumulative(Card topCard, Card playersCard){
-        return topCard.getTake() == playersCard.getTake();
+        return topCard.getDrawValue() == playersCard.getDrawValue();
     }
 
     private boolean isLastCard(Player player, int index){
@@ -129,11 +127,11 @@ public class LayService {
             case NUMBER:
                 return playersCard.getValue() == topCard.getValue() || playersCard.getColor().equals(topCard.getColor());
             case SKIP:
-            case RETOUR:
-            case TAKE2:
+            case REVERSE:
+            case DRAW_2:
                 return playersCard.getCardType().equals(topCard.getCardType()) || playersCard.getColor().equals(topCard.getColor());
             case JOKER:
-            case TAKE4:
+            case DRAW_4:
                 return playersCard.getColor().equals(game.getDesiredColor());
         }
         return false;

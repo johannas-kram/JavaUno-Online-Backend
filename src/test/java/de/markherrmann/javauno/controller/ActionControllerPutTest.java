@@ -1,7 +1,7 @@
 package de.markherrmann.javauno.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.markherrmann.javauno.controller.request.LayCardRequest;
+import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerLayTest {
+public class ActionControllerPutTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,65 +46,65 @@ public class ActionControllerLayTest {
     }
 
     @Test
-    public void shouldLayCard() throws Exception {
+    public void shouldPutCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        int laidBefore = game.getLayStack().size();
-        LayCardRequest layCardRequest = buildValidRequest();
+        int putBefore = game.getDiscardPile().size();
+        PutCardRequest putCardRequest = buildValidRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/lay")
+        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
                 .contentType("application/json")
-                .content(asJsonString(layCardRequest)))
+                .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
-        int laidNow = game.getLayStack().size();
+        int putNow = game.getDiscardPile().size();
 
-        assertThat(laidNow-laidBefore).isEqualTo(1);
+        assertThat(putNow - putBefore).isEqualTo(1);
         assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("success");
     }
 
     @Test
     public void shouldFailCausedByInvalidCard() throws Exception {
         String expectedMessage = buildExpectedMessage("java.lang.IllegalArgumentException", "The Player has no such card at this position.");
-        shouldFail("invalid", 0, TurnState.LAY_OR_TAKE, expectedMessage);
+        shouldFail("invalid", 0, TurnState.PUT_OR_DRAW, expectedMessage);
     }
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
         String expectedMessage = buildExpectedMessage("java.lang.IllegalStateException", "Turn is in wrong state for this action.");
-        shouldFail(game.getTopCard().toString(), 0, TurnState.TAKE_DUTIES, expectedMessage);
+        shouldFail(game.getTopCard().toString(), 0, TurnState.DRAW_DUTIES, expectedMessage);
     }
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
-        shouldFail(game.getTopCard().toString(), 1, TurnState.LAY_OR_TAKE, "failure: it's not your turn.");
+        shouldFail(game.getTopCard().toString(), 1, TurnState.PUT_OR_DRAW, "failure: it's not your turn.");
     }
 
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        shouldFail(game.getTopCard().toString(), 0, TurnState.LAY_TAKEN, "failure: card does not match.");
+        shouldFail(game.getTopCard().toString(), 0, TurnState.PUT_DRAWN, "failure: card does not match.");
     }
 
     private void shouldFail(String cardString, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        int laidBefore = game.getLayStack().size();
-        LayCardRequest layCardRequest = buildValidRequest();
-        layCardRequest.setCardString(cardString);
+        int putBefore = game.getDiscardPile().size();
+        PutCardRequest putCardRequest = buildValidRequest();
+        putCardRequest.setCardString(cardString);
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/lay")
+        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
                 .contentType("application/json")
-                .content(asJsonString(layCardRequest)))
+                .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
-        int laidNow = game.getLayStack().size();
+        int putNow = game.getDiscardPile().size();
 
-        assertFailure(mvcResult, expectedMessage, laidBefore, laidNow);
+        assertFailure(mvcResult, expectedMessage, putBefore, putNow);
     }
 
-    private void assertFailure(MvcResult mvcResult, String expectedMessage, int laidBefore, int laidNow) throws Exception {
-        assertThat(laidNow-laidBefore).isEqualTo(0);
+    private void assertFailure(MvcResult mvcResult, String expectedMessage, int putBefore, int putNow) throws Exception {
+        assertThat(putNow - putBefore).isEqualTo(0);
         assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(expectedMessage);
     }
 
@@ -120,13 +120,13 @@ public class ActionControllerLayTest {
         }
     }
 
-    private LayCardRequest buildValidRequest(){
-        LayCardRequest layCardRequest = new LayCardRequest();
-        layCardRequest.setGameUuid(game.getUuid());
-        layCardRequest.setPlayerUuid(game.getPlayers().get(0).getUuid());
-        layCardRequest.setCardString(game.getTopCard().toString());
-        layCardRequest.setCardIndex(7);
-        return layCardRequest;
+    private PutCardRequest buildValidRequest(){
+        PutCardRequest putCardRequest = new PutCardRequest();
+        putCardRequest.setGameUuid(game.getUuid());
+        putCardRequest.setPlayerUuid(game.getPlayers().get(0).getUuid());
+        putCardRequest.setCardString(game.getTopCard().toString());
+        putCardRequest.setCardIndex(7);
+        return putCardRequest;
     }
 
     private void addPlayers(){

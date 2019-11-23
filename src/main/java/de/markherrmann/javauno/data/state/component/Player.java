@@ -16,7 +16,6 @@ public class Player {
 	private int cardCount;
 	private boolean bot;
 	private boolean unoSaid;
-	private int take;
 
 	public Player(){
 
@@ -76,14 +75,6 @@ public class Player {
 
     public void setUnoSaid(boolean unoSaid) {
         this.unoSaid = unoSaid;
-    }
-
-    public int getTake() {
-        return take;
-    }
-
-    public void setTake(int take) {
-        this.take = take;
     }
 
 	public int getCardCount(){

@@ -7,7 +7,7 @@ import de.markherrmann.javauno.data.state.component.TurnState;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LayServiceTestHelper {
+class PutServiceTestHelper {
 
     static Game prepareGame(GameService gameService, PlayerService playerService){
         String uuid = gameService.createGame();
@@ -20,7 +20,7 @@ class LayServiceTestHelper {
         return game;
     }
 
-    static void assertLaidCard(Game game, Card card, String result){
+    static void assertPutCard(Game game, Card card, String result){
         assertThat(result).isEqualTo("success");
         assertThat(game.getTopCard()).isEqualTo(card);
         assertThat(game.getPlayers().get(0).getCards()).isEmpty();
