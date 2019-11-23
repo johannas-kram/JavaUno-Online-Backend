@@ -71,7 +71,7 @@ public class DrawService {
     }
 
     private boolean isDrawDutyLeft(Game game){
-        int drawDuties = game.getDrawDuties()-1;
+        int drawDuties = game.getDrawDuties();
         return drawDuties > 0;
     }
 
