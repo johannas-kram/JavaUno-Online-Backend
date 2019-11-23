@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/player")
 public class PlayerController {
 
+    private final PlayerService playerService;
+
     @Autowired
-    private PlayerService playerService;
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
 
     @PostMapping(value="/add")
     public @ResponseBody SetPlayerResponse addPlayer(@RequestBody AddPlayerRequest addPlayerRequest){

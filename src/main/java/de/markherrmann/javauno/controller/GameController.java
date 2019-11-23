@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/game")
 public class GameController {
 
+    private final GameService gameService;
+
     @Autowired
-    private GameService gameService;
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
+    }
 
     @PostMapping(value = "/create")
     public @ResponseBody String createGame(){

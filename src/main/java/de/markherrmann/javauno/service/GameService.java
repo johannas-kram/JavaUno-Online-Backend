@@ -16,8 +16,12 @@ import java.util.Stack;
 @Service
 public class GameService {
 
+    private final HousekeepingService housekeepingService;
+
     @Autowired
-    private HousekeepingService housekeepingService;
+    public GameService(HousekeepingService housekeepingService) {
+        this.housekeepingService = housekeepingService;
+    }
 
     public String createGame(){
         housekeepingService.removeOldGames();
