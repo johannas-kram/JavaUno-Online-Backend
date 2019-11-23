@@ -7,6 +7,8 @@ public class DrawnCardResponse {
     private String message;
     private Card card;
 
+    private DrawnCardResponse(){}
+
     public DrawnCardResponse(Card card) {
         this.success = true;
         this.message = "success";
