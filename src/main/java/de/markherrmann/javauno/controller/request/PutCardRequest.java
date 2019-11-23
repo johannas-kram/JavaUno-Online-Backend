@@ -1,8 +1,6 @@
 package de.markherrmann.javauno.controller.request;
 
-import de.markherrmann.javauno.data.fixed.Card;
-
-public class LayCardRequest {
+public class PutCardRequest {
 
     private String gameUuid;
     private String playerUuid;

@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LayServiceStateTest {
+public class PutServiceStateTest {
 
     @Autowired
-    private LayService layService;
+    private PutService putService;
 
     @Autowired
     private GameService gameService;
@@ -32,30 +32,30 @@ public class LayServiceStateTest {
 
     @Before
     public void setup(){
-        game = LayServiceTestHelper.prepareGame(gameService, playerService);
+        game = PutServiceTestHelper.prepareGame(gameService, playerService);
     }
 
     @Test
-    public void shouldLayCardInLayOrTakeState(){
-        shouldLayCard();
+    public void shouldPutCardInPutOrDrawState(){
+        shouldPutCard();
     }
 
     @Test
-    public void shouldLayCardInLayTakenState(){
-        game.setTurnState(TurnState.LAY_TAKEN);
-        shouldLayCard();
+    public void shouldPutCardInPutDrawnState(){
+        game.setTurnState(TurnState.PUT_DRAWN);
+        shouldPutCard();
     }
 
     @Test
-    public void shouldLayCardInTakeDutiesOrCumulateState(){
-        game.setTurnState(TurnState.TAKE_DUTIES_OR_CUMULATE);
-        game.getLayStack().push(findTake2Card());
-        shouldLayCard();
+    public void shouldPutCardInDrawDutiesOrCumulativeState(){
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+        game.getDiscardPile().push(findDraw2Card());
+        shouldPutCard();
     }
 
     @Test
-    public void shouldFailCausedByInvalidStateTakeDuties(){
-        game.setTurnState(TurnState.TAKE_DUTIES);
+    public void shouldFailCausedByInvalidStateDrawDuties(){
+        game.setTurnState(TurnState.DRAW_DUTIES);
         shouldFailCausedByInvalidState();
     }
 
@@ -71,16 +71,16 @@ public class LayServiceStateTest {
         shouldFailCausedByInvalidState();
     }
 
-    private void shouldLayCard(){
+    private void shouldPutCard(){
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Card card = game.getTopCard();
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
 
-        String result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
+        String result = putService.put(gameUuid, playerUuid, card.toString(), 0);
 
-        LayServiceTestHelper.assertLaidCard(game, card, result);
+        PutServiceTestHelper.assertPutCard(game, card, result);
     }
 
 
@@ -96,24 +96,18 @@ public class LayServiceStateTest {
         TurnState turnState = game.getTurnState();
 
         try {
-            result = layService.lay(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotLaid(game, card, result, exception, "IllegalStateException", "Turn is in wrong state for this action.", turnState);
+        assertNotPut(game, card, result, exception, "IllegalStateException", "Turn is in wrong state for this action.", turnState);
     }
 
-    private void assertLaid(Game game, Card card, String result){
-        LayServiceTestHelper.assertLaidCard(game, card, result);
-        game.getLayStack().pop();
-        assertThat(game.getTopCard()).isEqualTo(card);
-    }
-
-    private void assertNotLaid(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){
+    private void assertNotPut(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){
         assertThat(result).isEqualTo("");
-        game.getLayStack().pop();
-        assertThat(game.getLayStack()).isEmpty();
+        game.getDiscardPile().pop();
+        assertThat(game.getDiscardPile()).isEmpty();
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();
         assertThat(game.getPlayers().get(0).getCards().get(0)).isEqualTo(card);
         assertThat(game.getTurnState()).isEqualTo(turnState);
@@ -125,10 +119,10 @@ public class LayServiceStateTest {
         assertThat(exception.getMessage()).isEqualTo(message);
     }
 
-    private Card findTake2Card(){
+    private Card findDraw2Card(){
         Stack<Card> cards = Deck.getShuffled();
         for(Card card : cards){
-            if(card.isTakeCard() && card.getTake() == 2){
+            if(card.getDrawValue() == 2){
                 return card;
             }
         }

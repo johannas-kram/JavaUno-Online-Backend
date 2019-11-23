@@ -62,7 +62,7 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalStateException.class);
-        assertThat(game.getTakeStack()).isEmpty();
+        assertThat(game.getDrawPile()).isEmpty();
     }
 
     @Test
@@ -76,7 +76,7 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalStateException.class);
-        assertThat(game.getTakeStack()).isEmpty();
+        assertThat(game.getDrawPile()).isEmpty();
     }
 
     @Test
@@ -92,15 +92,15 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
-        assertThat(game.getTakeStack()).isEmpty();
+        assertThat(game.getDrawPile()).isEmpty();
     }
 
     private void assertStartedGameState(){
         for(Player player : game.getPlayers()){
             assertThat(player.getCards().size()).isEqualTo(7);
         }
-        assertThat(game.getLayStack().size()).isEqualTo(1);
-        assertThat(game.getTakeStack().size()).isEqualTo(86);
+        assertThat(game.getDiscardPile().size()).isEqualTo(1);
+        assertThat(game.getDrawPile().size()).isEqualTo(86);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
     }
 
