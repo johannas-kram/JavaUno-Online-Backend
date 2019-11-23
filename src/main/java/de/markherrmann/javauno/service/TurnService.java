@@ -37,7 +37,7 @@ public class TurnService {
                 return;
             }
         }
-        throw new IllegalStateException("Turn is in wrong state for this action.");
+        throw new IllegalStateException("turn is in wrong state for this action.");
     }
 
     Game getGame(String gameUuid) throws IllegalArgumentException {

@@ -70,7 +70,7 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
-        String expectedMessage = buildExpectedMessage("java.lang.IllegalStateException", "Turn is in wrong state for this action.");
+        String expectedMessage = buildExpectedMessage("java.lang.IllegalStateException", "turn is in wrong state for this action.");
         shouldFail(game.getTopCard().toString(), 0, TurnState.DRAW_DUTIES, expectedMessage);
     }
 

@@ -102,7 +102,7 @@ public class PutServiceStateTest {
             exception = ex;
         }
 
-        assertNotPut(game, card, result, exception, "IllegalStateException", "Turn is in wrong state for this action.", turnState);
+        assertNotPut(game, card, result, exception, "IllegalStateException", "turn is in wrong state for this action.", turnState);
     }
 
     private void assertNotPut(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){
