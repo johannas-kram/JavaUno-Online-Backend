@@ -41,10 +41,17 @@ public class PutServiceGeneralFailTest {
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
         game.setCurrentPlayerIndex(1);
+        Exception exception = new Exception("");
+        String result = "";
 
-        String result = putService.put(gameUuid, playerUuid, card.toString(), 0);
+        try {
+            putService.put(gameUuid, playerUuid, card.toString(), 0);
+        } catch (Exception ex){
+            exception = ex;
+        }
 
-        assertNotPut(game, card, result, "failure: it's not your turn.");
+        assertNotPut(game, card, result, "");
+        assertException(exception, "IllegalStateException", "it's not your turn.");
     }
 
     @Test
@@ -56,10 +63,17 @@ public class PutServiceGeneralFailTest {
         game.getPlayers().get(0).addCard(card);
         game.setCurrentPlayerIndex(1);
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+        Exception exception = new Exception("");
+        String result = "";
 
-        String result = putService.put(gameUuid, playerUuid, card.toString(), 0);
-
-        assertNotPut(game, card, result, "failure: game is in wrong lifecycle.");
+        try {
+            putService.put(gameUuid, playerUuid, card.toString(), 0);
+        } catch (Exception ex){
+            exception = ex;
+        }
+        
+        assertNotPut(game, card, result, "");
+        assertException(exception, "IllegalStateException", "game is in wrong lifecycle.");
     }
 
     @Test

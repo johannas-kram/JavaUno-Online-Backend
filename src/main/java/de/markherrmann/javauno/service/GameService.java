@@ -27,7 +27,7 @@ public class GameService {
         housekeepingService.removeOldGames();
         Game game = new Game();
         UnoState.putGame(game);
-        housekeepingService.updateGameLastAction(game);
+        housekeepingService.updateLastAction(game);
         return game.getUuid();
     }
 
@@ -46,7 +46,7 @@ public class GameService {
             giveCards(game.getPlayers(), deck);
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
-            housekeepingService.updateGameLastAction(game);
+            housekeepingService.updateLastAction(game);
         }
     }
 

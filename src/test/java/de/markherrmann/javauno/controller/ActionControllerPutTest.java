@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -51,7 +52,7 @@ public class ActionControllerPutTest {
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(put("/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
@@ -76,7 +77,8 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
-        shouldFail(game.getTopCard().toString(), 1, TurnState.PUT_OR_DRAW, "failure: it's not your turn.");
+        shouldFail(game.getTopCard().toString(), 1, TurnState.PUT_OR_DRAW,
+                "failure: java.lang.IllegalStateException: it's not your turn.");
     }
 
     @Test
@@ -93,7 +95,7 @@ public class ActionControllerPutTest {
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(put("/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
