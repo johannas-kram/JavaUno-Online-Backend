@@ -25,12 +25,13 @@ public class DrawService {
         synchronized (game){
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player);
-            return drawCard(game);
+            return drawCard(game, player);
         }
     }
 
-    private Card drawCard(Game game){
+    private Card drawCard(Game game, Player player){
         Card card = game.getDrawPile().pop();
+        player.addCard(card);
         maybeRearrangePiles(game);
         setTurnState(game);
         turnService.updateLastAction(game);
