@@ -71,7 +71,7 @@ public class PutServiceGeneralFailTest {
         } catch (Exception ex){
             exception = ex;
         }
-        
+
         assertNotPut(game, card, result, "");
         assertException(exception, "IllegalStateException", "game is in wrong lifecycle.");
     }

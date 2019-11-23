@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -52,7 +51,7 @@ public class ActionControllerPutTest {
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(put("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
@@ -95,7 +94,7 @@ public class ActionControllerPutTest {
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
-        MvcResult mvcResult = this.mockMvc.perform(put("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
