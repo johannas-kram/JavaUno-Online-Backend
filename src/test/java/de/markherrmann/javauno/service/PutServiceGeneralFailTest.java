@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -30,7 +31,7 @@ public class PutServiceGeneralFailTest {
 
     @Before
     public void setup(){
-        game = PutServiceTestHelper.prepareGame(gameService, playerService);
+        game = TestHelper.prepareAndStartGame(gameService, playerService);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class PutServiceGeneralFailTest {
         String result = "";
 
         try {
-            putService.put(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
         } catch (Exception ex){
             exception = ex;
         }
@@ -67,7 +68,7 @@ public class PutServiceGeneralFailTest {
         String result = "";
 
         try {
-            putService.put(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
         } catch (Exception ex){
             exception = ex;
         }
