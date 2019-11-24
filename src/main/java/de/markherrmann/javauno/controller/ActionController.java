@@ -24,7 +24,7 @@ public class ActionController {
     @PostMapping(value = "/put")
     public @ResponseBody String putCard(@RequestBody PutCardRequest putCardRequest){
         try {
-            return putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCardString(), putCardRequest.getCardIndex());
+            return putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
         } catch(Exception ex){
             return "failure: " + ex;
         }

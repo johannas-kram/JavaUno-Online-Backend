@@ -22,11 +22,10 @@ public class PutService {
         this.turnService = turnService;
     }
 
-    public String put(String gameUuid, String playerUuid, String cardString, int cardIndex) throws IllegalArgumentException, IllegalStateException {
+    public String put(String gameUuid, String playerUuid, Card card, int cardIndex) throws IllegalArgumentException, IllegalStateException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game){
             Player player = turnService.getPlayer(playerUuid, game);
-            Card card = giveCardByString(cardString);
             preChecks(game, player, card, cardIndex);
             if(!isPlayableCard(game, player, card, cardIndex)){
                 return "failure: card does not match.";
@@ -136,21 +135,6 @@ public class PutService {
         if(!foundCard.equals(card)){
             throw new IllegalArgumentException(message);
         }
-    }
-
-    private Card giveCardByString(String cardString) throws IllegalArgumentException {
-        Stack<Card> cards = Deck.getShuffled();
-        Card foundCard = null;
-        for(Card card : cards){
-            if(card.toString().equals(cardString)){
-                foundCard = card;
-                break;
-            }
-        }
-        if(foundCard == null){
-            throw new IllegalArgumentException("The Player has no such card at this position.");
-        }
-        return foundCard;
     }
 
 }

@@ -1,10 +1,12 @@
 package de.markherrmann.javauno.controller.request;
 
+import de.markherrmann.javauno.data.fixed.Card;
+
 public class PutCardRequest {
 
     private String gameUuid;
     private String playerUuid;
-    private String cardString;
+    private Card card;
     private int cardIndex;
 
     public String getGameUuid() {
@@ -23,12 +25,12 @@ public class PutCardRequest {
         this.playerUuid = playerUuid;
     }
 
-    public String getCardString() {
-        return cardString;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardString(String cardString) {
-        this.cardString = cardString;
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public int getCardIndex() {

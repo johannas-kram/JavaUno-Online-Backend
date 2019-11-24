@@ -177,7 +177,7 @@ public class PutServicePlayableTest {
         game.getDiscardPile().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
 
-        String result = putService.put(gameUuid, playerUuid, playersCard.toString(), 0);
+        String result = putService.put(gameUuid, playerUuid, playersCard, 0);
 
         TestHelper.assertPutCard(game, playersCard, result);
     }
@@ -190,7 +190,7 @@ public class PutServicePlayableTest {
         game.getPlayers().get(0).getCards().add(0, playersCard);
 
 
-        String result = putService.put(gameUuid, playerUuid, playersCard.toString(), 0);
+        String result = putService.put(gameUuid, playerUuid, playersCard, 0);
 
         assertNotPutCard(game, playersCard, result, turnState);
     }

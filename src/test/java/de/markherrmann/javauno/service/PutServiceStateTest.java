@@ -79,7 +79,7 @@ public class PutServiceStateTest {
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
 
-        String result = putService.put(gameUuid, playerUuid, card.toString(), 0);
+        String result = putService.put(gameUuid, playerUuid, card, 0);
 
         TestHelper.assertPutCard(game, card, result);
     }
@@ -97,7 +97,7 @@ public class PutServiceStateTest {
         TurnState turnState = game.getTurnState();
 
         try {
-            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }

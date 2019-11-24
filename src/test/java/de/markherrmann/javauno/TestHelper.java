@@ -33,4 +33,12 @@ public class TestHelper {
         }
     }
 
+    public static Card findWrongCard(Card rightCard, Game game){
+        Card card = rightCard;
+        while(card.equals(rightCard)){
+            card = game.getDrawPile().pop();
+        }
+        return card;
+    }
+
 }
