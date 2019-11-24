@@ -78,7 +78,7 @@ public class PlayerControllerTest {
                 .content(asJsonString(invalidRequest)))
                 .andExpect(status().isOk()).andReturn();
 
-        assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such game.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PlayerControllerTest {
                 .content(getAddPlayerRequestAsJson("player name", false)))
                 .andExpect(status().isOk()).andReturn();
 
-        assertFailure(mvcResult, "java.lang.IllegalStateException", "Game is started. Players can not be added anymore.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalStateException", "Game is started. Players can not be added anymore.");
     }
 
     @Test
@@ -126,7 +126,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such game.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such player in this game.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
     }
 
     @Test
@@ -150,7 +150,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "java.lang.IllegalArgumentException", "There is no such bot in this game.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such bot in this game.");
     }
 
     @Test
@@ -163,7 +163,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "java.lang.IllegalStateException", "Game is started. Players can not be removed anymore.");
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalStateException", "Game is started. Players can not be removed anymore.");
     }
 
     private void assertRemovePlayerResponse(MvcResult mvcResult) throws Exception {

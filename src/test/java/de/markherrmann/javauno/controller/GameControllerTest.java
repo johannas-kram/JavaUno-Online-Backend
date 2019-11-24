@@ -58,7 +58,7 @@ public class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: java.lang.IllegalArgumentException: There is no such game.");
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: There is no such game.");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: java.lang.IllegalStateException: Current round is not finished. New round can not be started yet.");
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalStateException: Current round is not finished. New round can not be started yet.");
     }
 
     @Test
@@ -82,7 +82,7 @@ public class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: java.lang.IllegalStateException: There are not enough players in the game.");
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalStateException: There are not enough players in the game.");
     }
 
     private Game createGame(){

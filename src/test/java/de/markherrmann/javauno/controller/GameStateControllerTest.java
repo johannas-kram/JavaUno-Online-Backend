@@ -103,7 +103,7 @@ public class GameStateControllerTest {
     private void assertFailure(MvcResult mvcResult, String message) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
         GameState gameState = jsonToObject(response);
-        String expectedMessage = "failure: java.lang.IllegalArgumentException: " + message;
+        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: " + message;
         assertThat(gameState.isSuccess()).isFalse();
         assertThat(gameState.getMessage()).isEqualTo(expectedMessage);
     }
