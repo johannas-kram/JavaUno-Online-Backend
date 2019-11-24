@@ -15,37 +15,31 @@ import java.util.Stack;
 @Service
 public class PutService {
 
-    private final GameService gameService;
-    private final PlayerService playerService;
     private final TurnService turnService;
-    private final HousekeepingService housekeepingService;
 
     @Autowired
-    public PutService(GameService gameService, PlayerService playerService, TurnService turnService, HousekeepingService housekeepingService){
-        this.gameService = gameService;
-        this.playerService = playerService;
+    public PutService(TurnService turnService){
         this.turnService = turnService;
-        this.housekeepingService = housekeepingService;
     }
 
     public String put(String gameUuid, String playerUuid, String cardString, int cardIndex) throws IllegalArgumentException, IllegalStateException {
-        Game game = gameService.getGame(gameUuid);
+        Game game = turnService.getGame(gameUuid);
         synchronized (game){
-            Player player = playerService.getPlayer(playerUuid, game);
+            Player player = turnService.getPlayer(playerUuid, game);
             Card card = giveCardByString(cardString);
-            String preChecksResult = preChecks(game, player, card, cardIndex);
-            if(!"ok".equals(preChecksResult)){
-                return preChecksResult;
+            preChecks(game, player, card, cardIndex);
+            if(!isPlayableCard(game, player, card, cardIndex)){
+                return "failure: card does not match.";
             }
             putCard(game, player, card, cardIndex);
-            housekeepingService.updateGameLastAction(game);
+            turnService.updateLastAction(game);
         }
         return "success";
     }
 
-    private String preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException {
-        if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            return "failure: game is in wrong lifecycle.";
+    private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException {
+        if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+            throw new IllegalStateException("game is in wrong lifecycle.");
         }
         turnService.failIfInvalidTurnState(
                 game,
@@ -53,13 +47,9 @@ public class PutService {
                 TurnState.PUT_OR_DRAW,
                 TurnState.PUT_DRAWN);
         if(!turnService.isPlayersTurn(game, player)){
-            return "failure: it's not your turn.";
+            throw new IllegalStateException("it's not your turn.");
         }
         failIfInvalidCard(card, player, cardIndex);
-        if(!isPlayableCard(game, player, card, cardIndex)){
-            return "failure: card does not match.";
-        }
-        return "ok";
     }
 
     private void putCard(Game game, Player player, Card card, int cardIndex){

@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
@@ -32,7 +33,7 @@ public class PutServicePlayableTest {
 
     @Before
     public void setup(){
-        game = PutServiceTestHelper.prepareGame(gameService, playerService);
+        game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
         game.getPlayers().get(0).clearCards();
     }
@@ -178,7 +179,7 @@ public class PutServicePlayableTest {
 
         String result = putService.put(gameUuid, playerUuid, playersCard.toString(), 0);
 
-        PutServiceTestHelper.assertPutCard(game, playersCard, result);
+        TestHelper.assertPutCard(game, playersCard, result);
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){

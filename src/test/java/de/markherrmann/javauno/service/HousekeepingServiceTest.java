@@ -37,7 +37,7 @@ public class HousekeepingServiceTest {
         long oldLastAction = game.getLastAction();
         Thread.sleep(3000);
 
-        housekeepingService.updateGameLastAction(game);
+        housekeepingService.updateLastAction(game);
         long newLastAction = game.getLastAction();
 
         assertThat(newLastAction).isGreaterThan(oldLastAction);

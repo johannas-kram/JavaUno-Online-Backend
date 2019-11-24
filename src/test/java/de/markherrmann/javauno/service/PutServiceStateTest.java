@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
@@ -32,7 +33,7 @@ public class PutServiceStateTest {
 
     @Before
     public void setup(){
-        game = PutServiceTestHelper.prepareGame(gameService, playerService);
+        game = TestHelper.prepareAndStartGame(gameService, playerService);
     }
 
     @Test
@@ -80,7 +81,7 @@ public class PutServiceStateTest {
 
         String result = putService.put(gameUuid, playerUuid, card.toString(), 0);
 
-        PutServiceTestHelper.assertPutCard(game, card, result);
+        TestHelper.assertPutCard(game, card, result);
     }
 
 
@@ -101,7 +102,7 @@ public class PutServiceStateTest {
             exception = ex;
         }
 
-        assertNotPut(game, card, result, exception, "IllegalStateException", "Turn is in wrong state for this action.", turnState);
+        assertNotPut(game, card, result, exception, "IllegalStateException", "turn is in wrong state for this action.", turnState);
     }
 
     private void assertNotPut(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){

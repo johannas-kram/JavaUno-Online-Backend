@@ -13,7 +13,7 @@ public class HousekeepingService {
 
     static final long MAX_DURATION_WITHOUT_ACTION = 30*60*1000; // 30 minutes
 
-    void updateGameLastAction(Game game){
+    void updateLastAction(Game game){
         game.setLastAction(System.currentTimeMillis());
     }
 

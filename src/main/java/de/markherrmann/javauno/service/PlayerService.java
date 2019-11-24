@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerService {
 
-    @Autowired
-    private GameService gameService;
+    private final GameService gameService;
+    private final HousekeepingService housekeepingService;
 
     @Autowired
-    private HousekeepingService housekeepingService;
+    public PlayerService(GameService gameService, HousekeepingService housekeepingService) {
+        this.gameService = gameService;
+        this.housekeepingService = housekeepingService;
+    }
 
     public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, IllegalStateException {
         Game game = gameService.getGame(gameUuid);

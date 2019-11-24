@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/gameState")
 public class GameStateController {
 
+    private final GameStateService gameStateService;
+
     @Autowired
-    private GameStateService gameStateService;
+    public GameStateController(GameStateService gameStateService) {
+        this.gameStateService = gameStateService;
+    }
 
     @GetMapping(value = "/get/{gameUuid}/{playerUuid}")
     public @ResponseBody GameState getGameState(@PathVariable String gameUuid, @PathVariable String playerUuid){
