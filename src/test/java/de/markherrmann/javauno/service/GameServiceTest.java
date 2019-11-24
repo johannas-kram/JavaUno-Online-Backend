@@ -1,6 +1,6 @@
 package de.markherrmann.javauno.service;
 
-import java.lang.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;

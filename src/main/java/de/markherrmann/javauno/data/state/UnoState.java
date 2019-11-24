@@ -1,6 +1,8 @@
 package de.markherrmann.javauno.data.state;
 
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

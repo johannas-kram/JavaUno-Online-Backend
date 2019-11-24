@@ -66,7 +66,7 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByInvalidCard() throws Exception {
-        String expectedMessage = buildExpectedMessage("java.lang.IllegalArgumentException", "The Player has no such card at this position.");
+        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "The Player has no such card at this position.");
         Card wrongCard = TestHelper.findWrongCard(game.getTopCard(), game);
         game.getPlayers().get(0).getCards().add(wrongCard);
         shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage);
@@ -74,14 +74,14 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
-        String expectedMessage = buildExpectedMessage("java.lang.IllegalStateException", "turn is in wrong state for this action.");
+        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalStateException", "turn is in wrong state for this action.");
         shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage);
     }
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
         shouldFail(game.getTopCard(), 1, TurnState.PUT_OR_DRAW,
-                "failure: java.lang.IllegalStateException: it's not your turn.");
+                "failure: de.markherrmann.javauno.exceptions.IllegalStateException: it's not your turn.");
     }
 
     @Test
