@@ -6,7 +6,7 @@ Das beliebte Kartenspiel als Multiplayer-Browser-Game
 Dies ist das Backend des Browser-Games, eine Springboot-Application.\
 Die gesamte Spiel-Logik passiert innerhalb des Backends auf einem SSD-vRoot-Server.\
 Die Springboot-Application wird über entsprechende Requests vom Frontent angesprochen,
-eine einfache Single-Page-Application auf einem nginx, vermutlich mit VUE.js\
+eine einfache Single-Page-Application auf einem nginx, vermutlich mit VUE.js
 
 ## Trennung von Backend und Frontend
 Backend und Frontend sind so voneinander getrennt, dass sie beliebig ausgetauscht werden können.\
