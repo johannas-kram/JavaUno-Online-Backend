@@ -20,7 +20,7 @@ public class DrawService {
         this.turnService = turnService;
     }
 
-    public Card draw(String gameUuid, String playerUuid) throws IllegalArgumentException {
+    public Card draw(String gameUuid, String playerUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game){
             Player player = turnService.getPlayer(playerUuid, game);
@@ -75,7 +75,7 @@ public class DrawService {
         return drawDuties > 0;
     }
 
-    private void preChecks(Game game, Player player){
+    private void preChecks(Game game, Player player) throws IllegalStateException {
         if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
             throw new IllegalStateException("game is in wrong lifecycle.");
         }
