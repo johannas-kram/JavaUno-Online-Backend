@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/action")
+@RequestMapping(value = "/api/action")
 public class ActionController {
 
     private final PutService putService;

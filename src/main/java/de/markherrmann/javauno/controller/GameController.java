@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/game")
+@RequestMapping(value = "/api/game")
 public class GameController {
 
     private final GameService gameService;

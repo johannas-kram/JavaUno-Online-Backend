@@ -44,7 +44,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldAddHumanPlayer() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/player/add")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", false)))
                 .andExpect(status().isOk()).andReturn();
@@ -57,7 +57,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldAddBotPlayer() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/player/add")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", true)))
                 .andExpect(status().isOk()).andReturn();
@@ -73,7 +73,7 @@ public class PlayerControllerTest {
         AddPlayerRequest invalidRequest = getAddPlayerRequest("player name", false);
         invalidRequest.setGameUuid("invalid");
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/player/add")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(invalidRequest)))
                 .andExpect(status().isOk()).andReturn();
@@ -85,7 +85,7 @@ public class PlayerControllerTest {
     public void shouldFailAddPlayerCausedByInvalidLifeCycle() throws Exception {
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/player/add")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", false)))
                 .andExpect(status().isOk()).andReturn();
@@ -97,7 +97,7 @@ public class PlayerControllerTest {
     public void shouldRemovePlayer() throws Exception {
         Player player = addPlayer();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk()).andReturn();
 
 
@@ -109,7 +109,7 @@ public class PlayerControllerTest {
     public void shouldRemoveBot() throws Exception {
         Player bot = addBot();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getBotUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getBotUuid()))
                 .andExpect(status().isOk()).andReturn();
 
 
@@ -121,7 +121,7 @@ public class PlayerControllerTest {
     public void shouldFailRemovePlayerCausedByInvalidGameUuid() throws Exception {
         Player player = addPlayer();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/remove/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
                 .andExpect(status().isOk()).andReturn();
 
 
@@ -133,7 +133,7 @@ public class PlayerControllerTest {
     public void shouldFailRemovePlayerCausedByInvalidPlayerUuid() throws Exception {
         addPlayer();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
                 .andExpect(status().isOk()).andReturn();
 
 
@@ -145,7 +145,7 @@ public class PlayerControllerTest {
     public void shouldFailRemoveBotCausedByInvalidBotUuid() throws Exception {
         addBot();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
                 .andExpect(status().isOk()).andReturn();
 
 
@@ -158,7 +158,7 @@ public class PlayerControllerTest {
         Player player = addPlayer();
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk()).andReturn();
 
 

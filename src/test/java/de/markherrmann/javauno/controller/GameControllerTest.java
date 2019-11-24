@@ -30,7 +30,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldCreateGame() throws Exception {
-        this.mockMvc.perform(post("/game/create"))
+        this.mockMvc.perform(post("/api/game/create"))
                 .andExpect(status().isOk());
 
         assertThat(UnoState.getGamesEntrySet()).isNotEmpty();
@@ -42,7 +42,7 @@ public class GameControllerTest {
         addPlayer(game);
         addPlayer(game);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/game/start/{gameUuid}", game.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -54,7 +54,7 @@ public class GameControllerTest {
         Game game = createGame();
         addPlayer(game);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/game/start/{gameUuid}", "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", "invalid"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -67,7 +67,7 @@ public class GameControllerTest {
         addPlayer(game);
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/game/start/{gameUuid}", game.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -78,7 +78,7 @@ public class GameControllerTest {
     public void shouldFailStartGameCausedByNoPlayers() throws Exception {
         Game game = createGame();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/game/start/{gameUuid}", game.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 

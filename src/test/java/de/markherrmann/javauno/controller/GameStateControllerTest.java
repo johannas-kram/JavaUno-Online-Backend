@@ -43,7 +43,7 @@ public class GameStateControllerTest {
 
     @Test
     public void shouldGetSetPlayersState() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -55,7 +55,7 @@ public class GameStateControllerTest {
         addPlayer();
         gameController.startGame(game.getUuid());
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -67,7 +67,7 @@ public class GameStateControllerTest {
         addPlayer();
         gameController.startGame(game.getUuid());
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -79,7 +79,7 @@ public class GameStateControllerTest {
         addPlayer();
         gameController.startGame(game.getUuid());
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
                 .andExpect(status().isOk())
                 .andReturn();
 

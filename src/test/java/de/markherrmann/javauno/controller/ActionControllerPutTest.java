@@ -53,7 +53,7 @@ public class ActionControllerPutTest {
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ public class ActionControllerPutTest {
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())

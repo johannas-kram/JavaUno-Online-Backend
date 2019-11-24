@@ -52,7 +52,7 @@ public class ActionControllerDrawTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -77,7 +77,7 @@ public class ActionControllerDrawTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
