@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Stack;
 public class PutService {
 
     private final TurnService turnService;
+    private final Logger logger = LoggerFactory.getLogger(PutService.class);
 
     @Autowired
     public PutService(TurnService turnService){
@@ -56,6 +59,12 @@ public class PutService {
         game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
+        logger.info(String.format(
+                "Put card successfully. Game: %s; Player: %s; playersCard: %s; topCard: %s",
+                game.getUuid(),
+                player.getUuid(),
+                card,
+                game.getTopCard()));
     }
 
     private void setGameVars(Game game, Card card){
@@ -91,15 +100,21 @@ public class PutService {
 
     private boolean isPlayableCard(Game game, Player player, Card card, int cardIndex) {
         if(TurnState.DRAW_DUTIES_OR_CUMULATIVE.equals(game.getTurnState()) && !isCumulative(game.getTopCard(), card)){
+            logNotMatchingCard(game, player, card, "It's not cumulative");
             return false;
         }
         if(TurnState.PUT_DRAWN.equals(game.getTurnState()) && !isLastCard(player, cardIndex)){
+            logNotMatchingCard(game, player, card, "It's not the drawn card");
             return false;
         }
         if(card.isJokerCard()){
             return true;
         }
-        return isMatch(game, card);
+        boolean match = isMatch(game, card);
+        if(!match){
+            logNotMatchingCard(game, player, card, "The cards do not match");
+        }
+        return match;
     }
 
     private boolean isCumulative(Card topCard, Card playersCard){
@@ -129,12 +144,32 @@ public class PutService {
     private void failIfInvalidCard(Card card, Player player, int cardIndex) throws IllegalArgumentException {
         String message = "The Player has no such card at this position.";
         if(player.getCards().size() < cardIndex+1){
+            logInvalidCard(player, card, cardIndex);
             throw new IllegalArgumentException(message);
         }
         Card foundCard = player.getCards().get(cardIndex);
         if(!foundCard.equals(card)){
+            logInvalidCard(player, card, cardIndex);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    private void logNotMatchingCard(Game game, Player player, Card playersCard, String reason){
+        Card topCard = game.getTopCard();
+        logger.warn(String.format(
+                "card does not match. %s. Game: %s; Player: %s; playersCard: %s; topCard: %s",
+                reason,
+                game.getUuid(),
+                player.getUuid(),
+                playersCard,
+                topCard));
+    }
+
+    private void logInvalidCard(Player player, Card card, int index){
+        logger.warn(String.format(
+                "The Player has no such card at this position. Cards: %s; CardToPut: %s",
+                player.getCards(),
+                card));
     }
 
 }

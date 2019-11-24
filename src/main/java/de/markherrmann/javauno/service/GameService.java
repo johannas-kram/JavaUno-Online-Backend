@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class GameService {
 
     private final HousekeepingService housekeepingService;
 
+    private final Logger logger = LoggerFactory.getLogger(GameService.class);
+
     @Autowired
     public GameService(HousekeepingService housekeepingService) {
         this.housekeepingService = housekeepingService;
@@ -28,6 +32,7 @@ public class GameService {
         Game game = new Game();
         UnoState.putGame(game);
         housekeepingService.updateLastAction(game);
+        logger.info("Created new game with uuid " + game.getUuid());
         return game.getUuid();
     }
 
@@ -35,9 +40,11 @@ public class GameService {
         Game game = getGame(gameUuid);
         synchronized (game) {
             if (isGameInLifecycle(game, GameLifecycle.RUNNING)) {
+                logger.error("Current round is not finished. New round can not be started yet. Game: " + gameUuid);
                 throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
             }
             if (game.getPlayers().size() < 2) {
+                logger.error("There are not enough players in the game. Game: " + gameUuid);
                 throw new IllegalStateException("There are not enough players in the game.");
             }
             resetGame(game);
@@ -47,6 +54,7 @@ public class GameService {
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
             housekeepingService.updateLastAction(game);
+            logger.info("Started new round. Game: " + game.getUuid());
         }
     }
 

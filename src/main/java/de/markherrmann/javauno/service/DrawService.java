@@ -5,6 +5,8 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Collections;
 public class DrawService {
 
     private final TurnService turnService;
+    private final Logger logger = LoggerFactory.getLogger(DrawService.class);
 
     @Autowired
     public DrawService(TurnService turnService){
@@ -35,6 +38,11 @@ public class DrawService {
         maybeRearrangePiles(game);
         setTurnState(game);
         turnService.updateLastAction(game);
+        logger.info(String.format(
+                "Drawn card successfully. Game: %s; Player: %s; card: %s",
+                game.getUuid(),
+                player.getUuid(),
+                card));
         return card;
     }
 
