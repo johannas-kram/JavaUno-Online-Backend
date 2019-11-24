@@ -46,7 +46,7 @@ public class PutServiceGeneralFailTest {
         String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
@@ -68,7 +68,7 @@ public class PutServiceGeneralFailTest {
         String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
+            result = putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
@@ -82,35 +82,14 @@ public class PutServiceGeneralFailTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Card card = game.getTopCard();
-        Card wrongCard = findWrongCard(card);
+        Card wrongCard = TestHelper.findWrongCard(card, game);
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(wrongCard);
         Exception exception = new Exception("");
         String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card.toString(), 0);
-        } catch (Exception ex){
-            exception = ex;
-        }
-
-        assertNotPut(game, wrongCard, result, "");
-        assertException(exception, "IllegalArgumentException", "The Player has no such card at this position.");
-    }
-
-    @Test
-    public void shouldFailCausedByIllegalCardString(){
-        String gameUuid = game.getUuid();
-        String playerUuid = game.getPlayers().get(0).getUuid();
-        Card card = game.getTopCard();
-        Card wrongCard = findWrongCard(card);
-        game.getPlayers().get(0).clearCards();
-        game.getPlayers().get(0).addCard(wrongCard);
-        Exception exception = new Exception("");
-        String result = "";
-
-        try {
-            result = putService.put(gameUuid, playerUuid, "illegal card string", 0);
+            result = putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
@@ -131,15 +110,6 @@ public class PutServiceGeneralFailTest {
     private void assertException(Exception exception, String exceptionType, String message){
         assertThat(exception.getClass().getSimpleName()).isEqualTo(exceptionType);
         assertThat(exception.getMessage()).isEqualTo(message);
-    }
-
-
-    private Card findWrongCard(Card rightCard){
-        Card card = rightCard;
-        while(card.equals(rightCard)){
-            card = game.getDrawPile().pop();
-        }
-        return card;
     }
 
 }

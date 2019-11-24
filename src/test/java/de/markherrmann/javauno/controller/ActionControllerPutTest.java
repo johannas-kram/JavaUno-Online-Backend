@@ -1,7 +1,9 @@
 package de.markherrmann.javauno.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.request.PutCardRequest;
+import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -65,32 +67,34 @@ public class ActionControllerPutTest {
     @Test
     public void shouldFailCausedByInvalidCard() throws Exception {
         String expectedMessage = buildExpectedMessage("java.lang.IllegalArgumentException", "The Player has no such card at this position.");
-        shouldFail("invalid", 0, TurnState.PUT_OR_DRAW, expectedMessage);
+        Card wrongCard = TestHelper.findWrongCard(game.getTopCard(), game);
+        game.getPlayers().get(0).getCards().add(wrongCard);
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage);
     }
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
         String expectedMessage = buildExpectedMessage("java.lang.IllegalStateException", "turn is in wrong state for this action.");
-        shouldFail(game.getTopCard().toString(), 0, TurnState.DRAW_DUTIES, expectedMessage);
+        shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage);
     }
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
-        shouldFail(game.getTopCard().toString(), 1, TurnState.PUT_OR_DRAW,
+        shouldFail(game.getTopCard(), 1, TurnState.PUT_OR_DRAW,
                 "failure: java.lang.IllegalStateException: it's not your turn.");
     }
 
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        shouldFail(game.getTopCard().toString(), 0, TurnState.PUT_DRAWN, "failure: card does not match.");
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN, "failure: card does not match.");
     }
 
-    private void shouldFail(String cardString, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {
+    private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
-        putCardRequest.setCardString(cardString);
+        putCardRequest.setCard(card);
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
@@ -125,7 +129,7 @@ public class ActionControllerPutTest {
         PutCardRequest putCardRequest = new PutCardRequest();
         putCardRequest.setGameUuid(game.getUuid());
         putCardRequest.setPlayerUuid(game.getPlayers().get(0).getUuid());
-        putCardRequest.setCardString(game.getTopCard().toString());
+        putCardRequest.setCard(game.getTopCard());
         putCardRequest.setCardIndex(7);
         return putCardRequest;
     }
