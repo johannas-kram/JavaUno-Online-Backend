@@ -29,11 +29,11 @@ public class SelectColorService {
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player);
             String colorName = getColorName(color);
-            setColor(game, colorName);
+            selectColor(game, colorName);
         }
     }
 
-    private void setColor(Game game, String colorName){
+    private void selectColor(Game game, String colorName){
         game.setDesiredColor(colorName);
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
     }
