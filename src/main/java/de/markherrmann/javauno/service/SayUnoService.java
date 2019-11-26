@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.data.fixed.Color;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -13,40 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SelectColorService {
+public class SayUnoService {
 
     private final TurnService turnService;
-    private final Logger logger = LoggerFactory.getLogger(SelectColorService.class);
+    private final Logger logger = LoggerFactory.getLogger(SayUnoService.class);
 
     @Autowired
-    public SelectColorService(TurnService turnService) {
+    public SayUnoService(TurnService turnService) {
         this.turnService = turnService;
     }
 
-    public void selectColor(String gameUuid, String playerUuid, String color) throws IllegalStateException, IllegalArgumentException {
+    public void sayUno(String gameUuid, String playerUuid) throws IllegalStateException, IllegalArgumentException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game) {
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player);
-            String colorName = getColorName(color);
-            selectColor(game, colorName);
+            sayUno(game, player);
         }
     }
 
-    private void selectColor(Game game, String colorName){
-        game.setDesiredColor(colorName);
-        game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        logger.info("Successfully set color. Game: " + game.getUuid() + "; Color: " + colorName);
-    }
-
-    private String getColorName(String color) throws IllegalArgumentException {
-        try {
-            String colorName = Color.valueOf(color.toUpperCase()).name();
-            return colorName;
-        } catch(java.lang.IllegalArgumentException ex){
-            logger.error("There is no such color. name: " + color);
-            throw new IllegalArgumentException("There is no such color.");
-        }
+    private void sayUno(Game game, Player player){
+        player.setUnoSaid(true);
+        logger.info("Successfully said uno. Game: " + game.getUuid() + "; Player: " + player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {
@@ -55,7 +42,8 @@ public class SelectColorService {
         }
         turnService.failIfInvalidTurnState(
                 game,
-                TurnState.SELECT_COLOR);
+                TurnState.SELECT_COLOR,
+                TurnState.FINAL_COUNTDOWN);
         if(!turnService.isPlayersTurn(game, player)){
             throw new IllegalStateException("it's not your turn.");
         }
