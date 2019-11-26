@@ -70,19 +70,12 @@ public class PutService {
 
     private void setGameVars(Game game, Card card){
         setGameDraw(game, card);
-        setGameSkip(game, card);
         setGameReversed(game, card);
     }
 
     private void setGameDraw(Game game, Card card){
         int draw = game.getDrawDuties() + card.getDrawValue();
         game.setDrawDuties(draw);
-    }
-
-    private void setGameSkip(Game game, Card card){
-        if(CardType.SKIP.equals(card.getCardType())){
-            game.setSkip(true);
-        }
     }
 
     private void setGameReversed(Game game, Card card){

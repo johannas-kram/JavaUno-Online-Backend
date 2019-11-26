@@ -21,7 +21,6 @@ public class Game{
 	private long lastAction;
     private TurnState turnState;
     private int drawDuties;
-    private boolean skip;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -149,13 +148,5 @@ public class Game{
 
 	public void setDrawDuties(int drawDuties) {
 		this.drawDuties = drawDuties;
-	}
-
-	public boolean isSkip() {
-		return skip;
-	}
-
-	public void setSkip(boolean skip) {
-		this.skip = skip;
 	}
 }
