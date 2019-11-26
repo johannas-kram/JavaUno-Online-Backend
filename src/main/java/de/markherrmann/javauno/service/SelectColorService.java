@@ -36,6 +36,7 @@ public class SelectColorService {
     private void selectColor(Game game, String colorName){
         game.setDesiredColor(colorName);
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
+        logger.info("Successfully set color. Game: " + game.getUuid() + "; Color: " + colorName);
     }
 
     private String getColorName(String color) throws IllegalArgumentException {
