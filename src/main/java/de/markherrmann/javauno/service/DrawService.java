@@ -39,7 +39,7 @@ public class DrawService {
         Card card = game.getDrawPile().pop();
         player.addCard(card);
         maybeRearrangePiles(game);
-        setTurnState(game);
+        setTurnState(game, player);
         turnService.updateLastAction(game);
         logger.info(String.format(
                 "Drawn card successfully. Game: %s; Player: %s; card: %s",
@@ -59,9 +59,11 @@ public class DrawService {
         }
     }
 
-    private void setTurnState(Game game){
+    private void setTurnState(Game game, Player player){
         if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())){
             game.setTurnState(TurnState.PUT_DRAWN);
+        } else if(TurnState.UNO_MISTAKE.equals(game.getTurnState())) {
+            handleUnoMistake(game, player);
         } else {
             handleDrawDuty(game);
         }
@@ -76,13 +78,34 @@ public class DrawService {
         }
     }
 
+    private void handleUnoMistake(Game game, Player player){
+        setDrawDuties(player);
+        if(!isDrawDutyLeft(player)){
+            if(isDrawDutyLeft(game)){
+                game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+            } else {
+                game.setTurnState(TurnState.PUT_OR_DRAW);
+            }
+        }
+    }
+
     private void setDrawDuties(Game game){
         int drawDuties = game.getDrawDuties()-1;
         game.setDrawDuties(drawDuties);
     }
 
+    private void setDrawDuties(Player player){
+        int drawDuties = player.getDrawDuties()-1;
+        player.setDrawDuties(drawDuties);
+    }
+
     private boolean isDrawDutyLeft(Game game){
         int drawDuties = game.getDrawDuties();
+        return drawDuties > 0;
+    }
+
+    private boolean isDrawDutyLeft(Player player){
+        int drawDuties = player.getDrawDuties();
         return drawDuties > 0;
     }
 
@@ -92,6 +115,7 @@ public class DrawService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                TurnState.UNO_MISTAKE,
                 TurnState.DRAW_DUTIES,
                 TurnState.DRAW_DUTIES_OR_CUMULATIVE,
                 TurnState.PUT_OR_DRAW);

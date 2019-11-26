@@ -16,6 +16,7 @@ public class Player {
 	private int cardCount;
 	private boolean bot;
 	private boolean unoSaid;
+	private int drawDuties;
 
 	public Player(){
 
@@ -83,5 +84,13 @@ public class Player {
 
 	public String getBotUuid(){
 		return botUuid;
+	}
+
+	public int getDrawDuties() {
+		return drawDuties;
+	}
+
+	public void setDrawDuties(int drawDuties) {
+		this.drawDuties = drawDuties;
 	}
 }

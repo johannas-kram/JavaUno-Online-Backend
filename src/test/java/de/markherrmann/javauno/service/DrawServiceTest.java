@@ -40,6 +40,25 @@ public class DrawServiceTest {
     }
 
     @Test
+    public void shouldDrawCardInUnoMistakeStateTwoCards(){
+        game.getPlayers().get(0).setDrawDuties(2);
+        shouldDraw(TurnState.UNO_MISTAKE, TurnState.UNO_MISTAKE);
+    }
+
+    @Test
+    public void shouldDrawCardInUnoMistakeStateOneCardDrawDuties(){
+        game.setDrawDuties(2);
+        game.getPlayers().get(0).setDrawDuties(1);
+        shouldDraw(TurnState.UNO_MISTAKE, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+    }
+
+    @Test
+    public void shouldDrawCardInUnoMistakeStateOneCardNoDrawDuties(){
+        game.getPlayers().get(0).setDrawDuties(1);
+        shouldDraw(TurnState.UNO_MISTAKE, TurnState.PUT_OR_DRAW);
+    }
+
+    @Test
     public void shouldDrawCardInDrawDutiesStateOneCard(){
         game.setDrawDuties(1);
         shouldDraw(TurnState.DRAW_DUTIES, TurnState.PUT_OR_DRAW);
