@@ -17,16 +17,25 @@ import java.util.Arrays;
 @Service
 public class TurnService {
 
+    private final FinalizeTurnService finalizeTurnService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final HousekeepingService housekeepingService;
     private final Logger logger = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
-    public TurnService(GameService gameService, PlayerService playerService, HousekeepingService housekeepingService){
+    public TurnService(FinalizeTurnService finalizeTurnService, GameService gameService,
+                       PlayerService playerService, HousekeepingService housekeepingService){
+        this.finalizeTurnService = finalizeTurnService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.housekeepingService = housekeepingService;
+    }
+
+    void finalizeTurn(Game game){
+        Runnable runnable = () -> finalize(game);
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     boolean isPlayersTurn(Game game, Player player){
@@ -74,5 +83,25 @@ public class TurnService {
 
     void updateLastAction(Game game){
         housekeepingService.updateLastAction(game);
+    }
+
+    private void finalize(Game game){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex){
+            logger.error("ERROR! Final Countdown Interrupted. while loop with bad performance will be used.", ex);
+            waitWithWhileLoop();
+        }
+        synchronized (game){
+            finalizeTurnService.finalizeTurn(game);
+        }
+    }
+
+    private void waitWithWhileLoop(){
+        long start = System.currentTimeMillis();
+        long diff;
+        do {
+            diff = System.currentTimeMillis() - start;
+        } while(diff < 3000);
     }
 }
