@@ -2,7 +2,6 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
-import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
