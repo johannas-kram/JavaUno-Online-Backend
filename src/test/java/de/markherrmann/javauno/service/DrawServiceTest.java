@@ -1,6 +1,7 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
+import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -101,15 +102,15 @@ public class DrawServiceTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Exception exception = null;
-        Card card = null;
+        DrawnCardResponse drawnCardResponse = null;
 
         try {
-            card = drawService.draw(gameUuid, playerUuid);
+            drawnCardResponse = drawService.draw(gameUuid, playerUuid);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertDrawn(card, exception, turnStateOut);
+        assertDrawn(drawnCardResponse, exception, turnStateOut);
     }
 
     private void shouldFail(TurnState turnState, Exception expectedException){
@@ -117,29 +118,34 @@ public class DrawServiceTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Exception exception = null;
-        Card card = null;
+        DrawnCardResponse drawnCardResponse = null;
 
         try {
-            card = drawService.draw(gameUuid, playerUuid);
+            drawnCardResponse = drawService.draw(gameUuid, playerUuid);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotDrawn(card, exception, turnState, expectedException);
+        assertNotDrawn(drawnCardResponse, exception, turnState, expectedException);
     }
 
-    private void assertDrawn(Card card, Exception exception, TurnState expectedTurnState){
+    private void assertDrawn(DrawnCardResponse drawnCardResponse, Exception exception, TurnState expectedTurnState){
         assertThat(exception).isNull();
-        assertThat(card).isNotNull();
+        assertThat(drawnCardResponse).isNotNull();
         assertThat(game.getDrawPile().size()).isEqualTo(78);
         assertThat(game.getPlayers().get(0).getCardCount()).isEqualTo(8);
-        assertThat(game.getPlayers().get(0).getCards().get(7)).isEqualTo(card);
-        assertThat(game.getTurnState()).isEqualTo(expectedTurnState);
+        assertThat(game.getPlayers().get(0).getCards().get(7)).isEqualTo(drawnCardResponse.getCard());
+        if(TurnState.PUT_DRAWN.equals(expectedTurnState) && !drawnCardResponse.isMatch()){
+            assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
+        } else {
+            assertThat(game.getTurnState()).isEqualTo(expectedTurnState);
+        }
+
     }
 
-    private void assertNotDrawn(Card card, Exception exception, TurnState expectedTurnState, Exception expectedException){
+    private void assertNotDrawn(DrawnCardResponse drawnCardResponse, Exception exception, TurnState expectedTurnState, Exception expectedException){
         assertThat(exception).isNotNull();
-        assertThat(card).isNull();
+        assertThat(drawnCardResponse).isNull();
         assertThat(exception).isInstanceOf(expectedException.getClass());
         assertThat(exception.getMessage()).isEqualTo(expectedException.getMessage());
         assertThat(game.getDrawPile().size()).isEqualTo(79);

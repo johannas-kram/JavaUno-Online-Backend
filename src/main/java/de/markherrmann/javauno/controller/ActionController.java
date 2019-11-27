@@ -2,7 +2,6 @@ package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
-import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +38,7 @@ public class ActionController {
     @PostMapping(value = "/draw/{gameUuid}/{playerUuid}")
     public @ResponseBody DrawnCardResponse drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            Card card = drawService.draw(gameUuid, playerUuid);
-            return new DrawnCardResponse(card);
+            return drawService.draw(gameUuid, playerUuid);
         } catch(Exception ex){
             return new DrawnCardResponse(ex);
         }

@@ -6,13 +6,15 @@ public class DrawnCardResponse {
     private boolean success;
     private String message;
     private Card card;
+    private boolean match;
 
     private DrawnCardResponse(){}
 
-    public DrawnCardResponse(Card card) {
+    public DrawnCardResponse(Card card, boolean match) {
         this.success = true;
         this.message = "success";
         this.card = card;
+        this.match = match;
     }
 
     public DrawnCardResponse(Exception ex) {
@@ -31,5 +33,13 @@ public class DrawnCardResponse {
 
     public Card getCard() {
         return card;
+    }
+
+    public boolean isMatch() {
+        return match;
+    }
+
+    public void setMatch(boolean match) {
+        this.match = match;
     }
 }

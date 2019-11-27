@@ -129,7 +129,7 @@ public class PutService {
         return index == player.getCards().size()-1;
     }
 
-    private boolean isMatch(Game game, Card playersCard){
+    boolean isMatch(Game game, Card playersCard){
         Card topCard = game.getTopCard();
         switch(topCard.getCardType()){
             case NUMBER:
