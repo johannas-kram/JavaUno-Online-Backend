@@ -36,7 +36,7 @@ public class ActionController {
         }
     }
 
-    @GetMapping(value = "/draw/{gameUuid}/{playerUuid}")
+    @PostMapping(value = "/draw/{gameUuid}/{playerUuid}")
     public @ResponseBody DrawnCardResponse drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             Card card = drawService.draw(gameUuid, playerUuid);
