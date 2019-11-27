@@ -37,6 +37,9 @@ public class PutService {
             putCard(game, player, card, cardIndex);
             turnService.updateLastAction(game);
         }
+        if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
+            turnService.finalizeTurn(game);
+        }
         return "success";
     }
 

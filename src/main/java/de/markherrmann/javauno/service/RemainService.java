@@ -29,6 +29,7 @@ public class RemainService {
             preChecks(game, player);
             remain(game, player);
         }
+        turnService.finalizeTurn(game);
     }
 
     private void remain(Game game, Player player){
