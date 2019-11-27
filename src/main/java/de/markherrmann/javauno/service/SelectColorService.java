@@ -31,6 +31,7 @@ public class SelectColorService {
             String colorName = getColorName(color);
             selectColor(game, colorName);
         }
+        turnService.finalizeTurn(game);
     }
 
     private void selectColor(Game game, String colorName){
