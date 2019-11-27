@@ -1,14 +1,11 @@
 package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
-import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerDrawTest {
+public class ActionControllerRemainTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,70 +42,51 @@ public class ActionControllerDrawTest {
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
+        game.setTurnState(TurnState.PUT_DRAWN);
     }
 
     @Test
-    public void shouldDrawCard() throws Exception {
+    public void shouldRemain() throws Exception {
         String gameUuid = game.getUuid();
-        String playerUuid = game.getPlayers().get(0).getUuid();
+        Player player = game.getPlayers().get(0);
+        String playerUuid = player.getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/remain/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertDrawn(mvcResult);
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("success");
+        assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
-        game.setTurnState(TurnState.FINAL_COUNTDOWN);
+        game.setTurnState(TurnState.PUT_OR_DRAW);
         Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
-        shouldFail(expectedException);
+        shouldFail(expectedException, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn() throws Exception {
         game.setCurrentPlayerIndex(1);
         Exception expectedException = new IllegalStateException("it's not your turn.");
-        shouldFail(expectedException);
+        shouldFail(expectedException, TurnState.PUT_DRAWN);
     }
 
-    private void shouldFail(Exception expectedException) throws Exception {
+    private void shouldFail(Exception expectedException, TurnState turnState) throws Exception {
         String gameUuid = game.getUuid();
-        String playerUuid = game.getPlayers().get(0).getUuid();
+        Player player = game.getPlayers().get(0);
+        String playerUuid = player.getUuid();
+        String expectedMessage = "failure: " + expectedException;
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/remain/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertNotDrawn(mvcResult, expectedException);
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(expectedMessage);
+        assertThat(game.getTurnState()).isEqualTo(turnState);
     }
 
-    private void assertDrawn(MvcResult mvcResult) throws Exception {
-        DrawnCardResponse drawnCardResponse = jsonToObject(mvcResult.getResponse().getContentAsString());
-        assertThat(drawnCardResponse.isSuccess()).isTrue();
-        assertThat(drawnCardResponse.getMessage()).isEqualTo("success");
-        assertThat(drawnCardResponse.getCard()).isNotNull();
-        assertThat(game.getDrawPile().size()).isEqualTo(92);
-        assertThat(drawnCardResponse.getCard()).isEqualTo(game.getPlayers().get(0).getCards().get(7));
-    }
-
-    private void assertNotDrawn(MvcResult mvcResult, Exception expectedException) throws Exception {
-        DrawnCardResponse drawnCardResponse = jsonToObject(mvcResult.getResponse().getContentAsString());
-        assertThat(drawnCardResponse.isSuccess()).isFalse();
-        assertThat(drawnCardResponse.getMessage()).isEqualTo("failure: " + expectedException);
-        assertThat(drawnCardResponse.getCard()).isNull();
-        assertThat(game.getDrawPile().size()).isEqualTo(93);
-        assertThat(game.getPlayers().get(0).getCardCount()).isEqualTo(7);
-    }
-
-    private DrawnCardResponse jsonToObject(final String json){
-        try {
-            return new ObjectMapper().readValue(json, DrawnCardResponse.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private void addPlayers(){
         Player player = new Player("player name", false);
@@ -116,4 +94,5 @@ public class ActionControllerDrawTest {
         game.putHuman(player);
         game.putHuman(player2);
     }
+
 }
