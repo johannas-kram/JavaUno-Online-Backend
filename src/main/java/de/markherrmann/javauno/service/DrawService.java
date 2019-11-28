@@ -123,9 +123,6 @@ public class DrawService {
     }
 
     private boolean matchesDrawnCard(Game game, Card drawn){
-        if(drawn.isJokerCard()){
-            return true;
-        }
         return putService.isMatch(game, drawn);
     }
 
