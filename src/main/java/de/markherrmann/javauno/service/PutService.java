@@ -111,9 +111,6 @@ public class PutService {
             logNotMatchingCard(game, player, card, "It's not the drawn card");
             return false;
         }
-        if(card.isJokerCard()){
-            return true;
-        }
         boolean match = isMatch(game, card);
         if(!match){
             logNotMatchingCard(game, player, card, "The cards do not match");
@@ -129,7 +126,10 @@ public class PutService {
         return index == player.getCards().size()-1;
     }
 
-    boolean isMatch(Game game, Card playersCard){
+    public static boolean isMatch(Game game, Card playersCard){
+        if(playersCard.isJokerCard()){
+            return true;
+        }
         Card topCard = game.getTopCard();
         switch(topCard.getCardType()){
             case NUMBER:
