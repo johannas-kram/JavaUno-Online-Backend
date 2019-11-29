@@ -18,22 +18,24 @@ import java.util.Arrays;
 public class TurnService {
 
     private final FinalizeTurnService finalizeTurnService;
+    private final BotService botService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final HousekeepingService housekeepingService;
     private final Logger logger = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
-    public TurnService(FinalizeTurnService finalizeTurnService, GameService gameService,
+    public TurnService(FinalizeTurnService finalizeTurnService, BotService botService, GameService gameService,
                        PlayerService playerService, HousekeepingService housekeepingService){
         this.finalizeTurnService = finalizeTurnService;
+        this.botService = botService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.housekeepingService = housekeepingService;
     }
 
     void finalizeTurn(Game game){
-        Runnable runnable = () -> finalize(game);
+        Runnable runnable = () -> waitAndFinalize(game);
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -85,15 +87,24 @@ public class TurnService {
         housekeepingService.updateLastAction(game);
     }
 
-    private void finalize(Game game){
+    private void waitAndFinalize(Game game){
         try {
             Thread.sleep(3000);
         } catch (InterruptedException ex){
             logger.error("ERROR! Final Countdown Interrupted. while loop with bad performance will be used.", ex);
             waitWithWhileLoop();
         }
+        finalize(game);
+    }
+
+    private void finalize(Game game){
         synchronized (game){
             finalizeTurnService.finalizeTurn(game);
+        }
+        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
+        if(player.isBot()){
+            botService.makeTurn(game, player);
+            finalize(game);
         }
     }
 
