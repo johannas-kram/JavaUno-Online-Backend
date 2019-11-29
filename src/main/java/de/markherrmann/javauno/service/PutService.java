@@ -91,7 +91,9 @@ public class PutService {
     }
 
     private static void setGameSkip(Game game, Card card){
-        if(CardType.SKIP.equals(card.getCardType())){
+        boolean skipCard = CardType.SKIP.equals(card.getCardType());
+        boolean reverseCard = CardType.REVERSE.equals(card.getCardType());
+        if(skipCard || (reverseCard && game.getPlayers().size() == 2)){
             game.setSkip(true);
         }
     }
