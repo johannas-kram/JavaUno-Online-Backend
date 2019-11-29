@@ -1,11 +1,14 @@
 package de.markherrmann.javauno;
 
 import de.markherrmann.javauno.data.fixed.Card;
+import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.service.PlayerService;
+
+import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,4 +41,13 @@ public class TestHelper {
         return card;
     }
 
+    public static Card giveCardByString(String cardString){
+        Stack<Card> cards = Deck.getShuffled();
+        for(Card card : cards){
+            if(card.toString().equals(cardString)){
+                return card;
+            }
+        }
+        return null;
+    }
 }
