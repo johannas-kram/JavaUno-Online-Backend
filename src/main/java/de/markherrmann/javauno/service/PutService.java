@@ -59,6 +59,7 @@ public class PutService {
     }
 
     static void putCard(Game game, Player player, Card card, int cardIndex){
+        Card topCard = game.getTopCard();
         player.removeCard(cardIndex);
         game.getDiscardPile().push(card);
         setGameVars(game, card);
@@ -68,7 +69,7 @@ public class PutService {
                 game.getUuid(),
                 player.getUuid(),
                 card,
-                game.getTopCard()));
+                topCard));
     }
 
     private static void setGameVars(Game game, Card card){
