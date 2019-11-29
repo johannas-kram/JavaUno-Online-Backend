@@ -176,10 +176,11 @@ public class PutServicePlayableTest {
         game.setTurnState(turnState);
         game.getDiscardPile().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
+        int discardPileSize = game.getDiscardPile().size();
 
         String result = putService.put(gameUuid, playerUuid, playersCard, 0);
 
-        TestHelper.assertPutCard(game, playersCard, result);
+        TestHelper.assertPutCard(game, playersCard, discardPileSize, result);
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){

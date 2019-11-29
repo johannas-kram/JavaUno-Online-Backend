@@ -36,6 +36,9 @@ public class PutService {
             }
             putCard(game, player, card, cardIndex);
             turnService.updateLastAction(game);
+            if(player.getCards().isEmpty()){
+                return "success";
+            }
         }
         if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
             turnService.finalizeTurn(game);
@@ -70,6 +73,10 @@ public class PutService {
                 player.getUuid(),
                 card,
                 topCard));
+        if(player.getCards().isEmpty()){
+            game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+            game.setTurnState(TurnState.FINAL_COUNTDOWN);
+        }
     }
 
     private static void setGameVars(Game game, Card card){

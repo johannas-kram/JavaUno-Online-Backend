@@ -1,7 +1,6 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.component.Game;
-import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.springframework.stereotype.Service;
@@ -13,11 +12,8 @@ public class FinalizeTurnService {
 
     void finalizeTurn(Game game){
         this.game = game;
-        boolean finished = finishedWithWinner();
-        if(!finished){
-            setPlayersDrawPenalties();
-            setNextPlayer();
-        }
+        setPlayersDrawPenalties();
+        setNextPlayer();
     }
 
     private void setPlayersDrawPenalties(){
@@ -59,14 +55,5 @@ public class FinalizeTurnService {
             return TurnState.DRAW_DUTIES_OR_CUMULATIVE;
         }
         return TurnState.PUT_OR_DRAW;
-    }
-
-    private boolean finishedWithWinner(){
-        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
-        if(player.getCards().isEmpty()){
-            game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-            return true;
-        }
-        return false;
     }
 }

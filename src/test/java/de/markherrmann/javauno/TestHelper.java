@@ -22,15 +22,12 @@ public class TestHelper {
         return game;
     }
 
-    public static void assertPutCard(Game game, Card card, String result){
+    public static void assertPutCard(Game game, Card card, int discadrPileSize, String result){
         assertThat(result).isEqualTo("success");
-        assertThat(game.getTopCard()).isEqualTo(card);
         assertThat(game.getPlayers().get(0).getCards()).isEmpty();
-        if(card.isJokerCard()){
-            assertThat(game.getTurnState()).isEqualTo(TurnState.SELECT_COLOR);
-        } else {
-            assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
-        }
+        assertThat(game.getDiscardPile().size()).isEqualTo(discadrPileSize+1);
+        assertThat(game.getTopCard()).isEqualTo(card);
+        assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
 
     public static Card findWrongCard(Card rightCard, Game game){
