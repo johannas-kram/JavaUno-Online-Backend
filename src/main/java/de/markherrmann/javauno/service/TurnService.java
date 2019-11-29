@@ -22,7 +22,8 @@ public class TurnService {
     private final GameService gameService;
     private final PlayerService playerService;
     private final HousekeepingService housekeepingService;
-    private final Logger logger = LoggerFactory.getLogger(TurnService.class);
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
     public TurnService(FinalizeTurnService finalizeTurnService, BotService botService, GameService gameService,
@@ -45,7 +46,7 @@ public class TurnService {
         Player current = game.getPlayers().get(currentIndex);
         boolean playersTurn = current.equals(player);
         if(!playersTurn){
-            logger.warn(String.format(
+            LOGGER.warn(String.format(
                     "It's not the players turn. Game: %s; playersIndex: %d; currentPlayerIndex: %d",
                     game.getUuid(),
                     game.getPlayers().indexOf(player),
@@ -57,7 +58,7 @@ public class TurnService {
     boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){
         boolean inLifecycle = game.getGameLifecycle().equals(gameLifecycle);
         if(!inLifecycle){
-            logger.error("game is in wrong lifecycle. Game: " + game.getUuid());
+            LOGGER.error("game is in wrong lifecycle. Game: " + game.getUuid());
         }
         return inLifecycle;
     }
@@ -68,7 +69,7 @@ public class TurnService {
                 return;
             }
         }
-        logger.error(String.format("turn is in wrong state for this action. Game: %s; validStates: %s; state: %s",
+        LOGGER.error(String.format("turn is in wrong state for this action. Game: %s; validStates: %s; state: %s",
                 game.getUuid(),
                 Arrays.asList(validTurnStates),
                 game.getTurnState()));
@@ -91,7 +92,7 @@ public class TurnService {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException ex){
-            logger.error("ERROR! Final Countdown Interrupted. while loop with bad performance will be used.", ex);
+            LOGGER.error("ERROR! Final Countdown Interrupted. while loop with bad performance will be used.", ex);
             waitWithWhileLoop();
         }
         finalize(game);
