@@ -40,132 +40,132 @@ public class PutServicePlayableTest {
 
     @Test
     public void shouldMatchByNumber(){
-        Card topCard = giveCardByString("NUMBER:BLUE:3");
-        Card playersCard = giveCardByString("NUMBER:RED:3");
+        Card topCard = TestHelper.giveCardByString("NUMBER:BLUE:3");
+        Card playersCard = TestHelper.giveCardByString("NUMBER:RED:3");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchBySkip(){
-        Card topCard = giveCardByString("SKIP:BLUE");
-        Card playersCard = giveCardByString("SKIP:YELLOW");
+        Card topCard = TestHelper.giveCardByString("SKIP:BLUE");
+        Card playersCard = TestHelper.giveCardByString("SKIP:YELLOW");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchByReverse(){
-        Card topCard = giveCardByString("REVERSE:GREEN");
-        Card playersCard = giveCardByString("REVERSE:YELLOW");
+        Card topCard = TestHelper.giveCardByString("REVERSE:GREEN");
+        Card playersCard = TestHelper.giveCardByString("REVERSE:YELLOW");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchByDraw2(){
-        Card topCard = giveCardByString("DRAW_2:GREEN");
-        Card playersCard = giveCardByString("DRAW_2:YELLOW");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:GREEN");
+        Card playersCard = TestHelper.giveCardByString("DRAW_2:YELLOW");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchByColor(){
-        Card topCard = giveCardByString("DRAW_2:GREEN");
-        Card playersCard = giveCardByString("SKIP:GREEN");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:GREEN");
+        Card playersCard = TestHelper.giveCardByString("SKIP:GREEN");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchByJoker(){
-        Card topCard = giveCardByString("DRAW_2:GREEN");
-        Card playersCard = giveCardByString("JOKER");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:GREEN");
+        Card playersCard = TestHelper.giveCardByString("JOKER");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchOnJokerByDesiredColor(){
-        Card topCard = giveCardByString("JOKER");
-        Card playersCard = giveCardByString("NUMBER:RED:0");
+        Card topCard = TestHelper.giveCardByString("JOKER");
+        Card playersCard = TestHelper.giveCardByString("NUMBER:RED:0");
         game.setDesiredColor("RED");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchOnDraw4JokerByDesiredColor(){
-        Card topCard = giveCardByString("DRAW_4");
-        Card playersCard = giveCardByString("NUMBER:RED:0");
+        Card topCard = TestHelper.giveCardByString("DRAW_4");
+        Card playersCard = TestHelper.giveCardByString("NUMBER:RED:0");
         game.setDesiredColor("RED");
         shouldPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldMatchCausedByCumulativeDraw2(){
-        Card topCard = giveCardByString("DRAW_2:RED");
-        Card playersCard = giveCardByString("DRAW_2:BLUE");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:RED");
+        Card playersCard = TestHelper.giveCardByString("DRAW_2:BLUE");
         shouldPutCard(topCard, playersCard, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
     }
 
     @Test
     public void shouldMatchCausedByCumulativeDraw4(){
-        Card topCard = giveCardByString("DRAW_4");
-        Card playersCard = giveCardByString("DRAW_4");
+        Card topCard = TestHelper.giveCardByString("DRAW_4");
+        Card playersCard = TestHelper.giveCardByString("DRAW_4");
         shouldPutCard(topCard, playersCard, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
     }
 
     @Test
     public void shouldMatchCausedByDrawnCard(){
-        Card topCard = giveCardByString("DRAW_2:RED");
-        Card playersCard = giveCardByString("JOKER");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:RED");
+        Card playersCard = TestHelper.giveCardByString("JOKER");
         shouldPutCard(topCard, playersCard, TurnState.PUT_DRAWN);
     }
     
     @Test
     public void shouldNotMatchByMixedActionCards(){
-        Card topCard = giveCardByString("SKIP:BLUE");
-        Card playersCard = giveCardByString("REVERSE:RED");
+        Card topCard = TestHelper.giveCardByString("SKIP:BLUE");
+        Card playersCard = TestHelper.giveCardByString("REVERSE:RED");
         shouldNotPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldNotMatchDraw2OnDraw4(){
-        Card topCard = giveCardByString("DRAW_4");
-        Card playersCard = giveCardByString("DRAW_2:RED");
+        Card topCard = TestHelper.giveCardByString("DRAW_4");
+        Card playersCard = TestHelper.giveCardByString("DRAW_2:RED");
         game.setDesiredColor("BLUE");
         shouldNotPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldNotMatchOnJokerByUndesiredColor(){
-        Card topCard = giveCardByString("JOKER");
-        Card playersCard = giveCardByString("REVERSE:RED");
+        Card topCard = TestHelper.giveCardByString("JOKER");
+        Card playersCard = TestHelper.giveCardByString("REVERSE:RED");
         game.setDesiredColor("BLUE");
         shouldNotPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldNotMatchOnDraw4JokerByUndesiredColor(){
-        Card topCard = giveCardByString("DRAW_4");
-        Card playersCard = giveCardByString("REVERSE:RED");
+        Card topCard = TestHelper.giveCardByString("DRAW_4");
+        Card playersCard = TestHelper.giveCardByString("REVERSE:RED");
         game.setDesiredColor("BLUE");
         shouldNotPutCard(topCard, playersCard, TurnState.PUT_OR_DRAW);
     }
 
     @Test
     public void shouldNotMatchCausedByNotCumulativeDraw2(){
-        Card topCard = giveCardByString("DRAW_2:RED");
-        Card playersCard = giveCardByString("JOKER");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:RED");
+        Card playersCard = TestHelper.giveCardByString("JOKER");
         shouldNotPutCard(topCard, playersCard, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
     }
 
     @Test
     public void shouldNotMatchCausedByNotCumulativeDraw4(){
-        Card topCard = giveCardByString("DRAW_4");
-        Card playersCard = giveCardByString("JOKER");
+        Card topCard = TestHelper.giveCardByString("DRAW_4");
+        Card playersCard = TestHelper.giveCardByString("JOKER");
         shouldNotPutCard(topCard, playersCard, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
     }
 
     @Test
     public void shouldNotMatchCausedByNotDrawnCard(){
-        Card topCard = giveCardByString("DRAW_2:RED");
-        Card playersCard = giveCardByString("JOKER");
+        Card topCard = TestHelper.giveCardByString("DRAW_2:RED");
+        Card playersCard = TestHelper.giveCardByString("JOKER");
         game.getPlayers().get(0).addCard(topCard);
         shouldNotPutCard(topCard, playersCard, TurnState.PUT_DRAWN);
     }
@@ -176,10 +176,11 @@ public class PutServicePlayableTest {
         game.setTurnState(turnState);
         game.getDiscardPile().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
+        int discardPileSize = game.getDiscardPile().size();
 
         String result = putService.put(gameUuid, playerUuid, playersCard, 0);
 
-        TestHelper.assertPutCard(game, playersCard, result);
+        TestHelper.assertPutCard(game, playersCard, discardPileSize, result);
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){
@@ -201,16 +202,6 @@ public class PutServicePlayableTest {
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();
         assertThat(game.getPlayers().get(0).getCards().get(0)).isEqualTo(card);
         assertThat(game.getTurnState()).isEqualTo(turnState);
-    }
-
-    private Card giveCardByString(String cardString){
-        Stack<Card> cards = Deck.getShuffled();
-        for(Card card : cards){
-            if(card.toString().equals(cardString)){
-                return card;
-            }
-        }
-        return null;
     }
 
 }

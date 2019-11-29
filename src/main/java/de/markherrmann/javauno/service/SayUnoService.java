@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class SayUnoService {
 
     private final TurnService turnService;
-    private final Logger logger = LoggerFactory.getLogger(SayUnoService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SayUnoService.class);
 
     @Autowired
     public SayUnoService(TurnService turnService) {
@@ -31,9 +31,9 @@ public class SayUnoService {
         }
     }
 
-    private void sayUno(Game game, Player player){
+    static void sayUno(Game game, Player player){
         player.setUnoSaid(true);
-        logger.info("Successfully said uno. Game: " + game.getUuid() + "; Player: " + player.getUuid());
+        LOGGER.info("Successfully said uno. Game: " + game.getUuid() + "; Player: " + player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {

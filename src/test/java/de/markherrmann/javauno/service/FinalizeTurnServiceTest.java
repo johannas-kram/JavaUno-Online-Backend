@@ -86,12 +86,6 @@ public class FinalizeTurnServiceTest {
         shouldFinalize(TurnState.DRAW_DUTIES_OR_CUMULATIVE, 1, 0, false);
     }
 
-    @Test
-    public void shouldFinalizeFinished(){
-        game.getPlayers().get(0).getCards().clear();
-        shouldFinalize(TurnState.PUT_OR_DRAW, 0, 0, true);
-    }
-
     private void shouldFinalize(TurnState turnState, int index, int drawPenalties, boolean finished){
         finalizeTurnService.finalizeTurn(game);
 

@@ -20,13 +20,11 @@ import java.util.Collections;
 public class DrawService {
 
     private final TurnService turnService;
-    private final PutService putService;
-    private final Logger logger = LoggerFactory.getLogger(DrawService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DrawService.class);
 
     @Autowired
-    public DrawService(TurnService turnService, PutService putService){
+    public DrawService(TurnService turnService){
         this.turnService = turnService;
-        this.putService = putService;
     }
 
     public DrawnCardResponse draw(String gameUuid, String playerUuid) throws IllegalArgumentException, IllegalStateException {
@@ -45,16 +43,16 @@ public class DrawService {
         if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
             turnService.finalizeTurn(game);
         }
+        turnService.updateLastAction(game);
         return new DrawnCardResponse(card, matches);
     }
 
-    private Card drawCard(Game game, Player player){
+    static Card drawCard(Game game, Player player){
         Card card = game.getDrawPile().pop();
         player.addCard(card);
         maybeRearrangePiles(game);
         setTurnState(game, player);
-        turnService.updateLastAction(game);
-        logger.info(String.format(
+        LOGGER.info(String.format(
                 "Drawn card successfully. Game: %s; Player: %s; card: %s",
                 game.getUuid(),
                 player.getUuid(),
@@ -62,7 +60,7 @@ public class DrawService {
         return card;
     }
 
-    private void maybeRearrangePiles(Game game){
+    private static void maybeRearrangePiles(Game game){
         if(game.getDrawPile().isEmpty()){
             Card topCard = game.getDiscardPile().pop();
             game.getDrawPile().addAll(game.getDiscardPile());
@@ -72,7 +70,7 @@ public class DrawService {
         }
     }
 
-    private void setTurnState(Game game, Player player){
+    private static void setTurnState(Game game, Player player){
         if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())){
             game.setTurnState(TurnState.PUT_DRAWN);
         } else if(TurnState.DRAW_PENALTIES.equals(game.getTurnState())) {
@@ -82,7 +80,7 @@ public class DrawService {
         }
     }
 
-    private void handleDrawDuty(Game game){
+    private static void handleDrawDuty(Game game){
         setDrawDuties(game);
         if(isDrawDutyLeft(game)){
             game.setTurnState(TurnState.DRAW_DUTIES);
@@ -91,7 +89,7 @@ public class DrawService {
         }
     }
 
-    private void handleUnoMistake(Game game, Player player){
+    private static void handleUnoMistake(Game game, Player player){
         setDrawPenalties(player);
         if(!isDrawPenaltyLeft(player)){
             if(isDrawDutyLeft(game)){
@@ -102,31 +100,28 @@ public class DrawService {
         }
     }
 
-    private void setDrawDuties(Game game){
+    private static void setDrawDuties(Game game){
         int drawDuties = game.getDrawDuties()-1;
         game.setDrawDuties(drawDuties);
     }
 
-    private void setDrawPenalties(Player player){
+    private static void setDrawPenalties(Player player){
         int drawDuties = player.getDrawPenalties()-1;
         player.setDrawPenalties(drawDuties);
     }
 
-    private boolean isDrawDutyLeft(Game game){
+    private static boolean isDrawDutyLeft(Game game){
         int drawDuties = game.getDrawDuties();
         return drawDuties > 0;
     }
 
-    private boolean isDrawPenaltyLeft(Player player){
+    private static boolean isDrawPenaltyLeft(Player player){
         int drawDuties = player.getDrawPenalties();
         return drawDuties > 0;
     }
 
     private boolean matchesDrawnCard(Game game, Card drawn){
-        if(drawn.isJokerCard()){
-            return true;
-        }
-        return putService.isMatch(game, drawn);
+        return PutService.isMatch(game, drawn);
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class RemainService {
 
     private final TurnService turnService;
-    private final Logger logger = LoggerFactory.getLogger(RemainService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemainService.class);
 
     @Autowired
     public RemainService(TurnService turnService) {
@@ -32,9 +32,9 @@ public class RemainService {
         turnService.finalizeTurn(game);
     }
 
-    private void remain(Game game, Player player){
+    static void remain(Game game, Player player){
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        logger.info("Successfully remained card. Game: " + game.getUuid() + "; Player: " + player.getUuid());
+        LOGGER.info("Successfully remained card. Game: " + game.getUuid() + "; Player: " + player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {

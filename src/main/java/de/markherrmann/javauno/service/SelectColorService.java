@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class SelectColorService {
 
     private final TurnService turnService;
-    private final Logger logger = LoggerFactory.getLogger(SelectColorService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SelectColorService.class);
 
     @Autowired
     public SelectColorService(TurnService turnService) {
@@ -34,18 +34,17 @@ public class SelectColorService {
         turnService.finalizeTurn(game);
     }
 
-    private void selectColor(Game game, String colorName){
+    static void selectColor(Game game, String colorName){
         game.setDesiredColor(colorName);
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        logger.info("Successfully set color. Game: " + game.getUuid() + "; Color: " + colorName);
+        LOGGER.info("Successfully set color. Game: " + game.getUuid() + "; Color: " + colorName);
     }
 
     private String getColorName(String color) throws IllegalArgumentException {
         try {
-            String colorName = Color.valueOf(color.toUpperCase()).name();
-            return colorName;
+            return Color.valueOf(color.toUpperCase()).name();
         } catch(java.lang.IllegalArgumentException ex){
-            logger.error("There is no such color. name: " + color);
+            LOGGER.error("There is no such color. name: " + color);
             throw new IllegalArgumentException("There is no such color.");
         }
     }

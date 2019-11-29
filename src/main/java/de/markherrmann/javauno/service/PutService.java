@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class PutService {
 
     private final TurnService turnService;
-    private final Logger logger = LoggerFactory.getLogger(PutService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PutService.class);
 
     @Autowired
     public PutService(TurnService turnService){
@@ -36,6 +36,9 @@ public class PutService {
             }
             putCard(game, player, card, cardIndex);
             turnService.updateLastAction(game);
+            if(player.getCards().isEmpty()){
+                return "success";
+            }
         }
         if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
             turnService.finalizeTurn(game);
@@ -58,43 +61,50 @@ public class PutService {
         failIfInvalidCard(card, player, cardIndex);
     }
 
-    private void putCard(Game game, Player player, Card card, int cardIndex){
+    static void putCard(Game game, Player player, Card card, int cardIndex){
+        Card topCard = game.getTopCard();
         player.removeCard(cardIndex);
         game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
-        logger.info(String.format(
+        LOGGER.info(String.format(
                 "Put card successfully. Game: %s; Player: %s; playersCard: %s; topCard: %s",
                 game.getUuid(),
                 player.getUuid(),
                 card,
-                game.getTopCard()));
+                topCard));
+        if(player.getCards().isEmpty()){
+            game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+            game.setTurnState(TurnState.FINAL_COUNTDOWN);
+        }
     }
 
-    private void setGameVars(Game game, Card card){
+    private static void setGameVars(Game game, Card card){
         setGameDraw(game, card);
         setGameSkip(game, card);
         setGameReversed(game, card);
     }
 
-    private void setGameDraw(Game game, Card card){
+    private static void setGameDraw(Game game, Card card){
         int draw = game.getDrawDuties() + card.getDrawValue();
         game.setDrawDuties(draw);
     }
 
-    private void setGameSkip(Game game, Card card){
-        if(CardType.SKIP.equals(card.getCardType())){
+    private static void setGameSkip(Game game, Card card){
+        boolean skipCard = CardType.SKIP.equals(card.getCardType());
+        boolean reverseCard = CardType.REVERSE.equals(card.getCardType());
+        if(skipCard || (reverseCard && game.getPlayers().size() == 2)){
             game.setSkip(true);
         }
     }
 
-    private void setGameReversed(Game game, Card card){
+    private static void setGameReversed(Game game, Card card){
         if(CardType.REVERSE.equals(card.getCardType())){
             game.toggleReversed();
         }
     }
 
-    private void switchTurnState(Game game){
+    private static void switchTurnState(Game game){
         if(game.getTopCard().isJokerCard()){
             game.setTurnState(TurnState.SELECT_COLOR);
         } else {
@@ -111,9 +121,6 @@ public class PutService {
             logNotMatchingCard(game, player, card, "It's not the drawn card");
             return false;
         }
-        if(card.isJokerCard()){
-            return true;
-        }
         boolean match = isMatch(game, card);
         if(!match){
             logNotMatchingCard(game, player, card, "The cards do not match");
@@ -129,7 +136,10 @@ public class PutService {
         return index == player.getCards().size()-1;
     }
 
-    boolean isMatch(Game game, Card playersCard){
+    static boolean isMatch(Game game, Card playersCard){
+        if(playersCard.isJokerCard()){
+            return true;
+        }
         Card topCard = game.getTopCard();
         switch(topCard.getCardType()){
             case NUMBER:
@@ -148,19 +158,19 @@ public class PutService {
     private void failIfInvalidCard(Card card, Player player, int cardIndex) throws IllegalArgumentException {
         String message = "The Player has no such card at this position.";
         if(player.getCards().size() < cardIndex+1){
-            logInvalidCard(player, card, cardIndex);
+            logInvalidCard(player, card);
             throw new IllegalArgumentException(message);
         }
         Card foundCard = player.getCards().get(cardIndex);
         if(!foundCard.equals(card)){
-            logInvalidCard(player, card, cardIndex);
+            logInvalidCard(player, card);
             throw new IllegalArgumentException(message);
         }
     }
 
     private void logNotMatchingCard(Game game, Player player, Card playersCard, String reason){
         Card topCard = game.getTopCard();
-        logger.warn(String.format(
+        LOGGER.warn(String.format(
                 "card does not match. %s. Game: %s; Player: %s; playersCard: %s; topCard: %s",
                 reason,
                 game.getUuid(),
@@ -169,8 +179,8 @@ public class PutService {
                 topCard));
     }
 
-    private void logInvalidCard(Player player, Card card, int index){
-        logger.warn(String.format(
+    private void logInvalidCard(Player player, Card card){
+        LOGGER.warn(String.format(
                 "The Player has no such card at this position. Cards: %s; CardToPut: %s",
                 player.getCards(),
                 card));

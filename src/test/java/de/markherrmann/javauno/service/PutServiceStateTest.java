@@ -72,16 +72,24 @@ public class PutServiceStateTest {
         shouldFailCausedByInvalidState();
     }
 
+    @Test
+    public void shouldFinishGame(){
+        game.setTurnState(TurnState.PUT_OR_DRAW);
+        shouldPutCard();
+        assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
+    }
+
     private void shouldPutCard(){
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Card card = game.getTopCard();
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
+        int discardPileSize = game.getDiscardPile().size();
 
         String result = putService.put(gameUuid, playerUuid, card, 0);
 
-        TestHelper.assertPutCard(game, card, result);
+        TestHelper.assertPutCard(game, card, discardPileSize, result);
     }
 
 
