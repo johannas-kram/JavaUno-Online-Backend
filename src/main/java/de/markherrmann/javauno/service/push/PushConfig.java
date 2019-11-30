@@ -13,7 +13,6 @@ public class PushConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/api/push");
-        //config.setApplicationDestinationPrefixes("/api");
     }
 
     @Override
