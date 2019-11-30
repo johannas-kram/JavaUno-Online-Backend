@@ -5,6 +5,8 @@ import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,6 +112,7 @@ public class DrawServiceTest {
         }
 
         assertDrawn(drawnCardResponse, exception, turnStateOut);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARD);
     }
 
     private void shouldFail(TurnState turnState, Exception expectedException){

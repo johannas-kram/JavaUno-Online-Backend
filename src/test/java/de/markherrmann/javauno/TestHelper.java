@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.service.PlayerService;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 
 import java.util.Stack;
 
@@ -25,12 +27,13 @@ public class TestHelper {
         return game;
     }
 
-    public static void assertPutCard(Game game, Card card, int discadrPileSize, String result){
+    public static void assertPutCard(Game game, Card card, int discardPileSize, String result){
         assertThat(result).isEqualTo("success");
         assertThat(game.getPlayers().get(0).getCards()).isEmpty();
-        assertThat(game.getDiscardPile().size()).isEqualTo(discadrPileSize+1);
+        assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
         assertThat(game.getTopCard()).isEqualTo(card);
         assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.FINISHED_GAME);
     }
 
     public static Card findWrongCard(Card rightCard, Game game){
@@ -50,4 +53,7 @@ public class TestHelper {
         }
         return null;
     }
+
+
+
 }

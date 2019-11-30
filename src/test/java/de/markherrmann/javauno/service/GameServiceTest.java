@@ -5,6 +5,8 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,6 +104,7 @@ public class GameServiceTest {
         assertThat(game.getDiscardPile().size()).isEqualTo(1);
         assertThat(game.getDrawPile().size()).isEqualTo(86);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.STARTED_GAME);
     }
 
     private void prepareGame(){

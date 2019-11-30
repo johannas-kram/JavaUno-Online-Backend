@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -93,6 +95,7 @@ public class SelectColorServiceTest {
 
         assertThat(game.getDesiredColor()).isEqualTo(color);
         assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SELECTED_COLOR);
     }
 
     private void shouldFail(String color, Exception expectedException){

@@ -4,6 +4,8 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +41,7 @@ public class PlayerServiceTest {
 
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(1);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.ADDED_PLAYER);
     }
 
     @Test
@@ -53,6 +56,7 @@ public class PlayerServiceTest {
         assertThat(playersBefore).isEqualTo(4);
         assertThat(playersNow).isEqualTo(3);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(1);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REMOVED_PLAYER);
     }
 
     @Test
@@ -67,6 +71,7 @@ public class PlayerServiceTest {
 
         assertThat(playersBefore).isEqualTo(5);
         assertThat(playersNow).isEqualTo(4);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REMOVED_PLAYER);
     }
 
     @Test

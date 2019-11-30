@@ -2,9 +2,10 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +35,6 @@ public class PutServiceSetAttributeTest {
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
-        game.getPlayers().get(0).clearCards();
     }
 
     @Test
@@ -46,6 +45,7 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.isSkip()).isTrue();
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -58,6 +58,7 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.isSkip()).isTrue();
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -69,6 +70,7 @@ public class PutServiceSetAttributeTest {
 
         assertThat(game.isSkip()).isFalse();
         assertThat(game.isReversed()).isTrue();
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -79,6 +81,7 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.getDrawDuties()).isEqualTo(2);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -91,6 +94,7 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.getDrawDuties()).isEqualTo(4);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -101,6 +105,8 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.getDrawDuties()).isEqualTo(4);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
+
     }
 
     @Test
@@ -113,6 +119,7 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.getDrawDuties()).isEqualTo(8);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     private void putCard(Card topCard, Card playersCard){
