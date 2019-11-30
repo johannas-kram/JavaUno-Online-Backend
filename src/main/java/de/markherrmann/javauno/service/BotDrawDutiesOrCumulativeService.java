@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class BotDrawDutiesOrCumulativeService {
 
-    void handleDrawDutiesOrCumulative(Game game, Player player) {
+    boolean handleDrawDutiesOrCumulative(Game game, Player player) {
         Card topCard = game.getTopCard();
         if(!topCard.isDrawCard()){
             DrawService.drawCard(game, player);
-            return;
+            return false;
         }
         boolean put = putCumulative(game, player, topCard.getDrawValue());
         if(!put){
             DrawService.drawCard(game, player);
         }
+        return put;
     }
 
     private boolean putCumulative(Game game, Player player, int topCardDrawValue){

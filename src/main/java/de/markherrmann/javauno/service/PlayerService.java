@@ -6,6 +6,8 @@ import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,15 @@ public class PlayerService {
 
     private final GameService gameService;
     private final HousekeepingService housekeepingService;
+    private final PushService pushService;
+
     private final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     @Autowired
-    public PlayerService(GameService gameService, HousekeepingService housekeepingService) {
+    public PlayerService(GameService gameService, HousekeepingService housekeepingService, PushService pushService) {
         this.gameService = gameService;
         this.housekeepingService = housekeepingService;
+        this.pushService = pushService;
     }
 
     public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, IllegalStateException {
@@ -38,6 +43,7 @@ public class PlayerService {
                 game.putHuman(player);
             }
             logger.info("Added Player. Game: " + gameUuid + "; Player: " + player.getUuid());
+            pushService.push(PushMessage.ADDED_PLAYER, game);
             return player.getUuid();
         }
     }
@@ -51,6 +57,7 @@ public class PlayerService {
             }
             remove(game, playerUuid, bot);
             housekeepingService.removeGameIfNoHumans(game);
+            pushService.push(PushMessage.REMOVED_PLAYER, game);
         }
         logger.info("Removed Player. Game: " + gameUuid + "; Player: " + playerUuid);
     }

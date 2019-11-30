@@ -85,9 +85,10 @@ public class PutServiceStateTest {
         Card card = game.getTopCard();
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
+        game.getPlayers().get(0).addCard(card);
         int discardPileSize = game.getDiscardPile().size();
 
-        String result = putService.put(gameUuid, playerUuid, card, 0);
+        String result = putService.put(gameUuid, playerUuid, card, 1);
 
         TestHelper.assertPutCard(game, card, discardPileSize, result);
     }
@@ -110,22 +111,22 @@ public class PutServiceStateTest {
             exception = ex;
         }
 
-        assertNotPut(game, card, result, exception, "IllegalStateException", "turn is in wrong state for this action.", turnState);
+        assertNotPut(game, card, result, exception, turnState);
     }
 
-    private void assertNotPut(Game game, Card card, String result, Exception exception, String exceptionType, String message, TurnState turnState){
+    private void assertNotPut(Game game, Card card, String result, Exception exception, TurnState turnState){
         assertThat(result).isEqualTo("");
         game.getDiscardPile().pop();
         assertThat(game.getDiscardPile()).isEmpty();
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();
         assertThat(game.getPlayers().get(0).getCards().get(0)).isEqualTo(card);
         assertThat(game.getTurnState()).isEqualTo(turnState);
-        assertException(exception, exceptionType, message);
+        assertException(exception);
     }
 
-    private void assertException(Exception exception, String exceptionType, String message){
-        assertThat(exception.getClass().getSimpleName()).isEqualTo(exceptionType);
-        assertThat(exception.getMessage()).isEqualTo(message);
+    private void assertException(Exception exception){
+        assertThat(exception.getClass().getSimpleName()).isEqualTo("IllegalStateException");
+        assertThat(exception.getMessage()).isEqualTo("turn is in wrong state for this action.");
     }
 
     private Card findDraw2Card(){

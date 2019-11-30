@@ -2,7 +2,6 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.junit.Before;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +33,6 @@ public class PutServiceSetAttributeTest {
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
-        game.getPlayers().get(0).clearCards();
     }
 
     @Test

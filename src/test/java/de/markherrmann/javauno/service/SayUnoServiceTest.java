@@ -6,6 +6,8 @@ import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +78,7 @@ public class SayUnoServiceTest {
 
         assertThat(player.isUnoSaid()).isTrue();
         assertThat(game.getTurnState()).isEqualTo(turnState);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SAID_UNO);
     }
 
     private void shouldFail(TurnState turnState, Exception expectedException){

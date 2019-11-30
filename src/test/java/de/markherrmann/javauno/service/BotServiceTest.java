@@ -8,6 +8,8 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Random;
 import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +53,7 @@ public class BotServiceTest {
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
         assertThat(player.getCardCount()).isEqualTo(7);
         assertThat(game.getTurnState()).isNotEqualTo(TurnState.PUT_OR_DRAW);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     @Test
@@ -67,6 +69,7 @@ public class BotServiceTest {
         assertThat(game.getDrawPile().size()).isEqualTo(93);
         assertThat(player.getCardCount()).isEqualTo(0);
         assertThat(game.getTurnState()).isNotEqualTo(TurnState.PUT_OR_DRAW);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.FINISHED_GAME);
     }
 
     @Test
@@ -80,6 +83,7 @@ public class BotServiceTest {
         assertThat(game.getDrawPile().size()).isEqualTo(92);
         assertThat(player.getCardCount()).isEqualTo(1);
         assertThat(game.getTurnState()).isEqualTo(TurnState.PUT_DRAWN);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARD);
     }
 
     @Test
@@ -158,6 +162,7 @@ public class BotServiceTest {
         } else {
             assertThat(game.getDesiredColor()).isEqualTo(player.getCards().get(0).getColor());
         }
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SELECTED_COLOR);
     }
 
     @Test
@@ -169,8 +174,12 @@ public class BotServiceTest {
 
         remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5600);
-        
-        assertThat(player.isUnoSaid()).isEqualTo(BotService.getLastSayUnoRandomNumber() < 8);
+
+        boolean shouldSayUno = BotService.getLastSayUnoRandomNumber() < 8;
+        assertThat(player.isUnoSaid()).isEqualTo(shouldSayUno);
+        if(shouldSayUno){
+            assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SAID_UNO);
+        }
     }
 
     @Test
@@ -180,6 +189,8 @@ public class BotServiceTest {
             Card card = game.getDrawPile().pop();
             game.getDiscardPile().push(card);
         }
+        player.getCards().clear();
+        player.addCard(game.getTopCard());
         player.addCard(game.getTopCard());
         int discardPileSize = game.getDiscardPile().size();
 
@@ -187,8 +198,9 @@ public class BotServiceTest {
         Thread.sleep(8600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
-        assertThat(player.getCardCount()).isEqualTo(7);
+        assertThat(player.getCardCount()).isEqualTo(1);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.NEXT_TURN);
     }
 
     private Card getNoneMatchingCard(){
