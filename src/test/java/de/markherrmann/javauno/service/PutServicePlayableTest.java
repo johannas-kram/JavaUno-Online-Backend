@@ -2,7 +2,6 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
-import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.junit.Before;
@@ -11,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -176,9 +173,10 @@ public class PutServicePlayableTest {
         game.setTurnState(turnState);
         game.getDiscardPile().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
+        game.getPlayers().get(0).getCards().add(0, playersCard);
         int discardPileSize = game.getDiscardPile().size();
 
-        String result = putService.put(gameUuid, playerUuid, playersCard, 0);
+        String result = putService.put(gameUuid, playerUuid, playersCard, 1);
 
         TestHelper.assertPutCard(game, playersCard, discardPileSize, result);
     }
