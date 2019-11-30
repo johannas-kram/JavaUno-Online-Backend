@@ -104,7 +104,7 @@ public class BotService {
         boolean put = botMaybePutService.maybePut(game, player, true);
         pushService.push(put ? PushMessage.PUT_CARD : PushMessage.DRAWN_CARD, game);
         if(!put){
-            RemainService.remain(game, player);
+            KeepService.keep(game, player);
         }
     }
 

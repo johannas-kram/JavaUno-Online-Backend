@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerRemainTest {
+public class ActionControllerKeepTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,12 +46,12 @@ public class ActionControllerRemainTest {
     }
 
     @Test
-    public void shouldRemain() throws Exception {
+    public void shouldKeep() throws Exception {
         String gameUuid = game.getUuid();
         Player player = game.getPlayers().get(0);
         String playerUuid = player.getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/remain/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/keep/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -79,7 +79,7 @@ public class ActionControllerRemainTest {
         String playerUuid = player.getUuid();
         String expectedMessage = "failure: " + expectedException;
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/remain/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/keep/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 

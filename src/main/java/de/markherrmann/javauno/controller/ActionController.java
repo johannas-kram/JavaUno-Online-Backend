@@ -14,16 +14,16 @@ public class ActionController {
     private final DrawService drawService;
     private final SelectColorService selectColorService;
     private final SayUnoService sayUnoService;
-    private final RemainService remainService;
+    private final KeepService keepService;
 
     @Autowired
     public ActionController(PutService putService, DrawService drawService,
-                            SelectColorService selectColorService, SayUnoService sayUnoService, RemainService remainService) {
+                            SelectColorService selectColorService, SayUnoService sayUnoService, KeepService keepService) {
         this.putService = putService;
         this.drawService = drawService;
         this.selectColorService = selectColorService;
         this.sayUnoService = sayUnoService;
-        this.remainService = remainService;
+        this.keepService = keepService;
     }
 
     @PostMapping(value = "/put")
@@ -64,10 +64,10 @@ public class ActionController {
         }
     }
 
-    @PostMapping(value = "/remain/{gameUuid}/{playerUuid}")
-    public @ResponseBody String remain(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    @PostMapping(value = "/keep/{gameUuid}/{playerUuid}")
+    public @ResponseBody String keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            remainService.remain(gameUuid, playerUuid);
+            keepService.keep(gameUuid, playerUuid);
             return "success";
         } catch(Exception ex){
             return "failure: " + ex;

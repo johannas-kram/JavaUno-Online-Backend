@@ -29,7 +29,7 @@ public class BotServiceTest {
     private GameService gameService;
 
     @Autowired
-    private RemainService remainService;
+    private KeepService keepService;
 
     private Game game;
 
@@ -47,7 +47,7 @@ public class BotServiceTest {
         Player player = game.getPlayers().get(1);
         player.addCard(game.getTopCard());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5100);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
@@ -62,7 +62,7 @@ public class BotServiceTest {
         player.getCards().clear();
         game.getDrawPile().push(game.getTopCard());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
@@ -77,7 +77,7 @@ public class BotServiceTest {
         Player player = game.getPlayers().get(1);
         player.getCards().clear();
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5100);
 
         assertThat(game.getDrawPile().size()).isEqualTo(92);
@@ -87,12 +87,12 @@ public class BotServiceTest {
     }
 
     @Test
-    public void shouldMakeBotTurnPutDrawnRemain() throws Exception {
+    public void shouldMakeBotTurnPutDrawnKeep() throws Exception {
         Player player = game.getPlayers().get(1);
         player.getCards().clear();
         game.getDrawPile().push(getNoneMatchingCard());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(1);
@@ -106,7 +106,7 @@ public class BotServiceTest {
         Player player = game.getPlayers().get(1);
         player.setDrawPenalties(2);
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(3600);
 
         assertThat(game.getDrawPile().size()).isEqualTo(91);
@@ -120,7 +120,7 @@ public class BotServiceTest {
         game.setDrawDuties(2);
         player.getCards().clear();
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(3600);
 
         assertThat(game.getDrawPile().size()).isEqualTo(91);
@@ -135,7 +135,7 @@ public class BotServiceTest {
         game.getDiscardPile().push(getDraw2Card());
         player.addCard(getDraw2Card());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(3100);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(3);
@@ -150,7 +150,7 @@ public class BotServiceTest {
         player.addCard(getNoneMatchingCard());
         player.addCard(getJoker());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
@@ -172,7 +172,7 @@ public class BotServiceTest {
         player.addCard(getNoneMatchingCard());
         player.addCard(game.getTopCard());
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(5600);
 
         boolean shouldSayUno = BotService.getLastSayUnoRandomNumber() < 8;
@@ -194,7 +194,7 @@ public class BotServiceTest {
         player.addCard(game.getTopCard());
         int discardPileSize = game.getDiscardPile().size();
 
-        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(8600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
