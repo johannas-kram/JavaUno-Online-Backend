@@ -10,6 +10,8 @@ import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,14 @@ import java.util.Stack;
 public class GameService {
 
     private final HousekeepingService housekeepingService;
+    private final PushService pushService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
-    public GameService(HousekeepingService housekeepingService) {
+    public GameService(HousekeepingService housekeepingService, PushService pushService) {
         this.housekeepingService = housekeepingService;
+        this.pushService = pushService;
     }
 
     public String createGame(){
@@ -58,6 +62,7 @@ public class GameService {
             game.setGameLifecycle(GameLifecycle.RUNNING);
             housekeepingService.updateLastAction(game);
             LOGGER.info("Started new round. Game: " + game.getUuid());
+            pushService.push(PushMessage.STARTED_GAME, game);
         }
     }
 

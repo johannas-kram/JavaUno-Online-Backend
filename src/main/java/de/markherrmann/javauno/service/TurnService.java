@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,19 @@ public class TurnService {
     private final GameService gameService;
     private final PlayerService playerService;
     private final HousekeepingService housekeepingService;
-    
+    private final PushService pushService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
     public TurnService(FinalizeTurnService finalizeTurnService, BotService botService, GameService gameService,
-                       PlayerService playerService, HousekeepingService housekeepingService){
+                       PlayerService playerService, HousekeepingService housekeepingService, PushService pushService){
         this.finalizeTurnService = finalizeTurnService;
         this.botService = botService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.housekeepingService = housekeepingService;
+        this.pushService = pushService;
     }
 
     void finalizeTurn(Game game){
@@ -88,6 +92,10 @@ public class TurnService {
         housekeepingService.updateLastAction(game);
     }
 
+    void pushAction(PushMessage message, Game game){
+        pushService.push(message, game);
+    }
+
     private void waitAndFinalize(Game game){
         try {
             Thread.sleep(3000);
@@ -102,6 +110,7 @@ public class TurnService {
         synchronized (game){
             finalizeTurnService.finalizeTurn(game);
         }
+        pushService.push(PushMessage.NEXT_TURN, game);
         Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
         if(player.isBot()){
             botService.makeTurn(game, player);

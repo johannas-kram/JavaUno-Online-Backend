@@ -34,7 +34,7 @@ public class RemainService {
 
     static void remain(Game game, Player player){
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        LOGGER.info("Successfully remained card. Game: " + game.getUuid() + "; Player: " + player.getUuid());
+        LOGGER.info("Successfully kept card. Game: " + game.getUuid() + "; Player: " + player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {

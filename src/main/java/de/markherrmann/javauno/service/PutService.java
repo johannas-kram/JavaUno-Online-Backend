@@ -9,6 +9,7 @@ import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
+import de.markherrmann.javauno.service.push.PushMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,9 @@ public class PutService {
             }
             putCard(game, player, card, cardIndex);
             turnService.updateLastAction(game);
+            turnService.pushAction(PushMessage.PUT_CARD, game);
             if(player.getCards().isEmpty()){
+                turnService.pushAction(PushMessage.FINISHED_GAME, game);
                 return "success";
             }
         }
