@@ -17,7 +17,7 @@ public class UnoState {
 
 	public static synchronized Game getGame(String uuid) throws IllegalArgumentException {
         if(!games.containsKey(uuid)){
-            LOGGER.error("There is no such game. UUID: " + uuid);
+            LOGGER.error("There is no such game. UUID: {}", uuid);
             throw new IllegalArgumentException("There is no such game.");
         }
         return games.get(uuid);

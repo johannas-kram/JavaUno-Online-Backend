@@ -70,12 +70,11 @@ public class PutService {
         game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
-        LOGGER.info(String.format(
-                "Put card successfully. Game: %s; Player: %s; playersCard: %s; topCard: %s",
+        LOGGER.info("Put card successfully. Game: {}; Player: {}; playersCard: {}; topCard: {}",
                 game.getUuid(),
                 player.getUuid(),
                 card,
-                topCard));
+                topCard);
         if(player.getCards().isEmpty()){
             game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
             game.setTurnState(TurnState.FINAL_COUNTDOWN);
@@ -173,20 +172,20 @@ public class PutService {
 
     private void logNotMatchingCard(Game game, Player player, Card playersCard, String reason){
         Card topCard = game.getTopCard();
-        LOGGER.warn(String.format(
-                "card does not match. %s. Game: %s; Player: %s; playersCard: %s; topCard: %s",
+        LOGGER.warn(
+                "card does not match. {}. Game: {}; Player: {}; playersCard: {}; topCard: {}",
                 reason,
                 game.getUuid(),
                 player.getUuid(),
                 playersCard,
-                topCard));
+                topCard);
     }
 
     private void logInvalidCard(Player player, Card card){
-        LOGGER.warn(String.format(
-                "The Player has no such card at this position. Cards: %s; CardToPut: %s",
+        LOGGER.warn(
+                "The Player has no such card at this position. Cards: {}; CardToPut: {}",
                 player.getCards(),
-                card));
+                card);
     }
 
 }

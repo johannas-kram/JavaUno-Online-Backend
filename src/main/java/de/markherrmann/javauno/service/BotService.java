@@ -21,7 +21,7 @@ public class BotService {
     private final BotFindColorService botSelectColorService;
     private final PushService pushService;
 
-    private final Logger logger = LoggerFactory.getLogger(BotService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BotService.class);
 
     private static int lastSayUnoRandomNumber = -1;
 
@@ -138,7 +138,7 @@ public class BotService {
         try {
             Thread.sleep(durance);
         } catch (InterruptedException ex){
-            logger.error("ERROR! Bot sleeping Interrupted. while loop with bad performance will be used.", ex);
+            LOGGER.error("ERROR! Bot sleeping Interrupted. while loop with bad performance will be used.", ex);
             waitWithWhileLoop(durance);
         }
     }
