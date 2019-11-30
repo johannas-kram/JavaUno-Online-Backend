@@ -25,9 +25,6 @@ public class BotService {
 
     private static int lastSayUnoRandomNumber = -1;
 
-    private static final String DRAWN_MESSAGE = "drawn-card";
-    private static final String PUT_MESSAGE = "put-card";
-
     @Autowired
     public BotService(BotDrawDutiesOrCumulativeService botDrawDutiesOrCumulativeService,
                       BotMaybePutService botMaybePutService, BotFindColorService botSelectColorService,
