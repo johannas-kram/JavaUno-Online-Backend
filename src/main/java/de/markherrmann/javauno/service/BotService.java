@@ -19,6 +19,8 @@ public class BotService {
     private final BotFindColorService botSelectColorService;
     private final Logger logger = LoggerFactory.getLogger(BotService.class);
 
+    private static int lastSayUnoRandomNumber = -1;
+
     @Autowired
     public BotService(BotDrawDutiesOrCumulativeService botDrawDutiesOrCumulativeService,
                       BotMaybePutService botMaybePutService, BotFindColorService botSelectColorService) {
@@ -101,13 +103,19 @@ public class BotService {
     private boolean maybeSayUno(Game game, Player player) {
         Random random = new Random();
         if(player.getCards().size() == 1){
-            if(random.nextInt(10) < 8){
+            int sayUnoRandomNumber = random.nextInt(10);
+            lastSayUnoRandomNumber = sayUnoRandomNumber;
+            if(sayUnoRandomNumber < 8){
                 doSleep(500);
                 SayUnoService.sayUno(game, player);
                 return true;
             }
         }
         return false;
+    }
+
+    public static int getLastSayUnoRandomNumber(){
+        return lastSayUnoRandomNumber;
     }
 
     private void doSleep(int durance){

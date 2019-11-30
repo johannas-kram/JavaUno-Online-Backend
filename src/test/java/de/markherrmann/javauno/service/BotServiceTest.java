@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Random;
 import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -157,6 +158,19 @@ public class BotServiceTest {
         } else {
             assertThat(game.getDesiredColor()).isEqualTo(player.getCards().get(0).getColor());
         }
+    }
+
+    @Test
+    public void shouldMakeBotTurnSayUno() throws Exception {
+        Player player = game.getPlayers().get(1);
+        player.getCards().clear();
+        player.addCard(getNoneMatchingCard());
+        player.addCard(game.getTopCard());
+
+        remainService.remain(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(5600);
+        
+        assertThat(player.isUnoSaid()).isEqualTo(BotService.getLastSayUnoRandomNumber() < 8);
     }
 
     @Test
