@@ -93,7 +93,6 @@ public class Game{
         this.desiredColor = desiredColor;
     }
 
-    @JsonIgnore
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }
