@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RemainServiceTest {
+public class KeepServiceTest {
 
     @Autowired
-    RemainService remainService;
+    KeepService keepService;
 
     @Autowired
     private GameService gameService;
@@ -38,12 +38,12 @@ public class RemainServiceTest {
     }
 
     @Test
-    public void shouldRemain(){
+    public void shouldKeep(){
         String gameUuid = game.getUuid();
         Player player = game.getPlayers().get(0);
         String playerUuid = player.getUuid();
 
-        remainService.remain(gameUuid, playerUuid);
+        keepService.keep(gameUuid, playerUuid);
 
         assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
@@ -77,7 +77,7 @@ public class RemainServiceTest {
         Exception exception = null;
 
         try {
-            remainService.remain(gameUuid, playerUuid);
+            keepService.keep(gameUuid, playerUuid);
         }
         catch(Exception ex){
             exception = ex;

@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class WsTestUtils {
 
-    private static Logger log = LoggerFactory.getLogger(WsTestUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WsTestUtils.class);
 
     public WebSocketStompClient createWebSocketClient() {
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
@@ -28,13 +28,13 @@ public class WsTestUtils {
     public static class MyStompSessionHandler extends StompSessionHandlerAdapter {
         @Override
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-            log.info("Stomp client is connected");
+            LOGGER.info("Stomp client is connected");
             super.afterConnected(session, connectedHeaders);
         }
 
         @Override
         public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-            log.info("Exception: " + exception);
+            LOGGER.info("Exception: {}", exception);
             super.handleException(session, command, headers, payload, exception);
         }
     }
@@ -60,7 +60,7 @@ public class WsTestUtils {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            log.info("received message: {} with headers: {}", payload, headers);
+            LOGGER.info("received message: {} with headers: {}", payload, headers);
             frameHandler.accept((String) payload);
         }
     }

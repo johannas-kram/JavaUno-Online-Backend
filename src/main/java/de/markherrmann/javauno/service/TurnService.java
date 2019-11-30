@@ -50,11 +50,11 @@ public class TurnService {
         Player current = game.getPlayers().get(currentIndex);
         boolean playersTurn = current.equals(player);
         if(!playersTurn){
-            LOGGER.warn(String.format(
-                    "It's not the players turn. Game: %s; playersIndex: %d; currentPlayerIndex: %d",
+            LOGGER.warn(
+                    "It's not the players turn. Game: {}; playersIndex: {}; currentPlayerIndex: {}",
                     game.getUuid(),
                     game.getPlayers().indexOf(player),
-                    game.getCurrentPlayerIndex()));
+                    game.getCurrentPlayerIndex());
         }
         return playersTurn;
     }
@@ -62,7 +62,7 @@ public class TurnService {
     boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){
         boolean inLifecycle = game.getGameLifecycle().equals(gameLifecycle);
         if(!inLifecycle){
-            LOGGER.error("game is in wrong lifecycle. Game: " + game.getUuid());
+            LOGGER.error("game is in wrong lifecycle. Game: {}", game.getUuid());
         }
         return inLifecycle;
     }
@@ -73,10 +73,10 @@ public class TurnService {
                 return;
             }
         }
-        LOGGER.error(String.format("turn is in wrong state for this action. Game: %s; validStates: %s; state: %s",
+        LOGGER.error("turn is in wrong state for this action. Game: {}; validStates: {}; state: {}",
                 game.getUuid(),
                 Arrays.asList(validTurnStates),
-                game.getTurnState()));
+                game.getTurnState());
         throw new IllegalStateException("turn is in wrong state for this action.");
     }
 

@@ -39,14 +39,14 @@ public class SelectColorService {
     static void selectColor(Game game, String colorName){
         game.setDesiredColor(colorName);
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        LOGGER.info("Successfully set color. Game: " + game.getUuid() + "; Color: " + colorName);
+        LOGGER.info("Successfully selected color. Game: {}; Color: {}", game.getUuid(), colorName);
     }
 
     private String getColorName(String color) throws IllegalArgumentException {
         try {
             return Color.valueOf(color.toUpperCase()).name();
         } catch(java.lang.IllegalArgumentException ex){
-            LOGGER.error("There is no such color. name: " + color);
+            LOGGER.error("There is no such color. name: {}", color);
             throw new IllegalArgumentException("There is no such color.");
         }
     }

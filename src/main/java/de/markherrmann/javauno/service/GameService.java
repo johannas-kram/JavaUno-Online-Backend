@@ -39,7 +39,7 @@ public class GameService {
         Game game = new Game();
         UnoState.putGame(game);
         housekeepingService.updateLastAction(game);
-        LOGGER.info("Created new game with uuid " + game.getUuid());
+        LOGGER.info("Created new game with uuid {}", game.getUuid());
         return game.getUuid();
     }
 
@@ -47,11 +47,11 @@ public class GameService {
         Game game = getGame(gameUuid);
         synchronized (game) {
             if (isGameInLifecycle(game, GameLifecycle.RUNNING)) {
-                LOGGER.error("Current round is not finished. New round can not be started yet. Game: " + gameUuid);
+                LOGGER.error("Current round is not finished. New round can not be started yet. Game: {}", gameUuid);
                 throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
             }
             if (game.getPlayers().size() < 2) {
-                LOGGER.error("There are not enough players in the game. Game: " + gameUuid);
+                LOGGER.error("There are not enough players in the game. Game: {}", gameUuid);
                 throw new IllegalStateException("There are not enough players in the game.");
             }
             resetGame(game);
@@ -61,7 +61,7 @@ public class GameService {
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
             housekeepingService.updateLastAction(game);
-            LOGGER.info("Started new round. Game: " + game.getUuid());
+            LOGGER.info("Started new round. Game: {}", game.getUuid());
             pushService.push(PushMessage.STARTED_GAME, game);
         }
     }

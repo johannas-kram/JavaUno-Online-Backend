@@ -54,11 +54,11 @@ public class DrawService {
         player.addCard(card);
         maybeRearrangePiles(game);
         setTurnState(game, player);
-        LOGGER.info(String.format(
-                "Drawn card successfully. Game: %s; Player: %s; card: %s",
+        LOGGER.info(
+                "Drawn card successfully. Game: {}; Player: {} card: {}",
                 game.getUuid(),
                 player.getUuid(),
-                card));
+                card);
         return card;
     }
 

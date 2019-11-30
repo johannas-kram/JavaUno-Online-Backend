@@ -35,7 +35,7 @@ public class SayUnoService {
 
     static void sayUno(Game game, Player player){
         player.setUnoSaid(true);
-        LOGGER.info("Successfully said uno. Game: " + game.getUuid() + "; Player: " + player.getUuid());
+        LOGGER.info("Successfully said uno. Game: {}; Player: {}", game.getUuid(), player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {

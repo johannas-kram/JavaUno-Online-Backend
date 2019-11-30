@@ -12,29 +12,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RemainService {
+public class KeepService {
 
     private final TurnService turnService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RemainService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeepService.class);
 
     @Autowired
-    public RemainService(TurnService turnService) {
+    public KeepService(TurnService turnService) {
         this.turnService = turnService;
     }
 
-    public void remain(String gameUuid, String playerUuid) throws IllegalStateException, IllegalArgumentException {
+    public void keep(String gameUuid, String playerUuid) throws IllegalStateException, IllegalArgumentException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game) {
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player);
-            remain(game, player);
+            keep(game, player);
         }
         turnService.finalizeTurn(game);
     }
 
-    static void remain(Game game, Player player){
+    static void keep(Game game, Player player){
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        LOGGER.info("Successfully kept card. Game: " + game.getUuid() + "; Player: " + player.getUuid());
+        LOGGER.info("Successfully kept card. Game: {}; Player: {}", game.getUuid(), player.getUuid());
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {
