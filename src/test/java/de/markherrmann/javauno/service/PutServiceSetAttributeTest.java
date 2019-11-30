@@ -98,7 +98,6 @@ public class PutServiceSetAttributeTest {
         putCard(topCard, playersCard);
 
         assertThat(game.getDrawDuties()).isEqualTo(4);
-
     }
 
     @Test
