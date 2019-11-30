@@ -20,6 +20,7 @@ public class BotMaybePutService {
         if(matches.isEmpty()){
             return false;
         }
+        removeJokersIfNotOnly(matches);
         Card card = chooseRandomly(matches);
         PutService.putCard(game, player, card, player.getCards().indexOf(card));
         return true;
@@ -48,5 +49,25 @@ public class BotMaybePutService {
         Random random = new Random();
         int randomIndex = random.nextInt(matches.size());
         return matches.get(randomIndex);
+    }
+
+    private void removeJokersIfNotOnly(List<Card> matches){
+        if(!onlyJokers(matches)){
+            for(int i = 0; i < matches.size(); i++){
+                if(matches.get(i).isJokerCard()){
+                    matches.remove(i);
+                    i--;
+                }
+            }
+        }
+    }
+
+    private boolean onlyJokers(List<Card> matches){
+        for(Card card : matches){
+            if(!card.isJokerCard()){
+                return false;
+            }
+        }
+        return true;
     }
 }
