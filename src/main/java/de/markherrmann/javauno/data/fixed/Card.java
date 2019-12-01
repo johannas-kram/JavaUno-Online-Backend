@@ -36,7 +36,7 @@ public final class Card {
     }
 
     static Card createSkipCard(Color color){
-        return new Card(CardType.SKIP, color, 20);
+        return new Card(CardType.SKIP, color);
     }
 
     static Card createReverseCard(Color color){
