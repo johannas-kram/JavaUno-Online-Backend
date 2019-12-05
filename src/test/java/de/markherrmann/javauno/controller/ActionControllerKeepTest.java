@@ -1,5 +1,7 @@
 package de.markherrmann.javauno.controller;
 
+import de.markherrmann.javauno.TestHelper;
+import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -38,7 +40,7 @@ public class ActionControllerKeepTest {
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame();
+        String uuid = gameController.createGame().getGameUuid();
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
@@ -55,7 +57,7 @@ public class ActionControllerKeepTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("success");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
         assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
 
@@ -83,7 +85,7 @@ public class ActionControllerKeepTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(expectedMessage);
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
         assertThat(game.getTurnState()).isEqualTo(turnState);
     }
 
@@ -94,5 +96,4 @@ public class ActionControllerKeepTest {
         game.putHuman(player);
         game.putHuman(player2);
     }
-
 }

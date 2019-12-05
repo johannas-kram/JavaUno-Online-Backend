@@ -87,10 +87,15 @@ public class PutServiceStateTest {
         game.getPlayers().get(0).addCard(card);
         game.getPlayers().get(0).addCard(card);
         int discardPileSize = game.getDiscardPile().size();
+        Exception exception = null;
 
-        String result = putService.put(gameUuid, playerUuid, card, 1);
+        try {
+            putService.put(gameUuid, playerUuid, card, 1);
+        } catch (Exception ex){
+            exception = ex;
+        }
 
-        TestHelper.assertPutCard(game, card, discardPileSize, result);
+        TestHelper.assertPutCard(game, card, discardPileSize, exception);
     }
 
 
@@ -102,20 +107,18 @@ public class PutServiceStateTest {
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(card);
         Exception exception = new Exception("");
-        String result = "";
         TurnState turnState = game.getTurnState();
 
         try {
-            result = putService.put(gameUuid, playerUuid, card, 0);
+            putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotPut(game, card, result, exception, turnState);
+        assertNotPut(game, card, exception, turnState);
     }
 
-    private void assertNotPut(Game game, Card card, String result, Exception exception, TurnState turnState){
-        assertThat(result).isEqualTo("");
+    private void assertNotPut(Game game, Card card, Exception exception, TurnState turnState){
         game.getDiscardPile().pop();
         assertThat(game.getDiscardPile()).isEmpty();
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();

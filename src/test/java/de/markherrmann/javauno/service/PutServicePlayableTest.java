@@ -175,10 +175,15 @@ public class PutServicePlayableTest {
         game.getPlayers().get(0).getCards().add(0, playersCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
         int discardPileSize = game.getDiscardPile().size();
+        Exception exception = null;
 
-        String result = putService.put(gameUuid, playerUuid, playersCard, 1);
+        try {
+            putService.put(gameUuid, playerUuid, playersCard, 1);
+        } catch (Exception ex){
+            exception = ex;
+        }
 
-        TestHelper.assertPutCard(game, playersCard, discardPileSize, result);
+        TestHelper.assertPutCard(game, playersCard, discardPileSize, exception);
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){
@@ -187,15 +192,19 @@ public class PutServicePlayableTest {
         game.setTurnState(turnState);
         game.getDiscardPile().push(topCard);
         game.getPlayers().get(0).getCards().add(0, playersCard);
+        Exception exception = new Exception("");
 
+        try {
+            putService.put(gameUuid, playerUuid, playersCard, 0);
+        } catch (Exception ex){
+            exception = ex;
+        }
 
-        String result = putService.put(gameUuid, playerUuid, playersCard, 0);
-
-        assertNotPutCard(game, playersCard, result, turnState);
+        assertNotPutCard(game, playersCard, exception, turnState);
     }
 
-    private void assertNotPutCard(Game game, Card card, String result, TurnState turnState){
-        assertThat(result).isEqualTo("failure: card does not match.");
+    private void assertNotPutCard(Game game, Card card, Exception exception, TurnState turnState){
+        assertThat(exception.getClass().getSimpleName()).isEqualTo("CardDoesNotMatchException");
         assertThat(game.getTopCard()).isNotEqualTo(card);
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();
         assertThat(game.getPlayers().get(0).getCards().get(0)).isEqualTo(card);

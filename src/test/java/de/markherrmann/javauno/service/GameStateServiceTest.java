@@ -3,7 +3,7 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
-import de.markherrmann.javauno.controller.response.GameState;
+import de.markherrmann.javauno.controller.response.GameStateResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class GameStateServiceTest {
     public void ShouldGetSetPlayersState(){
         prepareGame();
 
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayers().get(0).getUuid());
+        GameStateResponse state = gameStateService.get(game.getUuid(), game.getPlayers().get(0).getUuid());
 
         assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.SET_PLAYERS);
     }
@@ -49,7 +49,7 @@ public class GameStateServiceTest {
         prepareGame();
         gameService.startGame(game.getUuid());
 
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
+        GameStateResponse state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
 
         assertState(state, playerIndex, true);
     }
@@ -60,7 +60,7 @@ public class GameStateServiceTest {
         prepareGame();
         gameService.startGame(game.getUuid());
 
-        GameState state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
+        GameStateResponse state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
 
         assertState(state, playerIndex, false);
     }
@@ -92,7 +92,7 @@ public class GameStateServiceTest {
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
     }
 
-    private void assertState(GameState state, int playerIndex, boolean myTurn){
+    private void assertState(GameStateResponse state, int playerIndex, boolean myTurn){
         assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.RUNNING);
         assertThat(state.getGame()).isEqualTo(game);
         assertThat(state.getPlayers()).isEqualTo(game.getPlayers());

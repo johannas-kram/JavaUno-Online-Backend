@@ -41,7 +41,7 @@ public class ActionControllerPutTest {
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame();
+        String uuid = gameController.createGame().getGameUuid();
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
@@ -61,7 +61,7 @@ public class ActionControllerPutTest {
         int putNow = game.getDiscardPile().size();
 
         assertThat(putNow - putBefore).isEqualTo(1);
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("success");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
     }
 
     @Test
@@ -87,7 +87,8 @@ public class ActionControllerPutTest {
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN, "failure: card does not match.");
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN,
+                "failure: de.markherrmann.javauno.exceptions.CardDoesNotMatchException");
     }
 
     private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {
@@ -110,7 +111,7 @@ public class ActionControllerPutTest {
 
     private void assertFailure(MvcResult mvcResult, String expectedMessage, int putBefore, int putNow) throws Exception {
         assertThat(putNow - putBefore).isEqualTo(0);
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(expectedMessage);
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
     private String buildExpectedMessage(String exception, String message){

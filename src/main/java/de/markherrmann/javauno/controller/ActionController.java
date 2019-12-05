@@ -2,6 +2,7 @@ package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
+import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,12 @@ public class ActionController {
     }
 
     @PostMapping(value = "/put")
-    public @ResponseBody String putCard(@RequestBody PutCardRequest putCardRequest){
+    public @ResponseBody GeneralResponse putCard(@RequestBody PutCardRequest putCardRequest){
         try {
-            return putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
+            putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
+            return new GeneralResponse(true, "success");
         } catch(Exception ex){
-            return "failure: " + ex;
+            return new GeneralResponse(false, "failure: " + ex);
         }
     }
 
@@ -45,32 +47,32 @@ public class ActionController {
     }
 
     @PostMapping(value = "/select-color/{gameUuid}/{playerUuid}/{color}")
-    public @ResponseBody String selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
+    public @ResponseBody GeneralResponse selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
         try {
             selectColorService.selectColor(gameUuid, playerUuid, color);
-            return "success";
+            return new GeneralResponse(true,"success");
         } catch(Exception ex){
-            return "failure: " + ex;
+            return new GeneralResponse(false, "failure: " + ex);
         }
     }
 
     @PostMapping(value = "/say-uno/{gameUuid}/{playerUuid}")
-    public @ResponseBody String sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public @ResponseBody GeneralResponse sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             sayUnoService.sayUno(gameUuid, playerUuid);
-            return "success";
+            return new GeneralResponse(true,"success");
         } catch(Exception ex){
-            return "failure: " + ex;
+            return new GeneralResponse(false, "failure: " + ex);
         }
     }
 
     @PostMapping(value = "/keep/{gameUuid}/{playerUuid}")
-    public @ResponseBody String keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public @ResponseBody GeneralResponse keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             keepService.keep(gameUuid, playerUuid);
-            return "success";
+            return new GeneralResponse(true,"success");
         } catch(Exception ex){
-            return "failure: " + ex;
+            return new GeneralResponse(false, "failure: " + ex);
         }
     }
 }

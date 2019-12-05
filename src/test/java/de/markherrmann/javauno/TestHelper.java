@@ -1,5 +1,8 @@
 package de.markherrmann.javauno;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -26,8 +29,8 @@ public class TestHelper {
         return game;
     }
 
-    public static void assertPutCard(Game game, Card card, int discardPileSize, String result){
-        assertThat(result).isEqualTo("success");
+    public static void assertPutCard(Game game, Card card, int discardPileSize, Exception exception){
+        assertThat(exception).isNull();
         assertThat(game.getPlayers().get(0).getCards().size()).isEqualTo(1);
         assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
         assertThat(game.getTopCard()).isEqualTo(card);
@@ -50,5 +53,13 @@ public class TestHelper {
             }
         }
         return null;
+    }
+
+    public static GeneralResponse jsonToObject(final String json) {
+        try {
+            return new ObjectMapper().readValue(json, GeneralResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

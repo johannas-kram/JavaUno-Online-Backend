@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.CardDoesNotMatchException;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -27,26 +28,26 @@ public class PutService {
         this.turnService = turnService;
     }
 
-    public String put(String gameUuid, String playerUuid, Card card, int cardIndex) throws IllegalArgumentException, IllegalStateException {
+    public void put(String gameUuid, String playerUuid, Card card, int cardIndex)
+            throws IllegalArgumentException, IllegalStateException, CardDoesNotMatchException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game){
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player, card, cardIndex);
             if(!isPlayableCard(game, player, card, cardIndex)){
-                return "failure: card does not match.";
+                throw new CardDoesNotMatchException();
             }
             putCard(game, player, card, cardIndex);
             turnService.updateLastAction(game);
             turnService.pushAction(PushMessage.PUT_CARD, game);
             if(player.getCards().isEmpty()){
                 turnService.pushAction(PushMessage.FINISHED_GAME, game);
-                return "success";
+                return;
             }
         }
         if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
             turnService.finalizeTurn(game);
         }
-        return "success";
     }
 
     private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException {

@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.controller;
 
+import de.markherrmann.javauno.controller.response.ErrorResponse;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,22 +14,25 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
-    public @ResponseBody String handleError(HttpServletRequest request) {
+    public @ResponseBody
+    ErrorResponse handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (status == null) {
-            return "unknown error";
+            return new ErrorResponse("unknown error");
         }
 
         Integer statusCode = Integer.valueOf(status.toString());
         if(statusCode == HttpStatus.NOT_FOUND.value()) {
-            return "error: wrong path or missing url parts";
+            return new ErrorResponse("error: wrong path or missing url parts");
         } else if(statusCode == HttpStatus.METHOD_NOT_ALLOWED.value()) {
-            return "error: wrong request method";
+            return new ErrorResponse("error: wrong request method");
         } else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            return "error: internal server error";
+            return new ErrorResponse("error: internal server error");
+        } else if(statusCode == HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()) {
+            return new ErrorResponse("error: unsupported media type");
         }
         
-        return "unknown error";
+        return new ErrorResponse("unknown error");
     }
 
     @Override

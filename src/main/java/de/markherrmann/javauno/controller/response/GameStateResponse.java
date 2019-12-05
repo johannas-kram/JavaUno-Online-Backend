@@ -7,10 +7,8 @@ import de.markherrmann.javauno.data.state.component.Player;
 
 import java.util.List;
 
-public class GameState {
+public class GameStateResponse extends GeneralResponse {
 
-    private boolean success;
-    private String message;
     private Game game;
     private List<Player> players;
     private List<Card> ownCards;
@@ -18,20 +16,18 @@ public class GameState {
     @JsonProperty(value= "yourTurn")
     private boolean playersTurn;
 
-    private GameState(){}
+    private GameStateResponse(){}
 
-    public GameState(Game game, Player player, boolean playersTurn) {
+    public GameStateResponse(Game game, Player player, boolean playersTurn) {
+        super(true, "success");
         this.players = game.getPlayers();
         this.game = game;
         this.ownCards = player.getCards();
-        this.success = true;
-        this.message = "success";
         this.playersTurn = playersTurn;
     }
 
-    public GameState(Exception exception) {
-        this.success = false;
-        this.message = "failure: " + exception;
+    public GameStateResponse(Exception exception) {
+        super(false, "failure: " + exception);
     }
 
     public Game getGame() {
@@ -44,14 +40,6 @@ public class GameState {
 
     public List<Card> getOwnCards() {
         return ownCards;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public boolean isPlayersTurn() {
