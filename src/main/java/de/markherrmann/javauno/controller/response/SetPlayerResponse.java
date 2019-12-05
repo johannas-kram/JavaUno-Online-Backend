@@ -1,39 +1,18 @@
 package de.markherrmann.javauno.controller.response;
 
-public class SetPlayerResponse {
+public class SetPlayerResponse extends GeneralResponse {
 
-    private boolean success;
-    private String message;
     private String playerUuid;
 
-    public SetPlayerResponse(){
-
-    }
+    private SetPlayerResponse(){}
 
     public SetPlayerResponse(boolean success, String message, String playerUuid) {
-        this.success = success;
-        this.message = message;
+        super(success, message);
         this.playerUuid = playerUuid;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public String getPlayerUuid() {
         return playerUuid;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public void setPlayerUuid(String playerUuid) {
