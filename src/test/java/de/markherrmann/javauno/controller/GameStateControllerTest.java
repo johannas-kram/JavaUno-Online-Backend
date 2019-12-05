@@ -5,7 +5,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.controller.response.GameState;
+import de.markherrmann.javauno.controller.response.GameStateResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class GameStateControllerTest {
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame();
+        String uuid = gameController.createGame().getGameUuid();
         game = UnoState.getGame(uuid);
         addPlayer();
     }
@@ -88,29 +88,29 @@ public class GameStateControllerTest {
 
     private void assertGameState(MvcResult mvcResult, GameLifecycle gameLifecycle) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
-        GameState gameState = jsonToObject(response);
+        GameStateResponse gameStateResponse = jsonToObject(response);
 
-        assertThat(gameState.isSuccess()).isTrue();
-        assertThat(gameState.getMessage()).isEqualTo("success");
-        assertThat(gameState.getGame().getGameLifecycle()).isEqualTo(gameLifecycle);
-        assertThat(gameState.getPlayers()).isNotEmpty();
+        assertThat(gameStateResponse.isSuccess()).isTrue();
+        assertThat(gameStateResponse.getMessage()).isEqualTo("success");
+        assertThat(gameStateResponse.getGame().getGameLifecycle()).isEqualTo(gameLifecycle);
+        assertThat(gameStateResponse.getPlayers()).isNotEmpty();
 
         if(gameLifecycle.equals(GameLifecycle.RUNNING)){
-            assertThat(gameState.getOwnCards().size()).isEqualTo(7);
+            assertThat(gameStateResponse.getOwnCards().size()).isEqualTo(7);
         }
     }
 
     private void assertFailure(MvcResult mvcResult, String message) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
-        GameState gameState = jsonToObject(response);
+        GameStateResponse gameStateResponse = jsonToObject(response);
         String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: " + message;
-        assertThat(gameState.isSuccess()).isFalse();
-        assertThat(gameState.getMessage()).isEqualTo(expectedMessage);
+        assertThat(gameStateResponse.isSuccess()).isFalse();
+        assertThat(gameStateResponse.getMessage()).isEqualTo(expectedMessage);
     }
 
-    private static GameState jsonToObject(final String json) {
+    private static GameStateResponse jsonToObject(final String json) {
         try {
-            return new ObjectMapper().readValue(json, GameState.class);
+            return new ObjectMapper().readValue(json, GameStateResponse.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

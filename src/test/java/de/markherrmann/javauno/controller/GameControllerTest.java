@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.controller;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -46,19 +47,20 @@ public class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("success");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
     }
 
     @Test
     public void shouldFailStartGameCausedByInvalidUuid() throws Exception {
         Game game = createGame();
         addPlayer(game);
+        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: There is no such game.";
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", "invalid"))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: There is no such game.");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
     @Test
@@ -66,27 +68,29 @@ public class GameControllerTest {
         Game game = createGame();
         addPlayer(game);
         game.setGameLifecycle(GameLifecycle.RUNNING);
+        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: Current round is not finished. New round can not be started yet.";
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalStateException: Current round is not finished. New round can not be started yet.");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
     @Test
     public void shouldFailStartGameCausedByNoPlayers() throws Exception {
         Game game = createGame();
+        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: There are not enough players in the game.";
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("failure: de.markherrmann.javauno.exceptions.IllegalStateException: There are not enough players in the game.");
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
     private Game createGame(){
-        String gameUuid = gameController.createGame();
+        String gameUuid = gameController.createGame().getGameUuid();
         return UnoState.getGame(gameUuid);
     }
 

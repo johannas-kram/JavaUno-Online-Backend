@@ -1,5 +1,8 @@
 package de.markherrmann.javauno;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -50,5 +53,13 @@ public class TestHelper {
             }
         }
         return null;
+    }
+
+    public static GeneralResponse jsonToObject(final String json) {
+        try {
+            return new ObjectMapper().readValue(json, GeneralResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
