@@ -87,7 +87,8 @@ public class ActionControllerPutTest {
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN, "failure: card does not match.");
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN,
+                "failure: de.markherrmann.javauno.exceptions.CardDoesNotMatchException");
     }
 
     private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {

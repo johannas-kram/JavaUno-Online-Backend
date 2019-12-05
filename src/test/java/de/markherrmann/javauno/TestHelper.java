@@ -29,8 +29,8 @@ public class TestHelper {
         return game;
     }
 
-    public static void assertPutCard(Game game, Card card, int discardPileSize, String result){
-        assertThat(result).isEqualTo("success");
+    public static void assertPutCard(Game game, Card card, int discardPileSize, Exception exception){
+        assertThat(exception).isNull();
         assertThat(game.getPlayers().get(0).getCards().size()).isEqualTo(1);
         assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
         assertThat(game.getTopCard()).isEqualTo(card);

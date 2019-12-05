@@ -30,8 +30,8 @@ public class ActionController {
     @PostMapping(value = "/put")
     public @ResponseBody GeneralResponse putCard(@RequestBody PutCardRequest putCardRequest){
         try {
-            String result = putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
-            return new GeneralResponse("success".equals(result), result);
+            putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
+            return new GeneralResponse(true, "success");
         } catch(Exception ex){
             return new GeneralResponse(false, "failure: " + ex);
         }

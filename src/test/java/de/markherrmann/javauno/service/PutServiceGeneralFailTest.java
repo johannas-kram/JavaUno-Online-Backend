@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,15 +44,14 @@ public class PutServiceGeneralFailTest {
         game.getPlayers().get(0).addCard(card);
         game.setCurrentPlayerIndex(1);
         Exception exception = new Exception("");
-        String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card, 0);
+            putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotPut(game, card, result, "");
+        assertNotPut(game, card);
         assertException(exception, "IllegalStateException", "it's not your turn.");
     }
 
@@ -65,15 +65,14 @@ public class PutServiceGeneralFailTest {
         game.setCurrentPlayerIndex(1);
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
         Exception exception = new Exception("");
-        String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card, 0);
+            putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotPut(game, card, result, "");
+        assertNotPut(game, card);
         assertException(exception, "IllegalStateException", "game is in wrong lifecycle.");
     }
 
@@ -86,20 +85,18 @@ public class PutServiceGeneralFailTest {
         game.getPlayers().get(0).clearCards();
         game.getPlayers().get(0).addCard(wrongCard);
         Exception exception = new Exception("");
-        String result = "";
 
         try {
-            result = putService.put(gameUuid, playerUuid, card, 0);
+            putService.put(gameUuid, playerUuid, card, 0);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotPut(game, wrongCard, result, "");
+        assertNotPut(game, wrongCard);
         assertException(exception, "IllegalArgumentException", "The Player has no such card at this position.");
     }
 
-    private void assertNotPut(Game game, Card card, String result, String expextedResult){
-        assertThat(result).isEqualTo(expextedResult);
+    private void assertNotPut(Game game, Card card){
         game.getDiscardPile().pop();
         assertThat(game.getDiscardPile()).isEmpty();
         assertThat(game.getPlayers().get(0).getCards()).isNotEmpty();
