@@ -2,7 +2,7 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.controller.response.GameState;
+import de.markherrmann.javauno.controller.response.GameStateResponse;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,12 @@ public class GameStateService {
         this.turnService = turnService;
     }
 
-    public GameState get(String gameUuid, String playerUuid) throws IllegalArgumentException {
+    public GameStateResponse get(String gameUuid, String playerUuid) throws IllegalArgumentException {
         Game game = gameService.getGame(gameUuid);
         synchronized (game) {
             Player player = playerService.getPlayer(playerUuid, game);
             boolean playersTurn = turnService.isPlayersTurn(game, player);
-            return new GameState(game, player, playersTurn);
+            return new GameStateResponse(game, player, playersTurn);
         }
     }
 }
