@@ -26,8 +26,12 @@ public class GameStateService {
         Game game = gameService.getGame(gameUuid);
         synchronized (game) {
             Player player = playerService.getPlayer(playerUuid, game);
-            boolean playersTurn = turnService.isPlayersTurn(game, player);
-            return new GameStateResponse(game, player, playersTurn);
+            int playersIndex = getPlayersIndex(game, player);
+            return new GameStateResponse(game, player, playersIndex);
         }
+    }
+
+    private int getPlayersIndex(Game game, Player player){
+        return game.getPlayers().indexOf(player);
     }
 }

@@ -51,7 +51,7 @@ public class GameStateServiceTest {
 
         GameStateResponse state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
 
-        assertState(state, playerIndex, true);
+        assertState(state, playerIndex);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class GameStateServiceTest {
 
         GameStateResponse state = gameStateService.get(game.getUuid(), game.getPlayers().get(playerIndex).getUuid());
 
-        assertState(state, playerIndex, false);
+        assertState(state, playerIndex);
     }
 
     @Test
@@ -92,12 +92,12 @@ public class GameStateServiceTest {
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
     }
 
-    private void assertState(GameStateResponse state, int playerIndex, boolean myTurn){
+    private void assertState(GameStateResponse state, int playerIndex){
         assertThat(state.getGame().getGameLifecycle()).isEqualTo(GameLifecycle.RUNNING);
         assertThat(state.getGame()).isEqualTo(game);
         assertThat(state.getPlayers()).isEqualTo(game.getPlayers());
         assertThat(state.getOwnCards()).isEqualTo(game.getPlayers().get(playerIndex).getCards());
-        assertThat(state.isPlayersTurn()).isEqualTo(myTurn);
+        assertThat(state.getPlayersIndex()).isEqualTo(playerIndex);
     }
 
     private void prepareGame(){
