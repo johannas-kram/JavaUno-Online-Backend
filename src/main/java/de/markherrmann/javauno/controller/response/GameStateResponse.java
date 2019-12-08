@@ -13,17 +13,17 @@ public class GameStateResponse extends GeneralResponse {
     private List<Player> players;
     private List<Card> ownCards;
 
-    @JsonProperty(value= "yourTurn")
-    private boolean playersTurn;
+    @JsonProperty(value= "myIndex")
+    private int playersIndex;
 
     private GameStateResponse(){}
 
-    public GameStateResponse(Game game, Player player, boolean playersTurn) {
+    public GameStateResponse(Game game, Player player, int playersIndex) {
         super(true, "success");
         this.players = game.getPlayers();
         this.game = game;
         this.ownCards = player.getCards();
-        this.playersTurn = playersTurn;
+        this.playersIndex = playersIndex;
     }
 
     public GameStateResponse(Exception exception) {
@@ -42,7 +42,7 @@ public class GameStateResponse extends GeneralResponse {
         return ownCards;
     }
 
-    public boolean isPlayersTurn() {
-        return playersTurn;
+    public int getPlayersIndex() {
+        return playersIndex;
     }
 }
