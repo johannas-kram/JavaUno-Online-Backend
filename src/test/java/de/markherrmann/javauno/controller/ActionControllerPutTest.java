@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.data.fixed.Card;
@@ -9,6 +8,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.service.GameService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +20,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
