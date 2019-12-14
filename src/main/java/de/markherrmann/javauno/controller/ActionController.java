@@ -3,9 +3,6 @@ package de.markherrmann.javauno.controller;
 import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
-import de.markherrmann.javauno.exceptions.CardDoesNotMatchException;
-import de.markherrmann.javauno.exceptions.IllegalArgumentException;
-import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,16 +40,17 @@ public class ActionController {
             GeneralResponse response = new GeneralResponse(true, "success");
             return ResponseEntity.ok(response);
         } catch(Exception exception){
-            return ErrorResponseUtil.getErrorResponseEntity(exception);
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
     @PostMapping(value = "/draw/{gameUuid}/{playerUuid}")
-    public @ResponseBody DrawnCardResponse drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            return drawService.draw(gameUuid, playerUuid);
-        } catch(Exception ex){
-            return new DrawnCardResponse(ex);
+            DrawnCardResponse drawnCardResponse = drawService.draw(gameUuid, playerUuid);
+            return ResponseEntity.ok(drawnCardResponse);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
