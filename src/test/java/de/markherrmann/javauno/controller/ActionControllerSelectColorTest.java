@@ -65,6 +65,21 @@ public class ActionControllerSelectColorTest {
     }
 
     @Test
+    public void shouldFailCausedByNoSuchGame() throws Exception {
+        UnoState.removeGame(game.getUuid());
+        Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_GAME.getValue());
+        shouldFail("red", expectedException, HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void shouldFailCausedByNoSuchPlayer() throws Exception {
+        game.getPlayers().clear();
+        game.getPlayers().add(new Player("test", false));
+        Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
+        shouldFail("red", expectedException, HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     public void shouldFailCausedByInvalidColor() throws Exception {
         Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_COLOR.getValue());
         shouldFail("silver", expectedException, HttpStatus.NOT_FOUND);
