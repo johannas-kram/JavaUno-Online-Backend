@@ -7,6 +7,9 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,7 +81,7 @@ public class PlayerControllerTest {
                 .content(asJsonString(invalidRequest)))
                 .andExpect(status().isOk()).andReturn();
 
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
+        assertFailure(mvcResult, IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -90,7 +93,7 @@ public class PlayerControllerTest {
                 .content(getAddPlayerRequestAsJson("player name", false)))
                 .andExpect(status().isOk()).andReturn();
 
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalStateException", "Game is started. Players can not be added anymore.");
+        assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -150,7 +153,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such bot in this game.");
+        assertFailure(mvcResult, IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     @Test
@@ -163,7 +166,7 @@ public class PlayerControllerTest {
 
 
         assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalStateException", "Game is started. Players can not be removed anymore.");
+        assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     private void assertRemovePlayerResponse(MvcResult mvcResult) throws Exception {

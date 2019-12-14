@@ -5,6 +5,9 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +57,7 @@ public class GameControllerTest {
     public void shouldFailStartGameCausedByInvalidUuid() throws Exception {
         Game game = createGame();
         addPlayer(game);
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: There is no such game.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", "invalid"))
                 .andExpect(status().isOk())
@@ -68,7 +71,7 @@ public class GameControllerTest {
         Game game = createGame();
         addPlayer(game);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: Current round is not finished. New round can not be started yet.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())
@@ -80,7 +83,7 @@ public class GameControllerTest {
     @Test
     public void shouldFailStartGameCausedByNoPlayers() throws Exception {
         Game game = createGame();
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: There are not enough players in the game.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.NOT_ENOUGH_PLAYERS.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
                 .andExpect(status().isOk())

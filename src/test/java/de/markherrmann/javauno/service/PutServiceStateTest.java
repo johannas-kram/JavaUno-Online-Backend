@@ -5,6 +5,8 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -128,8 +130,8 @@ public class PutServiceStateTest {
     }
 
     private void assertException(Exception exception){
-        assertThat(exception.getClass().getSimpleName()).isEqualTo("IllegalStateException");
-        assertThat(exception.getMessage()).isEqualTo("turn is in wrong state for this action.");
+        assertThat(exception.getClass().getSimpleName()).isEqualTo(IllegalStateException.class.getSimpleName());
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_TURN.getValue());
     }
 
     private Card findDraw2Card(){

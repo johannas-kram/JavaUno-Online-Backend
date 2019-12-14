@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +72,7 @@ public class GameStateControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertFailure(mvcResult, "There is no such game.");
+        assertFailure(mvcResult, ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -83,7 +84,7 @@ public class GameStateControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertFailure(mvcResult, "There is no such player in this game.");
+        assertFailure(mvcResult, ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     private void assertGameState(MvcResult mvcResult, GameLifecycle gameLifecycle) throws Exception {

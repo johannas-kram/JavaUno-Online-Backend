@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
@@ -64,14 +65,14 @@ public class ActionControllerSayUnoTest {
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
         game.setTurnState(TurnState.DRAW_DUTIES);
-        Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(expectedException);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn() throws Exception {
         game.setCurrentPlayerIndex(1);
-        Exception expectedException = new IllegalStateException("it's not your turn.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         shouldFail(expectedException);
     }
 

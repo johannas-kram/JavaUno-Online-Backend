@@ -4,6 +4,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -77,7 +78,7 @@ public class TurnService {
                 game.getUuid(),
                 Arrays.asList(validTurnStates),
                 game.getTurnState());
-        throw new IllegalStateException("turn is in wrong state for this action.");
+        throw new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
     }
 
     Game getGame(String gameUuid) throws IllegalArgumentException {

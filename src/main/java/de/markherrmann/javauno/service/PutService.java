@@ -7,6 +7,7 @@ import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.CardDoesNotMatchException;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -52,7 +53,7 @@ public class PutService {
 
     private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException, IllegalArgumentException {
         if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            throw new IllegalStateException("game is in wrong lifecycle.");
+            throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         }
         turnService.failIfInvalidTurnState(
                 game,
@@ -60,7 +61,7 @@ public class PutService {
                 TurnState.PUT_OR_DRAW,
                 TurnState.PUT_DRAWN);
         if(!turnService.isPlayersTurn(game, player)){
-            throw new IllegalStateException("it's not your turn.");
+            throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         }
         failIfInvalidCard(card, player, cardIndex);
     }
@@ -159,15 +160,14 @@ public class PutService {
     }
 
     private void failIfInvalidCard(Card card, Player player, int cardIndex) throws IllegalArgumentException {
-        String message = "The Player has no such card at this position.";
         if(player.getCards().size() < cardIndex+1){
             logInvalidCard(player, card);
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_CARD.getValue());
         }
         Card foundCard = player.getCards().get(cardIndex);
         if(!foundCard.equals(card)){
             logInvalidCard(player, card);
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_CARD.getValue());
         }
     }
 

@@ -7,6 +7,10 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.CardDoesNotMatchException;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
 
 import org.junit.Before;
@@ -69,14 +73,14 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByNoSuchGame() throws Exception {
-        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
+        String expectedMessage = buildExpectedMessage(IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
         UnoState.removeGame(game.getUuid());
         shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void shouldFailCausedByNoSuchPlayer() throws Exception {
-        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
+        String expectedMessage = buildExpectedMessage(IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_PLAYER.getValue());
         game.getPlayers().clear();
         game.getPlayers().add(new Player("test", false));
         shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
@@ -84,7 +88,7 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByInvalidCard() throws Exception {
-        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "The Player has no such card at this position.");
+        String expectedMessage = buildExpectedMessage(IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_CARD.getValue());
         Card wrongCard = TestHelper.findWrongCard(game.getTopCard(), game);
         game.getPlayers().get(0).getCards().add(wrongCard);
         shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
@@ -92,21 +96,21 @@ public class ActionControllerPutTest {
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
-        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalStateException", "turn is in wrong state for this action.");
+        String expectedMessage = buildExpectedMessage(IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage, HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
-        shouldFail(game.getTopCard(), 1, TurnState.PUT_OR_DRAW,
-                "failure: de.markherrmann.javauno.exceptions.IllegalStateException: it's not your turn.", HttpStatus.BAD_REQUEST);
+        String expectedMessage = buildExpectedMessage(IllegalStateException.class.getCanonicalName(), ExceptionMessage.NOT_YOUR_TURN.getValue());
+        shouldFail(game.getTopCard(), 1, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
-        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN,
-                "failure: de.markherrmann.javauno.exceptions.CardDoesNotMatchException", HttpStatus.BAD_REQUEST);
+        String expectedMessage = "failure: " + CardDoesNotMatchException.class.getCanonicalName();
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN, expectedMessage, HttpStatus.BAD_REQUEST);
     }
 
     private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage, HttpStatus httpStatus) throws Exception {

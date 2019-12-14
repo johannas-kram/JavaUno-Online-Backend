@@ -3,6 +3,7 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -34,7 +35,7 @@ public class PlayerService {
         synchronized (game){
             if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
                 logger.error("Game is started. Players can not be added anymore. Game: {}", gameUuid);
-                throw new IllegalStateException("Game is started. Players can not be added anymore.");
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
             Player player = new Player(name, bot);
             if(bot){
@@ -53,14 +54,14 @@ public class PlayerService {
         synchronized (game){
             if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
                 logger.error("Game is started. Players can not be removed anymore. Game: {}", gameUuid);
-                throw new IllegalStateException("Game is started. Players can not be removed anymore.");
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
             remove(game, playerUuid, bot);
             boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
             if(removedGame){
-                pushService.push(PushMessage.REMOVED_PLAYER, game);
-            } else {
                 pushService.push(PushMessage.END, game);
+            } else {
+                pushService.push(PushMessage.REMOVED_PLAYER, game);
             }
         }
         logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
@@ -95,7 +96,7 @@ public class PlayerService {
     Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
         if(!game.getHumans().containsKey(playerUuid)){
             logger.error("There is no such player in this game. Game: {}; uuid: {}", game.getUuid(), playerUuid);
-            throw new IllegalArgumentException("There is no such player in this game.");
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         }
         return game.getHumans().get(playerUuid);
     }
@@ -103,7 +104,7 @@ public class PlayerService {
     private Player getBot(String botUuid, Game game) throws IllegalArgumentException {
         if(!game.getBots().containsKey(botUuid)){
             logger.error("There is no such bot in this game. Game: {}; uuid: {}", game.getUuid(), botUuid);
-            throw new IllegalArgumentException("There is no such bot in this game.");
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         }
         return game.getBots().get(botUuid);
     }

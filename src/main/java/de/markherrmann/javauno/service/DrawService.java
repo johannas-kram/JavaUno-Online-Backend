@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -128,7 +129,7 @@ public class DrawService {
 
     private void preChecks(Game game, Player player) throws IllegalStateException {
         if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            throw new IllegalStateException("game is in wrong lifecycle.");
+            throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         }
         turnService.failIfInvalidTurnState(
                 game,
@@ -137,7 +138,7 @@ public class DrawService {
                 TurnState.DRAW_DUTIES_OR_CUMULATIVE,
                 TurnState.PUT_OR_DRAW);
         if(!turnService.isPlayersTurn(game, player)){
-            throw new IllegalStateException("it's not your turn.");
+            throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         }
     }
 

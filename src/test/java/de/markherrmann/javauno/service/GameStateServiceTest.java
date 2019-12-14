@@ -4,6 +4,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +77,7 @@ public class GameStateServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -90,6 +92,7 @@ public class GameStateServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     private void assertState(GameStateResponse state, int playerIndex){

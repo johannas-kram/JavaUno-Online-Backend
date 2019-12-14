@@ -4,6 +4,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
@@ -102,6 +103,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -118,6 +120,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -136,6 +139,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -153,6 +157,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -170,6 +175,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     @Test
@@ -190,6 +196,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     private void prepareGame(){

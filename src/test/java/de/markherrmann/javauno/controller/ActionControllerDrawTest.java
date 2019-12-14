@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
@@ -66,7 +67,7 @@ public class ActionControllerDrawTest {
     @Test
     public void shouldFailCausedByNoSuchGame() throws Exception {
         UnoState.removeGame(game.getUuid());
-        Exception expectedException = new IllegalArgumentException("There is no such game.");
+        Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_GAME.getValue());
         shouldFail(expectedException, HttpStatus.NOT_FOUND);
     }
 
@@ -77,21 +78,21 @@ public class ActionControllerDrawTest {
         for(int i = 1; i <= 7; i++){
             game.getPlayers().get(0).addCard(game.getTopCard());
         }
-        Exception expectedException = new IllegalArgumentException("There is no such player in this game.");
+        Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         shouldFail(expectedException, HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(expectedException, HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn() throws Exception {
         game.setCurrentPlayerIndex(1);
-        Exception expectedException = new IllegalStateException("it's not your turn.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         shouldFail(expectedException, HttpStatus.BAD_REQUEST);
     }
 
