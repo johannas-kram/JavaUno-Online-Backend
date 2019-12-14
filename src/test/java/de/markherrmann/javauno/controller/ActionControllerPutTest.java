@@ -78,7 +78,7 @@ public class ActionControllerPutTest {
     public void shouldFailCausedByNoSuchPlayer() throws Exception {
         String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
         game.getPlayers().clear();
-        game.getPlayers().add(new Player());
+        game.getPlayers().add(new Player("test", false));
         shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
     }
 
