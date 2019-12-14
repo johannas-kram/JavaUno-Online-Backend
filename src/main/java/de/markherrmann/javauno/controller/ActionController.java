@@ -42,12 +42,8 @@ public class ActionController {
             putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
             GeneralResponse response = new GeneralResponse(true, "success");
             return ResponseEntity.ok(response);
-        } catch(RuntimeException ex){
-            HttpStatus status = ex instanceof IllegalArgumentException ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
-            GeneralResponse response = new GeneralResponse(false, "failure: " + ex);
-            return ResponseEntity.status(status).body(response);
-        } catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getErrorResponseEntity(exception);
         }
     }
 

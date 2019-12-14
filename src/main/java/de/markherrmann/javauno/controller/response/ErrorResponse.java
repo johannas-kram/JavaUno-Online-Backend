@@ -1,16 +1,13 @@
 package de.markherrmann.javauno.controller.response;
 
 public class ErrorResponse extends GeneralResponse {
-    private String error;
-
     private ErrorResponse(){}
 
-    public ErrorResponse(String error){
-        super(false, "error");
-        this.error = error;
+    public ErrorResponse(Exception exception){
+        super(false, "failure: " + exception);
     }
 
-    public String getError() {
-        return error;
+    public ErrorResponse(String error){
+        super(false, "failure: " + error);
     }
 }
