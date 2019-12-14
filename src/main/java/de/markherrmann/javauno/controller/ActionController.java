@@ -67,12 +67,13 @@ public class ActionController {
     }
 
     @PostMapping(value = "/say-uno/{gameUuid}/{playerUuid}")
-    public @ResponseBody GeneralResponse sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             sayUnoService.sayUno(gameUuid, playerUuid);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
