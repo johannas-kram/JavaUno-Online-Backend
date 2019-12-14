@@ -78,12 +78,13 @@ public class ActionController {
     }
 
     @PostMapping(value = "/keep/{gameUuid}/{playerUuid}")
-    public @ResponseBody GeneralResponse keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             keepService.keep(gameUuid, playerUuid);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 }
