@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -65,33 +66,48 @@ public class ActionControllerPutTest {
     }
 
     @Test
+    public void shouldFailCausedByNoSuchGame() throws Exception {
+        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
+        UnoState.removeGame(game.getUuid());
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void shouldFailCausedByNoSuchPlayer() throws Exception {
+        String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
+        game.getPlayers().clear();
+        game.getPlayers().add(new Player());
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     public void shouldFailCausedByInvalidCard() throws Exception {
         String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalArgumentException", "The Player has no such card at this position.");
         Card wrongCard = TestHelper.findWrongCard(game.getTopCard(), game);
         game.getPlayers().get(0).getCards().add(wrongCard);
-        shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage);
+        shouldFail(game.getTopCard(), 0, TurnState.PUT_OR_DRAW, expectedMessage, HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
         String expectedMessage = buildExpectedMessage("de.markherrmann.javauno.exceptions.IllegalStateException", "turn is in wrong state for this action.");
-        shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage);
+        shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage, HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByWrongTurn() throws Exception {
         shouldFail(game.getTopCard(), 1, TurnState.PUT_OR_DRAW,
-                "failure: de.markherrmann.javauno.exceptions.IllegalStateException: it's not your turn.");
+                "failure: de.markherrmann.javauno.exceptions.IllegalStateException: it's not your turn.", HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByNotMatchingCard() throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
         shouldFail(game.getTopCard(), 0, TurnState.PUT_DRAWN,
-                "failure: de.markherrmann.javauno.exceptions.CardDoesNotMatchException");
+                "failure: de.markherrmann.javauno.exceptions.CardDoesNotMatchException", HttpStatus.BAD_REQUEST);
     }
 
-    private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage) throws Exception {
+    private void shouldFail(Card card, int playerIndex, TurnState turnState, String expectedMessage, HttpStatus httpStatus) throws Exception {
         game.getPlayers().get(0).addCard(game.getTopCard());
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
@@ -102,7 +118,7 @@ public class ActionControllerPutTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/action/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
-                .andExpect(status().isOk())
+                .andExpect(status().is(httpStatus.value()))
                 .andReturn();
         int putNow = game.getDiscardPile().size();
 

@@ -3,8 +3,13 @@ package de.markherrmann.javauno.controller;
 import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
+import de.markherrmann.javauno.exceptions.CardDoesNotMatchException;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,13 +32,22 @@ public class ActionController {
         this.keepService = keepService;
     }
 
+    public ResponseEntity<GeneralResponse> test(){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
     @PostMapping(value = "/put")
-    public @ResponseBody GeneralResponse putCard(@RequestBody PutCardRequest putCardRequest){
+    public ResponseEntity<GeneralResponse> putCard(@RequestBody PutCardRequest putCardRequest){
         try {
             putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
-            return new GeneralResponse(true, "success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch(RuntimeException ex){
+            HttpStatus status = ex instanceof IllegalArgumentException ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
+            GeneralResponse response = new GeneralResponse(false, "failure: " + ex);
+            return ResponseEntity.status(status).body(response);
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
