@@ -56,8 +56,12 @@ public class PlayerService {
                 throw new IllegalStateException("Game is started. Players can not be removed anymore.");
             }
             remove(game, playerUuid, bot);
-            housekeepingService.removeGameIfNoHumans(game);
-            pushService.push(PushMessage.REMOVED_PLAYER, game);
+            boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+            if(removedGame){
+                pushService.push(PushMessage.REMOVED_PLAYER, game);
+            } else {
+                pushService.push(PushMessage.END, game);
+            }
         }
         logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
     }
@@ -96,7 +100,7 @@ public class PlayerService {
         return game.getHumans().get(playerUuid);
     }
 
-    Player getBot(String botUuid, Game game) throws IllegalArgumentException {
+    private Player getBot(String botUuid, Game game) throws IllegalArgumentException {
         if(!game.getBots().containsKey(botUuid)){
             logger.error("There is no such bot in this game. Game: {}; uuid: {}", game.getUuid(), botUuid);
             throw new IllegalArgumentException("There is no such bot in this game.");
