@@ -50,7 +50,7 @@ public class PutService {
         }
     }
 
-    private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException {
+    private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException, IllegalArgumentException {
         if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
             throw new IllegalStateException("game is in wrong lifecycle.");
         }
