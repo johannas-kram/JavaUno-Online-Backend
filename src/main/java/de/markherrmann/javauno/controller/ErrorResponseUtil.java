@@ -10,7 +10,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 class ErrorResponseUtil {
-    static ResponseEntity<GeneralResponse> getErrorResponseEntity(Exception exception){
+    static ResponseEntity<GeneralResponse> getExceptionResponseEntity(Exception exception){
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         if(exception instanceof RuntimeException) {
             status = exception instanceof IllegalArgumentException ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
@@ -19,7 +19,7 @@ class ErrorResponseUtil {
         return ResponseEntity.status(status).body(response);
     }
 
-    static HttpStatus getCustomErrorStatus(HttpServletRequest request){
+    static HttpStatus getErrorStatus(HttpServletRequest request){
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         Integer statusCode = 500;
         if(status != null) {
@@ -28,7 +28,7 @@ class ErrorResponseUtil {
         return HttpStatus.resolve(statusCode);
     }
 
-    static ResponseEntity<ErrorResponse> getCustomErrorResponse(HttpStatus httpStatus){
+    static ResponseEntity<ErrorResponse> getErrorResponseEntity(HttpStatus httpStatus){
         String error;
         switch (httpStatus){
             case NOT_FOUND:
