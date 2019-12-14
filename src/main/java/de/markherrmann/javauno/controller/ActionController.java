@@ -56,12 +56,13 @@ public class ActionController {
     }
 
     @PostMapping(value = "/select-color/{gameUuid}/{playerUuid}/{color}")
-    public @ResponseBody GeneralResponse selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
+    public ResponseEntity<GeneralResponse> selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
         try {
             selectColorService.selectColor(gameUuid, playerUuid, color);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
