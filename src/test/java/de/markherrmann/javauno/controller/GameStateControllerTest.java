@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -73,7 +74,7 @@ public class GameStateControllerTest {
         gameController.startGame(game.getUuid());
 
         MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
         assertFailure(mvcResult, ExceptionMessage.NO_SUCH_GAME.getValue());
@@ -85,7 +86,7 @@ public class GameStateControllerTest {
         gameController.startGame(game.getUuid());
 
         MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
         assertFailure(mvcResult, ExceptionMessage.NO_SUCH_PLAYER.getValue());
