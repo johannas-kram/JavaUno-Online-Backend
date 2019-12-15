@@ -19,9 +19,12 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping("/error")
     public ResponseEntity<ErrorResponse> handleError(HttpServletRequest request) {
         HttpStatus httpStatus = ErrorResponseUtil.getErrorStatus(request);
-        ResponseEntity<ErrorResponse> errorResponseEntity = ErrorResponseUtil.getErrorResponseEntity(httpStatus);
-        LOGGER.error("Request error: status:{}; message:{}", httpStatus.value(), errorResponseEntity.toString());
-        return errorResponseEntity;
+        ErrorResponse errorResponse = ErrorResponseUtil.getErrorResponse(httpStatus);
+        LOGGER.error("Request error: status:{}; message:{}", httpStatus.value(), errorResponse.getMessage());
+        if("head".equalsIgnoreCase(request.getMethod())){
+            return ResponseEntity.status(httpStatus).build();
+        }
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     @Override

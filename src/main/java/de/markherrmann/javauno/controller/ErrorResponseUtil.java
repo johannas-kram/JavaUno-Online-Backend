@@ -28,7 +28,7 @@ class ErrorResponseUtil {
         return HttpStatus.resolve(statusCode);
     }
 
-    static ResponseEntity<ErrorResponse> getErrorResponseEntity(HttpStatus httpStatus){
+    static ErrorResponse getErrorResponse(HttpStatus httpStatus){
         String error;
         switch (httpStatus){
             case NOT_FOUND:
@@ -44,7 +44,6 @@ class ErrorResponseUtil {
                 error = "Unknown error";
                 break;
         }
-        ErrorResponse response = new ErrorResponse(error);
-        return ResponseEntity.status(httpStatus).body(response);
+        return new ErrorResponse(error);
     }
 }
