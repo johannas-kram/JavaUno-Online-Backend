@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,7 +52,8 @@ public class PlayerControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", false)))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.CREATED.value()))
+                .andReturn();
         Player player = game.getPlayers().get(0);
 
         assertThat(player).isNotNull();
@@ -64,7 +66,8 @@ public class PlayerControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", true)))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.CREATED.value()))
+                .andReturn();
         Player player = game.getPlayers().get(0);
 
         assertThat(player).isNotNull();
@@ -80,7 +83,8 @@ public class PlayerControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(invalidRequest)))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
 
         assertFailure(mvcResult, IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
     }
@@ -92,7 +96,8 @@ public class PlayerControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getAddPlayerRequestAsJson("player name", false)))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
+                .andReturn();
 
         assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
@@ -102,7 +107,8 @@ public class PlayerControllerTest {
         Player player = addPlayer();
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk())
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isEmpty();
@@ -114,7 +120,8 @@ public class PlayerControllerTest {
         Player bot = addBot();
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getBotUuid()))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk())
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isEmpty();
@@ -126,7 +133,8 @@ public class PlayerControllerTest {
         Player player = addPlayer();
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isNotEmpty();
@@ -138,7 +146,8 @@ public class PlayerControllerTest {
         addPlayer();
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isNotEmpty();
@@ -150,7 +159,8 @@ public class PlayerControllerTest {
         addBot();
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isNotEmpty();
@@ -163,7 +173,8 @@ public class PlayerControllerTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
+                .andReturn();
 
 
         assertThat(game.getPlayers()).isNotEmpty();
