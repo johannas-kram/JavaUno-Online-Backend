@@ -1,7 +1,6 @@
 package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.TestHelper;
-import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -34,16 +33,13 @@ public class ActionControllerKeepTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GameController gameController;
-
-    @Autowired
     private GameService gameService;
 
     private Game game;
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame().getGameUuid();
+        String uuid = gameService.createGame();
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());

@@ -33,16 +33,13 @@ public class ActionControllerSelectColorTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GameController gameController;
-
-    @Autowired
     private GameService gameService;
 
     private Game game;
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame().getGameUuid();
+        String uuid = gameService.createGame();
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());

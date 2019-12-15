@@ -10,6 +10,7 @@ import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,13 +36,13 @@ public class PlayerControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GameController gameController;
+    private GameService gameService;
 
     private Game game;
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame().getGameUuid();
+        String uuid = gameService.createGame();
         game = UnoState.getGame(uuid);
     }
 

@@ -7,6 +7,7 @@ import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.controller.response.GameStateResponse;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +33,15 @@ public class GameStateControllerTest {
     @Autowired
     private GameController gameController;
 
+    @Autowired
+    private GameService gameService;
+
     private Game game;
     private Player player;
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame().getGameUuid();
+        String uuid = gameService.createGame();
         game = UnoState.getGame(uuid);
         addPlayer();
     }
