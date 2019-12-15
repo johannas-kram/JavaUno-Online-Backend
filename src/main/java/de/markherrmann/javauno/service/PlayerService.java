@@ -37,14 +37,11 @@ public class PlayerService {
                 logger.error("Game is started. Players can not be added anymore. Game: {}", gameUuid);
                 throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
-            Player player = new Player(name, bot);
-            if(bot){
-                game.putBot(player);
-            } else {
-                game.putHuman(player);
+            if(game.getPlayers().size() == 10){
+                logger.error("Players Limit reached. Can not add any further players. Game: {}", gameUuid);
+                throw new IllegalStateException(ExceptionMessage.PLAYERS_LIMIT_REACHED.getValue());
             }
-            logger.info("Added Player. Game: {}; Player: {}", game.getUuid(), player.getUuid());
-            pushService.push(PushMessage.ADDED_PLAYER, game);
+            Player player = addPlayer(game, name, bot);
             return player.getUuid();
         }
     }
@@ -65,6 +62,18 @@ public class PlayerService {
             }
         }
         logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
+    }
+
+    private Player addPlayer(Game game, String name, boolean bot){
+        Player player = new Player(name, bot);
+        if(bot){
+            game.putBot(player);
+        } else {
+            game.putHuman(player);
+        }
+        logger.info("Added Player. Game: {}; Player: {}", game.getUuid(), player.getUuid());
+        pushService.push(PushMessage.ADDED_PLAYER, game);
+        return player;
     }
 
     private void remove(Game game, String playerUuid, boolean bot){

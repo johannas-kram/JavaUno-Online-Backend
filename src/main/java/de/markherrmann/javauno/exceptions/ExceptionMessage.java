@@ -8,7 +8,8 @@ public enum ExceptionMessage {
     INVALID_STATE_GAME("The game is in wrong state."),
     INVALID_STATE_TURN("The current turn of the game is in wrong state."),
     NOT_YOUR_TURN("It's not your turn."),
-    NOT_ENOUGH_PLAYERS("There are not enough players in the game.");
+    NOT_ENOUGH_PLAYERS("There are not enough players in the game."),
+    PLAYERS_LIMIT_REACHED("There are already 10 players in the game. Players limit is reached.");
 
     private String value;
 
