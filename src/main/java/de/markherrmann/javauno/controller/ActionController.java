@@ -30,10 +30,6 @@ public class ActionController {
         this.keepService = keepService;
     }
 
-    public ResponseEntity<GeneralResponse> test(){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-    }
-
     @PostMapping(value = "/put")
     public ResponseEntity<GeneralResponse> putCard(@RequestBody PutCardRequest putCardRequest){
         try {
