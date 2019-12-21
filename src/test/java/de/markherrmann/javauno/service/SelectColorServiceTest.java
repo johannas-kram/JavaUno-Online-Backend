@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.fixed.Color;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -62,28 +63,28 @@ public class SelectColorServiceTest {
 
     @Test
     public void shouldFailCausedByInvalidColor(){
-        Exception expectedException = new IllegalArgumentException("There is no such color.");
+        Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_COLOR.getValue());
         shouldFail("GOLD", expectedException);
     }
 
     @Test
     public void shouldFailCausedByInvalidLifecycle(){
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-        Exception expectedException = new IllegalStateException("game is in wrong lifecycle.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         shouldFail("RED", expectedException);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState(){
         game.setTurnState(TurnState.DRAW_DUTIES);
-        Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail("RED", expectedException);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn(){
         game.setCurrentPlayerIndex(1);
-        Exception expectedException = new IllegalStateException("it's not your turn.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         shouldFail("RED", expectedException);
     }
 

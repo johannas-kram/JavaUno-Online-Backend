@@ -5,6 +5,8 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +54,7 @@ public class PutServiceGeneralFailTest {
         }
 
         assertNotPut(game, card);
-        assertException(exception, "IllegalStateException", "it's not your turn.");
+        assertException(exception, IllegalStateException.class.getSimpleName(), ExceptionMessage.NOT_YOUR_TURN.getValue());
     }
 
     @Test
@@ -73,7 +75,7 @@ public class PutServiceGeneralFailTest {
         }
 
         assertNotPut(game, card);
-        assertException(exception, "IllegalStateException", "game is in wrong lifecycle.");
+        assertException(exception, IllegalStateException.class.getSimpleName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -93,7 +95,7 @@ public class PutServiceGeneralFailTest {
         }
 
         assertNotPut(game, wrongCard);
-        assertException(exception, "IllegalArgumentException", "The Player has no such card at this position.");
+        assertException(exception, IllegalArgumentException.class.getSimpleName(), ExceptionMessage.NO_SUCH_CARD.getValue());
     }
 
     private void assertNotPut(Game game, Card card){

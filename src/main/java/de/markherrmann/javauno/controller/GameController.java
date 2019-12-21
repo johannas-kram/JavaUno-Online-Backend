@@ -4,6 +4,8 @@ import de.markherrmann.javauno.controller.response.GameCreateResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,18 +20,23 @@ public class GameController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody
-    GameCreateResponse createGame(){
-        return new GameCreateResponse(gameService.createGame());
+    public ResponseEntity<GeneralResponse> createGame(){
+        try {
+            GameCreateResponse response = new GameCreateResponse(gameService.createGame());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
     }
 
     @PostMapping(value = "/start/{gameUuid}")
-    public @ResponseBody GeneralResponse startGame(@PathVariable String gameUuid){
+    public ResponseEntity<GeneralResponse> startGame(@PathVariable String gameUuid){
         try {
             gameService.startGame(gameUuid);
-            return new GeneralResponse(true, "success");
-        } catch (Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 

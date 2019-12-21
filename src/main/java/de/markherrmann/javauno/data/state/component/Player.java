@@ -18,9 +18,7 @@ public class Player {
 	private boolean unoSaid;
 	private int drawPenalties;
 
-	public Player(){
-
-	}
+	private Player(){}
 
 	public Player(String name, boolean bot){
 	    this.uuid = UUID.randomUUID().toString();

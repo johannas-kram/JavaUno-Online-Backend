@@ -4,7 +4,10 @@ import de.markherrmann.javauno.controller.request.PutCardRequest;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,51 +31,56 @@ public class ActionController {
     }
 
     @PostMapping(value = "/put")
-    public @ResponseBody GeneralResponse putCard(@RequestBody PutCardRequest putCardRequest){
+    public ResponseEntity<GeneralResponse> putCard(@RequestBody PutCardRequest putCardRequest){
         try {
             putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
-            return new GeneralResponse(true, "success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
     @PostMapping(value = "/draw/{gameUuid}/{playerUuid}")
-    public @ResponseBody DrawnCardResponse drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            return drawService.draw(gameUuid, playerUuid);
-        } catch(Exception ex){
-            return new DrawnCardResponse(ex);
+            DrawnCardResponse drawnCardResponse = drawService.draw(gameUuid, playerUuid);
+            return ResponseEntity.ok(drawnCardResponse);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
     @PostMapping(value = "/select-color/{gameUuid}/{playerUuid}/{color}")
-    public @ResponseBody GeneralResponse selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
+    public ResponseEntity<GeneralResponse> selectColor(@PathVariable String gameUuid, @PathVariable String playerUuid, @PathVariable String color){
         try {
             selectColorService.selectColor(gameUuid, playerUuid, color);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
     @PostMapping(value = "/say-uno/{gameUuid}/{playerUuid}")
-    public @ResponseBody GeneralResponse sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> sayUno(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             sayUnoService.sayUno(gameUuid, playerUuid);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 
     @PostMapping(value = "/keep/{gameUuid}/{playerUuid}")
-    public @ResponseBody GeneralResponse keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             keepService.keep(gameUuid, playerUuid);
-            return new GeneralResponse(true,"success");
-        } catch(Exception ex){
-            return new GeneralResponse(false, "failure: " + ex);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
     }
 }

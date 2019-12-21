@@ -13,13 +13,11 @@ public class GameStateService {
 
     private final GameService gameService;
     private final PlayerService playerService;
-    private final TurnService turnService;
 
     @Autowired
-    public GameStateService(GameService gameService, PlayerService playerService, TurnService turnService) {
+    public GameStateService(GameService gameService, PlayerService playerService) {
         this.gameService = gameService;
         this.playerService = playerService;
-        this.turnService = turnService;
     }
 
     public GameStateResponse get(String gameUuid, String playerUuid) throws IllegalArgumentException {

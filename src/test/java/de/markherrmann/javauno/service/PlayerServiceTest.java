@@ -4,14 +4,18 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -100,8 +104,9 @@ public class PlayerServiceTest {
         }
 
         int playersNow = game.getPlayers().size();
-        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(playersNow).isEqualTo(playersBefore);
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -116,8 +121,29 @@ public class PlayerServiceTest {
         }
 
         int playersNow = game.getPlayers().size();
-        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(playersNow).isEqualTo(playersBefore);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
+    }
+
+    @Test
+    public void shouldFailAddPlayerCausedByLimitReached(){
+        for(int i = 1; i <= 10; i++){
+            playerService.addPlayer(game.getUuid(), "player name", false);
+        }
+        int playersBefore = game.getPlayers().size();
+        Exception exception = null;
+
+        try {
+            playerService.addPlayer(game.getUuid(), "player name", false);
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayers().size();
+        assertThat(playersNow).isEqualTo(playersBefore);
+        assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.PLAYERS_LIMIT_REACHED.getValue());
     }
 
     @Test
@@ -136,6 +162,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
     @Test
@@ -153,6 +180,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -170,6 +198,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     @Test
@@ -190,6 +219,7 @@ public class PlayerServiceTest {
         int playersNow = game.getPlayers().size();
         assertThat(playersNow-playersBefore).isEqualTo(0);
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     private void prepareGame(){

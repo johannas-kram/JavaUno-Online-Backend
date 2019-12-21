@@ -6,12 +6,15 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,12 +34,15 @@ public class GameStateControllerTest {
     @Autowired
     private GameController gameController;
 
+    @Autowired
+    private GameService gameService;
+
     private Game game;
     private Player player;
 
     @Before
     public void setup(){
-        String uuid = gameController.createGame().getGameUuid();
+        String uuid = gameService.createGame();
         game = UnoState.getGame(uuid);
         addPlayer();
     }
@@ -68,10 +74,10 @@ public class GameStateControllerTest {
         gameController.startGame(game.getUuid());
 
         MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
-        assertFailure(mvcResult, "There is no such game.");
+        assertFailure(mvcResult, ExceptionMessage.NO_SUCH_GAME.getValue());
     }
 
     @Test
@@ -80,10 +86,10 @@ public class GameStateControllerTest {
         gameController.startGame(game.getUuid());
 
         MvcResult mvcResult = this.mockMvc.perform(get("/api/gameState/get/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
-        assertFailure(mvcResult, "There is no such player in this game.");
+        assertFailure(mvcResult, ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
     private void assertGameState(MvcResult mvcResult, GameLifecycle gameLifecycle) throws Exception {

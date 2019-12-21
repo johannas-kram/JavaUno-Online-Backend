@@ -1,8 +1,10 @@
 package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.controller.response.GameStateResponse;
+import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.service.GameStateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,12 +19,12 @@ public class GameStateController {
     }
 
     @GetMapping(value = "/get/{gameUuid}/{playerUuid}")
-    public @ResponseBody
-    GameStateResponse getGameState(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    public ResponseEntity<GeneralResponse> getGameState(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            return gameStateService.get(gameUuid, playerUuid);
-        } catch(Exception ex){
-            return new GameStateResponse(ex);
+            GameStateResponse gameStateResponse = gameStateService.get(gameUuid, playerUuid);
+            return ResponseEntity.ok(gameStateResponse);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
 
     }

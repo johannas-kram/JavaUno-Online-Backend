@@ -31,10 +31,12 @@ public class HousekeepingService {
         }
     }
 
-    void removeGameIfNoHumans(Game game){
+    boolean removeGameIfNoHumans(Game game){
         if(game.getHumans().isEmpty()){
             UnoState.removeGame(game.getUuid());
+            return true;
         }
+        return false;
     }
 
 }

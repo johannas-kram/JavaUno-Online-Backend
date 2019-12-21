@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,21 +52,21 @@ public class KeepServiceTest {
     @Test
     public void shouldFailCausedByInvalidLifecycle(){
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-        Exception expectedException = new IllegalStateException("game is in wrong lifecycle.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         shouldFail(TurnState.PUT_DRAWN, expectedException);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState(){
         game.setTurnState(TurnState.PUT_OR_DRAW);
-        Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(TurnState.PUT_OR_DRAW, expectedException);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn(){
         game.setCurrentPlayerIndex(1);
-        Exception expectedException = new IllegalStateException("it's not your turn.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         shouldFail(TurnState.PUT_DRAWN, expectedException);
     }
 

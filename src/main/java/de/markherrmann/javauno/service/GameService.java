@@ -7,6 +7,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
@@ -48,11 +49,11 @@ public class GameService {
         synchronized (game) {
             if (isGameInLifecycle(game, GameLifecycle.RUNNING)) {
                 LOGGER.error("Current round is not finished. New round can not be started yet. Game: {}", gameUuid);
-                throw new IllegalStateException("Current round is not finished. New round can not be started yet.");
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
             if (game.getPlayers().size() < 2) {
                 LOGGER.error("There are not enough players in the game. Game: {}", gameUuid);
-                throw new IllegalStateException("There are not enough players in the game.");
+                throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_PLAYERS.getValue());
             }
             resetGame(game);
             Stack<Card> deck = Deck.getShuffled();

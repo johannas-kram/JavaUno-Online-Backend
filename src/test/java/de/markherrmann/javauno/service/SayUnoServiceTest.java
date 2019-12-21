@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
@@ -51,20 +52,20 @@ public class SayUnoServiceTest {
     @Test
     public void shouldFailCausedByInvalidLifecycle(){
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-        Exception expectedException = new IllegalStateException("game is in wrong lifecycle.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         shouldFail(TurnState.FINAL_COUNTDOWN, expectedException);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState(){
-        Exception expectedException = new IllegalStateException("turn is in wrong state for this action.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(TurnState.DRAW_DUTIES, expectedException);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn(){
         game.setCurrentPlayerIndex(1);
-        Exception expectedException = new IllegalStateException("it's not your turn.");
+        Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         shouldFail(TurnState.FINAL_COUNTDOWN, expectedException);
     }
 

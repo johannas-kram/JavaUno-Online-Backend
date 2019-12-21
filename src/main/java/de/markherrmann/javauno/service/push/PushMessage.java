@@ -15,7 +15,7 @@ public enum PushMessage {
 
     private final String value;
 
-    private PushMessage(String value){
+    PushMessage(String value){
         this.value = value;
     }
 

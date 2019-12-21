@@ -1,6 +1,7 @@
 package de.markherrmann.javauno.data.state;
 
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class UnoState {
 	public static synchronized Game getGame(String uuid) throws IllegalArgumentException {
         if(!games.containsKey(uuid)){
             LOGGER.error("There is no such game. UUID: {}", uuid);
-            throw new IllegalArgumentException("There is no such game.");
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_GAME.getValue());
         }
         return games.get(uuid);
     }

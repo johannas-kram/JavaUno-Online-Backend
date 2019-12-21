@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
@@ -64,6 +65,7 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
         assertThat(game.getDrawPile()).isEmpty();
     }
 
@@ -78,6 +80,7 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NOT_ENOUGH_PLAYERS.getValue());
         assertThat(game.getDrawPile()).isEmpty();
     }
 
@@ -94,6 +97,7 @@ public class GameServiceTest {
         }
 
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
         assertThat(game.getDrawPile()).isEmpty();
     }
 

@@ -5,14 +5,21 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.GameService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,12 +34,12 @@ public class GameControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GameController gameController;
+    private GameService gameService;
 
     @Test
     public void shouldCreateGame() throws Exception {
         this.mockMvc.perform(post("/api/game/create"))
-                .andExpect(status().isOk());
+                .andExpect(status().is(HttpStatus.CREATED.value()));
 
         assertThat(UnoState.getGamesEntrySet()).isNotEmpty();
     }
@@ -54,10 +61,10 @@ public class GameControllerTest {
     public void shouldFailStartGameCausedByInvalidUuid() throws Exception {
         Game game = createGame();
         addPlayer(game);
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalArgumentException: There is no such game.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", "invalid"))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
@@ -68,10 +75,10 @@ public class GameControllerTest {
         Game game = createGame();
         addPlayer(game);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: Current round is not finished. New round can not be started yet.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
@@ -80,17 +87,17 @@ public class GameControllerTest {
     @Test
     public void shouldFailStartGameCausedByNoPlayers() throws Exception {
         Game game = createGame();
-        String expectedMessage = "failure: de.markherrmann.javauno.exceptions.IllegalStateException: There are not enough players in the game.";
+        String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.NOT_ENOUGH_PLAYERS.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
-                .andExpect(status().isOk())
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
     private Game createGame(){
-        String gameUuid = gameController.createGame().getGameUuid();
+        String gameUuid = gameService.createGame();
         return UnoState.getGame(gameUuid);
     }
 

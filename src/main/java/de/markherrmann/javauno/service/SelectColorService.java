@@ -5,6 +5,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -47,19 +48,19 @@ public class SelectColorService {
             return Color.valueOf(color.toUpperCase()).name();
         } catch(java.lang.IllegalArgumentException ex){
             LOGGER.error("There is no such color. name: {}", color);
-            throw new IllegalArgumentException("There is no such color.");
+            throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_COLOR.getValue());
         }
     }
 
     private void preChecks(Game game, Player player) throws IllegalStateException {
         if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
-            throw new IllegalStateException("game is in wrong lifecycle.");
+            throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
         }
         turnService.failIfInvalidTurnState(
                 game,
                 TurnState.SELECT_COLOR);
         if(!turnService.isPlayersTurn(game, player)){
-            throw new IllegalStateException("it's not your turn.");
+            throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         }
     }
 }
