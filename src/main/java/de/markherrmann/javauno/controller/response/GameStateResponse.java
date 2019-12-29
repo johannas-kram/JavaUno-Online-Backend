@@ -14,7 +14,7 @@ public class GameStateResponse extends GeneralResponse {
     private List<Card> ownCards;
 
     @JsonProperty(value= "myIndex")
-    private int playersIndex;
+    private int playersIndex = -1;
 
     private GameStateResponse(){}
 
@@ -26,8 +26,10 @@ public class GameStateResponse extends GeneralResponse {
         this.playersIndex = playersIndex;
     }
 
-    public GameStateResponse(Exception exception) {
-        super(false, "failure: " + exception);
+    public GameStateResponse(Game game) {
+        super(true, "success");
+        this.players = game.getPlayers();
+        this.game = game;
     }
 
     public Game getGame() {

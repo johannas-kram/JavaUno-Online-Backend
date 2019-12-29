@@ -29,6 +29,11 @@ public class GameStateService {
         }
     }
 
+    public GameStateResponse get(String gameUuid) throws IllegalArgumentException {
+        Game game = gameService.getGame(gameUuid);
+        return new GameStateResponse(game);
+    }
+
     private int getPlayersIndex(Game game, Player player){
         return game.getPlayers().indexOf(player);
     }

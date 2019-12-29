@@ -29,4 +29,15 @@ public class GameStateController {
 
     }
 
+    @GetMapping(value = "/get/{gameUuid}")
+    public ResponseEntity<GeneralResponse> getGameState(@PathVariable String gameUuid){
+        try {
+            GameStateResponse gameStateResponse = gameStateService.get(gameUuid);
+            return ResponseEntity.ok(gameStateResponse);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+
+    }
+
 }
