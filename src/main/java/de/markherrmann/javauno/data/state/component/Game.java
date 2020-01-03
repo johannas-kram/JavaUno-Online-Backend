@@ -132,8 +132,6 @@ public class Game{
         players.remove(player);
     }
 
-
-    @JsonIgnore
     public TurnState getTurnState() {
         return turnState;
     }
