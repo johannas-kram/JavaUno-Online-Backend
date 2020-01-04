@@ -2,6 +2,7 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
+import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.TurnState;
@@ -38,8 +39,18 @@ public class DrawServiceTest {
     }
 
     @Test
-    public void shouldDrawCardInPutOrDrawState(){
+    public void shouldDrawCardInPutOrDrawStateMatchingCard(){
+        game.getDiscardPile().push(game.getDrawPile().peek());
         shouldDraw(TurnState.PUT_OR_DRAW, TurnState.PUT_DRAWN);
+    }
+
+    @Test
+    public void shouldDrawCardInPutOrDrawStateNotMatchingCard(){
+        while(PutService.isMatch(game, game.getDrawPile().peek())){
+            Card card = game.getDrawPile().pop();
+            game.getDrawPile().add(0, card);
+        }
+        shouldDraw(TurnState.PUT_OR_DRAW, TurnState.FINAL_COUNTDOWN);
     }
 
     @Test
