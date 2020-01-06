@@ -72,6 +72,9 @@ public class PutService {
         game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
+        if(!card.isJokerCard()){
+            game.setDesiredColor(null);
+        }
         LOGGER.info("Put card successfully. Game: {}; Player: {}; playersCard: {}; topCard: {}",
                 game.getUuid(),
                 player.getUuid(),
