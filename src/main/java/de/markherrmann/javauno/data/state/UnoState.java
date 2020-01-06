@@ -30,6 +30,7 @@ public class UnoState {
 
     public static synchronized void removeGame(String gameUuid){
 	    games.remove(gameUuid);
+        LOGGER.info("Removed old game: {}", gameUuid);
     }
 
     public static synchronized Set<Map.Entry<String, Game>> getGamesEntrySet(){
