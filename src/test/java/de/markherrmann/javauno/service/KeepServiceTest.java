@@ -7,6 +7,8 @@ import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,7 @@ public class KeepServiceTest {
         keepService.keep(gameUuid, playerUuid);
 
         assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.KEPT_CARD);
     }
 
     @Test
