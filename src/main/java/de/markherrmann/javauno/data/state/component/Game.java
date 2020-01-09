@@ -22,6 +22,7 @@ public class Game{
     private TurnState turnState;
     private int drawDuties;
     private boolean skip;
+	private int toDeleteIndex;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -154,5 +155,14 @@ public class Game{
 
 	public void setSkip(boolean skip) {
 		this.skip = skip;
+	}
+
+	public void setToDeleteIndex(int toDeleteIndex) {
+		this.toDeleteIndex = toDeleteIndex;
+	}
+
+	@JsonIgnore
+	public int getToDeleteIndex(){
+		return toDeleteIndex;
 	}
 }

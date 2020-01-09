@@ -1,7 +1,6 @@
 package de.markherrmann.javauno;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.markherrmann.javauno.controller.response.GameStateResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;

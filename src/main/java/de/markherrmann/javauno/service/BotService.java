@@ -102,7 +102,7 @@ public class BotService {
 
     private void handlePutDrawn(Game game, Player player) {
         boolean put = botMaybePutService.maybePut(game, player, true);
-        pushService.push(put ? PushMessage.PUT_CARD : PushMessage.DRAWN_CARD, game);
+        pushService.push(put ? PushMessage.PUT_CARD : PushMessage.KEPT_CARD, game);
         if(!put){
             KeepService.keep(game, player);
         }
@@ -130,7 +130,7 @@ public class BotService {
         return false;
     }
 
-    public static int getLastSayUnoRandomNumber(){
+    static int getLastSayUnoRandomNumber(){
         return lastSayUnoRandomNumber;
     }
 

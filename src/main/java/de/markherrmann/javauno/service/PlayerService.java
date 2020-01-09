@@ -83,6 +83,8 @@ public class PlayerService {
         } else {
             player = getPlayer(playerUuid, game);
         }
+        int index = game.getPlayers().indexOf(player);
+        game.setToDeleteIndex(index);
         fixCurrentPlayerIndex(game, player);
         if(bot){
             game.removeBot(player);

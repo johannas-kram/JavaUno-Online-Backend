@@ -7,6 +7,7 @@ import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
+import de.markherrmann.javauno.service.push.PushMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class KeepService {
             Player player = turnService.getPlayer(playerUuid, game);
             preChecks(game, player);
             keep(game, player);
+            turnService.pushAction(PushMessage.KEPT_CARD, game);
         }
         turnService.finalizeTurn(game);
     }
