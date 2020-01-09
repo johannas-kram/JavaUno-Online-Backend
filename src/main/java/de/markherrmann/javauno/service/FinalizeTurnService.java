@@ -22,8 +22,8 @@ public class FinalizeTurnService {
         boolean saidUno = player.isUnoSaid();
         if((lastCard && !saidUno) || (!lastCard && saidUno)){
             player.setDrawPenalties(2);
-            player.setUnoSaid(false);
         }
+        player.setUnoSaid(false);
     }
 
     private void setNextPlayer(){
