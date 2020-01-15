@@ -23,7 +23,6 @@ public class FinalizeTurnService {
         if((lastCard && !saidUno) || (!lastCard && saidUno)){
             player.setDrawPenalties(2);
         }
-        player.setUnoSaid(false);
     }
 
     private void setNextPlayer(){
@@ -31,6 +30,7 @@ public class FinalizeTurnService {
         TurnState turnState = getNextTurnState(index);
         game.setCurrentPlayerIndex(index);
         game.setTurnState(turnState);
+        game.getPlayers().get(index).setUnoSaid(false);
     }
 
     private int getNextPlayerIndex(){
