@@ -30,7 +30,6 @@ public class FinalizeTurnService {
         TurnState turnState = getNextTurnState(index);
         game.setCurrentPlayerIndex(index);
         game.setTurnState(turnState);
-        game.getPlayers().get(index).setUnoSaid(false);
     }
 
     private int getNextPlayerIndex(){

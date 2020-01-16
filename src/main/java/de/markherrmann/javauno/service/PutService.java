@@ -84,6 +84,7 @@ public class PutService {
             game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
             game.setTurnState(TurnState.FINAL_COUNTDOWN);
         }
+        player.setUnoSaid(false);
     }
 
     private static void setGameVars(Game game, Card card){

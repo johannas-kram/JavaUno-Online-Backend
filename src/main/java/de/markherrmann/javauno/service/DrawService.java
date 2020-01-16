@@ -60,6 +60,7 @@ public class DrawService {
                 game.getUuid(),
                 player.getUuid(),
                 card);
+        player.setUnoSaid(false);
         return card;
     }
 
