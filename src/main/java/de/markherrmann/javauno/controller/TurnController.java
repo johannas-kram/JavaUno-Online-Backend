@@ -11,23 +11,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/action")
-public class ActionController {
+@RequestMapping(value = "/api/turn")
+public class TurnController {
 
     private final PutService putService;
     private final DrawService drawService;
     private final SelectColorService selectColorService;
     private final SayUnoService sayUnoService;
     private final KeepService keepService;
+    private final TurnService turnService;
 
     @Autowired
-    public ActionController(PutService putService, DrawService drawService,
-                            SelectColorService selectColorService, SayUnoService sayUnoService, KeepService keepService) {
+    public TurnController(PutService putService, DrawService drawService,
+                          SelectColorService selectColorService, SayUnoService sayUnoService,
+                          KeepService keepService, TurnService turnService) {
         this.putService = putService;
         this.drawService = drawService;
         this.selectColorService = selectColorService;
         this.sayUnoService = sayUnoService;
         this.keepService = keepService;
+        this.turnService = turnService;
     }
 
     @PostMapping(value = "/put")
@@ -77,6 +80,17 @@ public class ActionController {
     public ResponseEntity<GeneralResponse> keep(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             keepService.keep(gameUuid, playerUuid);
+            GeneralResponse response = new GeneralResponse(true,"success");
+            return ResponseEntity.ok(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
+    @PostMapping(value = "/next/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> next(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            turnService.next(gameUuid, playerUuid);
             GeneralResponse response = new GeneralResponse(true,"success");
             return ResponseEntity.ok(response);
         } catch(Exception exception){
