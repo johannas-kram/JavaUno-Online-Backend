@@ -89,8 +89,9 @@ public class FinalizeTurnServiceTest {
     }
 
     private void shouldFinalize(TurnState turnState, int index, int drawPenalties) throws Exception {
-        turnService.finalizeTurn(game);
-        Thread.sleep(3100);
+        game.setTurnState(TurnState.FINAL_COUNTDOWN);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(300);
         assertFinalized(turnState, index, drawPenalties);
     }
 

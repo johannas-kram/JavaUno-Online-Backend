@@ -31,6 +31,9 @@ public class BotServiceTest {
     @Autowired
     private KeepService keepService;
 
+    @Autowired
+    private TurnService turnService;
+
     private Game game;
 
     @Before
@@ -48,7 +51,8 @@ public class BotServiceTest {
         player.addCard(game.getTopCard());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5100);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2100);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
         assertThat(player.getCardCount()).isEqualTo(7);
@@ -63,7 +67,8 @@ public class BotServiceTest {
         game.getDrawPile().push(game.getTopCard());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
         assertThat(game.getDrawPile().size()).isEqualTo(93);
@@ -78,7 +83,8 @@ public class BotServiceTest {
         player.getCards().clear();
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5100);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2100);
 
         assertThat(game.getDrawPile().size()).isEqualTo(92);
         assertThat(player.getCardCount()).isEqualTo(1);
@@ -93,7 +99,8 @@ public class BotServiceTest {
         game.getDrawPile().push(getNoneMatchingCard());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(1);
         assertThat(game.getDrawPile().size()).isEqualTo(93);
@@ -107,7 +114,8 @@ public class BotServiceTest {
         player.setDrawPenalties(2);
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(3600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(600);
 
         assertThat(game.getDrawPile().size()).isEqualTo(91);
         assertThat(player.getCardCount()).isEqualTo(9);
@@ -121,7 +129,8 @@ public class BotServiceTest {
         player.getCards().clear();
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(3600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(600);
 
         assertThat(game.getDrawPile().size()).isEqualTo(91);
         assertThat(player.getCardCount()).isEqualTo(2);
@@ -136,7 +145,8 @@ public class BotServiceTest {
         player.addCard(getDraw2Card());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(3100);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(100);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(3);
         assertThat(player.getCardCount()).isEqualTo(7);
@@ -151,7 +161,8 @@ public class BotServiceTest {
         player.addCard(getJoker());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(2);
         assertThat(player.getCardCount()).isEqualTo(1);
@@ -173,7 +184,8 @@ public class BotServiceTest {
         player.addCard(game.getTopCard());
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(5600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(2600);
 
         boolean shouldSayUno = BotService.getLastSayUnoRandomNumber() < 8;
         assertThat(player.isUnoSaid()).isEqualTo(shouldSayUno);
@@ -195,7 +207,8 @@ public class BotServiceTest {
         int discardPileSize = game.getDiscardPile().size();
 
         keepService.keep(game.getUuid(), game.getPlayers().get(0).getUuid());
-        Thread.sleep(8600);
+        turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
+        Thread.sleep(5600);
 
         assertThat(game.getDiscardPile().size()).isEqualTo(discardPileSize+1);
         assertThat(player.getCardCount()).isEqualTo(1);
