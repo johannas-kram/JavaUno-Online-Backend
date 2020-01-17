@@ -32,7 +32,6 @@ public class KeepService {
             keep(game, player);
             turnService.pushAction(PushMessage.KEPT_CARD, game);
         }
-        turnService.finalizeTurn(game);
     }
 
     static void keep(Game game, Player player){
