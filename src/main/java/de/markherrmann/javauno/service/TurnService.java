@@ -40,8 +40,20 @@ public class TurnService {
         this.pushService = pushService;
     }
 
+    public void next(String gameUuid, String playerUuid){
+        Game game = getGame(gameUuid);
+        synchronized (game){
+            Player player = getPlayer(playerUuid, game);
+            failIfInvalidTurnState(game, TurnState.FINAL_COUNTDOWN);
+            if(!isPlayersTurn(game, player)){
+                throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
+            }
+        }
+        finalizeTurn(game);
+    }
+
     void finalizeTurn(Game game){
-        Runnable runnable = () -> waitAndFinalize(game);
+        Runnable runnable = () -> finalize(game);
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -97,16 +109,6 @@ public class TurnService {
         pushService.push(message, game);
     }
 
-    private void waitAndFinalize(Game game){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex){
-            LOGGER.error("ERROR! Final Countdown Interrupted. while loop with bad performance will be used.", ex);
-            waitWithWhileLoop();
-        }
-        finalize(game);
-    }
-
     private void finalize(Game game){
         synchronized (game){
             finalizeTurnService.finalizeTurn(game);
@@ -117,13 +119,5 @@ public class TurnService {
             botService.makeTurn(game, player);
             finalize(game);
         }
-    }
-
-    private void waitWithWhileLoop(){
-        long start = System.currentTimeMillis();
-        long diff;
-        do {
-            diff = System.currentTimeMillis() - start;
-        } while(diff < 3000);
     }
 }
