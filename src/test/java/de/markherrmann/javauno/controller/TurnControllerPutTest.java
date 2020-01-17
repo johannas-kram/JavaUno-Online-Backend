@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerPutTest {
+public class TurnControllerPutTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,7 +57,7 @@ public class ActionControllerPutTest {
         int putBefore = game.getDiscardPile().size();
         PutCardRequest putCardRequest = buildValidRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().isOk())
@@ -118,7 +118,7 @@ public class ActionControllerPutTest {
         game.setTurnState(turnState);
         game.setCurrentPlayerIndex(playerIndex);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/put")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/put")
                 .contentType("application/json")
                 .content(asJsonString(putCardRequest)))
                 .andExpect(status().is(httpStatus.value()))

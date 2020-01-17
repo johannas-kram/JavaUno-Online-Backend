@@ -42,9 +42,6 @@ public class DrawService {
                 game.setTurnState(TurnState.FINAL_COUNTDOWN);
             }
         }
-        if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
-            turnService.finalizeTurn(game);
-        }
         turnService.updateLastAction(game);
         turnService.pushAction(PushMessage.DRAWN_CARD, game);
         return new DrawnCardResponse(card, matches);

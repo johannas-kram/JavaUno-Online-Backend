@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerSayUnoTest {
+public class TurnControllerKeepTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,29 +43,28 @@ public class ActionControllerSayUnoTest {
         game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
-        game.setTurnState(TurnState.FINAL_COUNTDOWN);
-        game.getPlayers().get(0).setUnoSaid(false);
+        game.setTurnState(TurnState.PUT_DRAWN);
     }
 
     @Test
-    public void shouldSayUno() throws Exception {
+    public void shouldKeep() throws Exception {
         String gameUuid = game.getUuid();
         Player player = game.getPlayers().get(0);
         String playerUuid = player.getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/say-uno/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/keep/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
-        assertThat(player.isUnoSaid()).isTrue();
+        assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
 
     @Test
     public void shouldFailCausedByNoSuchGame() throws Exception {
         UnoState.removeGame(game.getUuid());
         Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_GAME.getValue());
-        shouldFail(expectedException, HttpStatus.NOT_FOUND);
+        shouldFail(expectedException, TurnState.PUT_DRAWN, HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -73,35 +72,35 @@ public class ActionControllerSayUnoTest {
         game.getPlayers().clear();
         game.getPlayers().add(new Player("test", false));
         Exception expectedException = new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
-        shouldFail(expectedException, HttpStatus.NOT_FOUND);
+        shouldFail(expectedException, TurnState.PUT_DRAWN, HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
-        game.setTurnState(TurnState.DRAW_DUTIES);
+        game.setTurnState(TurnState.PUT_OR_DRAW);
         Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
-        shouldFail(expectedException, HttpStatus.BAD_REQUEST);
+        shouldFail(expectedException, TurnState.PUT_OR_DRAW, HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void shouldFailCausedByAnotherTurn() throws Exception {
         game.setCurrentPlayerIndex(1);
         Exception expectedException = new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
-        shouldFail(expectedException, HttpStatus.BAD_REQUEST);
+        shouldFail(expectedException, TurnState.PUT_DRAWN, HttpStatus.BAD_REQUEST);
     }
 
-    private void shouldFail(Exception expectedException, HttpStatus httpStatus) throws Exception {
+    private void shouldFail(Exception expectedException, TurnState turnState, HttpStatus httpStatus) throws Exception {
         String gameUuid = game.getUuid();
         Player player = game.getPlayers().get(0);
         String playerUuid = player.getUuid();
         String expectedMessage = "failure: " + expectedException;
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/say-uno/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/keep/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().is(httpStatus.value()))
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
-        assertThat(player.isUnoSaid()).isFalse();
+        assertThat(game.getTurnState()).isEqualTo(turnState);
     }
 
 
@@ -111,5 +110,4 @@ public class ActionControllerSayUnoTest {
         game.putHuman(player);
         game.putHuman(player2);
     }
-
 }

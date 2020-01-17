@@ -46,9 +46,6 @@ public class PutService {
                 return;
             }
         }
-        if(TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
-            turnService.finalizeTurn(game);
-        }
     }
 
     private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException, IllegalArgumentException {

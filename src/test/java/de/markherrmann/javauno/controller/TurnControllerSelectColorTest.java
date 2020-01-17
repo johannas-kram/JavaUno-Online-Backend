@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerSelectColorTest {
+public class TurnControllerSelectColorTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class ActionControllerSelectColorTest {
         String playerUuid = game.getPlayers().get(0).getUuid();
         String color = "RED";
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/select-color/{gameUuid}/{playerUuid}/{color}", gameUuid, playerUuid, color))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/select-color/{gameUuid}/{playerUuid}/{color}", gameUuid, playerUuid, color))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -101,7 +101,7 @@ public class ActionControllerSelectColorTest {
         String playerUuid = game.getPlayers().get(0).getUuid();
         String expectedMessage = "failure: " + expectedException;
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/select-color/{gameUuid}/{playerUuid}/{color}", gameUuid, playerUuid, color))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/select-color/{gameUuid}/{playerUuid}/{color}", gameUuid, playerUuid, color))
                 .andExpect(status().is(httpStatus.value()))
                 .andReturn();
 

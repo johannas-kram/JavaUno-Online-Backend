@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActionControllerDrawTest {
+public class TurnControllerDrawTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -54,7 +54,7 @@ public class ActionControllerDrawTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -97,7 +97,7 @@ public class ActionControllerDrawTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/action/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().is(httpStatus.value()))
                 .andReturn();
 
