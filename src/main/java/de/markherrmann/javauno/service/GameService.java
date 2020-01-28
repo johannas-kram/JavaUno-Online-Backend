@@ -74,16 +74,19 @@ public class GameService {
         game.getDrawPile().clear();
         game.getDiscardPile().clear();
         game.setDesiredColor(null);
+        game.setSkip(false);
+        game.setDrawDuties(0);
         resetPlayers(game);
+        game.setTurnState(TurnState.PUT_OR_DRAW);
         if(game.isReversed()){
             game.toggleReversed();
         }
-        game.setTurnState(TurnState.PUT_OR_DRAW);
     }
 
     private void resetPlayers(Game game){
         for(Player player : game.getPlayers()){
             player.setUnoSaid(false);
+            player.setDrawPenalties(0);
         }
     }
 
