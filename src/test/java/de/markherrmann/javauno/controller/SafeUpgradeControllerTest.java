@@ -46,7 +46,7 @@ public class SafeUpgradeControllerTest {
         UnoState.removeGame(gameUuid);
 
 
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/upgrade/safe"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/admin/safe-upgrade/get"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -56,7 +56,7 @@ public class SafeUpgradeControllerTest {
 
     @Test
     public void shouldReturnUnsafe() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/upgrade/safe"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/admin/safe-upgrade/get"))
                 .andExpect(status().isOk())
                 .andReturn();
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/upgrade")
+@RequestMapping("/admin/safe-upgrade")
 public class SafeUpgradeController {
 
     private final HousekeepingService housekeepingService;
@@ -17,7 +17,7 @@ public class SafeUpgradeController {
         this.housekeepingService = housekeepingService;
     }
 
-    @GetMapping("/safe")
+    @GetMapping("/get")
     public String getUpgradeSafeState(){
         return housekeepingService.isUpgradeSafe() ? "safe" : "unsafe";
     }
