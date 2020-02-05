@@ -44,7 +44,7 @@ public class TurnService {
         Game game = getGame(gameUuid);
         synchronized (game){
             Player player = getPlayer(playerUuid, game);
-            failIfInvalidTurnState(game, TurnState.FINAL_COUNTDOWN);
+            failIfInvalidTurnState(game, playerUuid, this.getClass(), TurnState.FINAL_COUNTDOWN);
             if(!isPlayersTurn(game, player)){
                 throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
             }
@@ -80,16 +80,18 @@ public class TurnService {
         return inLifecycle;
     }
 
-    void failIfInvalidTurnState(Game game, TurnState... validTurnStates) throws IllegalStateException {
+    void failIfInvalidTurnState(Game game, String playerUuid, Class<?> service, TurnState... validTurnStates) throws IllegalStateException {
         for(TurnState state : validTurnStates){
             if(game.getTurnState().equals(state)){
                 return;
             }
         }
-        LOGGER.error("turn is in wrong state for this action. Game: {}; validStates: {}; state: {}",
+        LOGGER.error("turn is in wrong state for this action. Game: {}; Player: {}; validStates: {}; state: {}; Service: {}",
                 game.getUuid(),
+                playerUuid,
                 Arrays.asList(validTurnStates),
-                game.getTurnState());
+                game.getTurnState(),
+                service.getSimpleName());
         throw new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
     }
 
@@ -115,6 +117,7 @@ public class TurnService {
         }
         pushService.push(PushMessage.NEXT_TURN, game);
         Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
+        LOGGER.info("Successfully terminated turn. Game: {}; CurrentPlayerIndex: {}", game.getUuid(), game.getCurrentPlayerIndex());
         if(player.isBot()){
             botService.makeTurn(game, player);
             finalize(game);

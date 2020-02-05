@@ -45,6 +45,8 @@ public class SayUnoService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                player.getUuid(),
+                this.getClass(),
                 TurnState.SELECT_COLOR,
                 TurnState.FINAL_COUNTDOWN);
         if(!turnService.isPlayersTurn(game, player)){

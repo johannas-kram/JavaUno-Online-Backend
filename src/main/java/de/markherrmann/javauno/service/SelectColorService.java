@@ -57,6 +57,8 @@ public class SelectColorService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                player.getUuid(),
+                this.getClass(),
                 TurnState.SELECT_COLOR);
         if(!turnService.isPlayersTurn(game, player)){
             throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());

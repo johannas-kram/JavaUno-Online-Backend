@@ -45,6 +45,8 @@ public class KeepService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                player.getUuid(),
+                this.getClass(),
                 TurnState.PUT_DRAWN);
         if(!turnService.isPlayersTurn(game, player)){
             throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());

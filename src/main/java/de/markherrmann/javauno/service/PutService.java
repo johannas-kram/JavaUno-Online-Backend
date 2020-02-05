@@ -54,6 +54,8 @@ public class PutService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                player.getUuid(),
+                this.getClass(),
                 TurnState.DRAW_DUTIES_OR_CUMULATIVE,
                 TurnState.PUT_OR_DRAW,
                 TurnState.PUT_DRAWN);

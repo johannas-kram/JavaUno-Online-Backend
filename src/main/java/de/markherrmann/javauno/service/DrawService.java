@@ -131,6 +131,8 @@ public class DrawService {
         }
         turnService.failIfInvalidTurnState(
                 game,
+                player.getUuid(),
+                this.getClass(),
                 TurnState.DRAW_PENALTIES,
                 TurnState.DRAW_DUTIES,
                 TurnState.DRAW_DUTIES_OR_CUMULATIVE,
