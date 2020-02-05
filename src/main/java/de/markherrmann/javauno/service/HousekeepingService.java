@@ -39,4 +39,16 @@ public class HousekeepingService {
         return false;
     }
 
+    public boolean isUpgradeSafe(){
+        long now = System.currentTimeMillis();
+        for(Map.Entry<String, Game> gameEntry : UnoState.getGamesEntrySet()){
+            Game game = gameEntry.getValue();
+            long lastAction = game.getLastAction();
+            if((now - lastAction) <= MAX_DURATION_WITHOUT_ACTION){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
