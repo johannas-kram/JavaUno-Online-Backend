@@ -44,6 +44,9 @@ public class TurnService {
         Game game = getGame(gameUuid);
         synchronized (game){
             Player player = getPlayer(playerUuid, game);
+            if(!this.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+            }
             failIfInvalidTurnState(game, playerUuid, this.getClass(), TurnState.FINAL_COUNTDOWN);
             if(!isPlayersTurn(game, player)){
                 throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
