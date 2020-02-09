@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
@@ -88,11 +89,42 @@ public class FinalizeTurnServiceTest {
         shouldFinalize(TurnState.DRAW_DUTIES_OR_CUMULATIVE, 1, 0);
     }
 
+    @Test
+    public void shouldFailCausedByInvalidLifecycle() {
+        shouldFail(GameLifecycle.SET_PLAYERS, TurnState.FINAL_COUNTDOWN, 0, ExceptionMessage.INVALID_STATE_GAME);
+    }
+
+    @Test
+    public void shouldFailCausedByInvalidTurnState() {
+        shouldFail(GameLifecycle.RUNNING, TurnState.PUT_OR_DRAW, 0, ExceptionMessage.INVALID_STATE_TURN);
+    }
+
+    @Test
+    public void shouldFailCausedByOthersTurn() {
+        shouldFail(GameLifecycle.RUNNING, TurnState.FINAL_COUNTDOWN, 1, ExceptionMessage.NOT_YOUR_TURN);
+    }
+
     private void shouldFinalize(TurnState turnState, int index, int drawPenalties) throws Exception {
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
         turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(300);
         assertFinalized(turnState, index, drawPenalties);
+    }
+
+    private void shouldFail(GameLifecycle lifecycle, TurnState turnState, int index, ExceptionMessage exceptionMessage){
+        game.setGameLifecycle(lifecycle);
+        game.setTurnState(turnState);
+        Exception exception = null;
+
+        try {
+            turnService.next(game.getUuid(), game.getPlayers().get(index).getUuid());
+        }
+        catch(Exception ex){
+            exception = ex;
+        }
+
+        assertThat(exception).isNotNull();
+        assertThat(exception.getMessage()).isEqualTo(exceptionMessage.getValue());
     }
 
     private void assertFinalized(TurnState turnState, int index, int drawPenalties){
