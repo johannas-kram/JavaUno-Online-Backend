@@ -3,12 +3,47 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FinalizeTurnService {
 
     private Game game;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TurnService.class);
+
+    private final PushService pushService;
+
+    private final BotService botService;
+
+    @Autowired
+    public FinalizeTurnService(PushService pushService, BotService botService) {
+        this.pushService = pushService;
+        this.botService = botService;
+    }
+
+    void finalize(Game game){
+        synchronized (game){
+            finalizeTurn(game);
+        }
+        pushService.push(PushMessage.NEXT_TURN, game);
+        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
+        LOGGER.info("Successfully terminated turn. Game: {}; CurrentPlayerIndex: {}", game.getUuid(), game.getCurrentPlayerIndex());
+        handleBotTurn(game, player);
+    }
+
+    void handleBotTurn(Game game, Player player){
+        if(player.isBot()){
+            botService.makeTurn(game, player);
+            if(player.getCardCount() > 0){
+                finalize(game);
+            }
+        }
+    }
 
     void finalizeTurn(Game game){
         this.game = game;

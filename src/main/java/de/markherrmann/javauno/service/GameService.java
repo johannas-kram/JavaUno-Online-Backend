@@ -24,15 +24,15 @@ import java.util.Stack;
 @Service
 public class GameService {
 
-    private final TurnService turnService;
+    private final FinalizeTurnService finalizeTurnService;
     private final HousekeepingService housekeepingService;
     private final PushService pushService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
-    public GameService(TurnService turnService, HousekeepingService housekeepingService, PushService pushService) {
-        this.turnService = turnService;
+    public GameService(FinalizeTurnService finalizeTurnService, HousekeepingService housekeepingService, PushService pushService) {
+        this.finalizeTurnService = finalizeTurnService;
         this.housekeepingService = housekeepingService;
         this.pushService = pushService;
     }
@@ -67,7 +67,8 @@ public class GameService {
             LOGGER.info("Started new round. Game: {}", game.getUuid());
             pushService.push(PushMessage.STARTED_GAME, game);
         }
-        turnService.handleBotTurn(game, game.getPlayers().get(game.getCurrentPlayerIndex()));
+        Player currentPlayer = game.getPlayers().get(game.getCurrentPlayerIndex());
+        finalizeTurnService.handleBotTurn(game, currentPlayer);
     }
 
     private void resetGame(Game game){

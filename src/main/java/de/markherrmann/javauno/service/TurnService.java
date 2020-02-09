@@ -56,7 +56,7 @@ public class TurnService {
     }
 
     void finalizeTurn(Game game){
-        Runnable runnable = () -> finalize(game);
+        Runnable runnable = () -> finalizeTurnService.finalize(game);
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -112,24 +112,5 @@ public class TurnService {
 
     void pushAction(PushMessage message, Game game){
         pushService.push(message, game);
-    }
-
-    private void finalize(Game game){
-        synchronized (game){
-            finalizeTurnService.finalizeTurn(game);
-        }
-        pushService.push(PushMessage.NEXT_TURN, game);
-        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
-        LOGGER.info("Successfully terminated turn. Game: {}; CurrentPlayerIndex: {}", game.getUuid(), game.getCurrentPlayerIndex());
-        handleBotTurn(game, player);
-    }
-
-    void handleBotTurn(Game game, Player player){
-        if(player.isBot()){
-            botService.makeTurn(game, player);
-            if(player.getCardCount() > 0){
-                finalize(game);
-            }
-        }
     }
 }
