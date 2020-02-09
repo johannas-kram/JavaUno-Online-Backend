@@ -123,7 +123,9 @@ public class TurnService {
         LOGGER.info("Successfully terminated turn. Game: {}; CurrentPlayerIndex: {}", game.getUuid(), game.getCurrentPlayerIndex());
         if(player.isBot()){
             botService.makeTurn(game, player);
-            finalize(game);
+            if(player.getCardCount() > 0){
+                finalize(game);
+            }
         }
     }
 }
