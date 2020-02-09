@@ -121,6 +121,10 @@ public class TurnService {
         pushService.push(PushMessage.NEXT_TURN, game);
         Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
         LOGGER.info("Successfully terminated turn. Game: {}; CurrentPlayerIndex: {}", game.getUuid(), game.getCurrentPlayerIndex());
+        handleBotTurn(game, player);
+    }
+
+    void handleBotTurn(Game game, Player player){
         if(player.isBot()){
             botService.makeTurn(game, player);
             if(player.getCardCount() > 0){
