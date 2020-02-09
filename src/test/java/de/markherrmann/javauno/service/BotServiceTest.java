@@ -187,7 +187,7 @@ public class BotServiceTest {
         turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(2600);
 
-        boolean shouldSayUno = BotService.getLastSayUnoRandomNumber() < 8;
+        boolean shouldSayUno = BotService.getLastSayUnoRandomNumber() < 9;
         assertThat(player.isUnoSaid()).isEqualTo(shouldSayUno);
         if(shouldSayUno){
             assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SAID_UNO);

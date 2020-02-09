@@ -120,7 +120,7 @@ public class BotService {
         if(player.getCards().size() == 1){
             int sayUnoRandomNumber = random.nextInt(10);
             lastSayUnoRandomNumber = sayUnoRandomNumber;
-            if(sayUnoRandomNumber < 8){
+            if(sayUnoRandomNumber < 9){
                 doSleep(500);
                 SayUnoService.sayUno(game, player);
                 pushService.push(PushMessage.SAID_UNO, game);
