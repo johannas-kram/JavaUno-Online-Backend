@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,10 +35,9 @@ public class SafeUpgradeControllerTest {
 
     @Before
     public void setup(){
-        for(Map.Entry<String, Game> gameEntry : UnoState.getGamesEntrySet()){
-            String uuid = gameEntry.getKey();
-            UnoState.removeGame(uuid);
-        }
+        List<String> toRemove = new ArrayList<>();
+        UnoState.getGamesEntrySet().forEach(e->toRemove.add(e.getKey()));
+        toRemove.forEach(UnoState::removeGame);
         gameUuid = gameService.createGame();
     }
 
