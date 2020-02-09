@@ -10,7 +10,7 @@
     </parent>
     <groupId>de.tomatenmarkwebapps</groupId>
     <artifactId>javauno</artifactId>
-    <version>1.0_beta.9_release_candidate3</version>
+    <version>1.0_beta.10_release_candidate4</version>
     <name>JavaUno</name>
     <description>The Card Game Uno as an online game written in Java with SpringBoot (Backend)</description>
 
