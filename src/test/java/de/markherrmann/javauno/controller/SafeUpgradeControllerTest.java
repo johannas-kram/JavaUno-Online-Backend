@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,18 +35,16 @@ public class SafeUpgradeControllerTest {
 
     @Before
     public void setup(){
+        for(Map.Entry<String, Game> gameEntry : UnoState.getGamesEntrySet()){
+            String uuid = gameEntry.getKey();
+            UnoState.removeGame(uuid);
+        }
         gameUuid = gameService.createGame();
-    }
-
-    @After
-    public void tearDown(){
-        UnoState.removeGame(gameUuid);
     }
 
     @Test
     public void shouldReturnSafe() throws Exception {
         UnoState.removeGame(gameUuid);
-
 
         MvcResult mvcResult = this.mockMvc.perform(get("/admin/safe-upgrade/get"))
                 .andExpect(status().isOk())

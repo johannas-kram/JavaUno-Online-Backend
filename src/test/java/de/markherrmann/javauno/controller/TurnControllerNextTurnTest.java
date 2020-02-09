@@ -59,7 +59,6 @@ public class TurnControllerNextTurnTest {
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
-        assertThat(game.getCurrentPlayerIndex()).isEqualTo(1);
     }
 
     @Test
@@ -103,14 +102,12 @@ public class TurnControllerNextTurnTest {
         Player player = game.getPlayers().get(0);
         String playerUuid = player.getUuid();
         String expectedMessage = "failure: " + expectedException;
-        int index = game.getCurrentPlayerIndex();
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/say-uno/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
                 .andExpect(status().is(httpStatus.value()))
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
-        assertThat(game.getCurrentPlayerIndex()).isEqualTo(index);
     }
 
 
