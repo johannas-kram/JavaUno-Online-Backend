@@ -32,6 +32,7 @@ public class PushService {
             case DRAWN_CARD: return getEnhancedDrawnCardMessage(pushMessage.getValue(), game);
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
             case SELECTED_COLOR: return getEnhancedSelectColorMessage(pushMessage.getValue(), game);
+            case FINISHED_GAME: return getEnhancedFinishedGameMessage(pushMessage.getValue(), game);
             default: return pushMessage.getValue();
         }
     }
@@ -71,6 +72,11 @@ public class PushService {
     private String getEnhancedNextTurnMessage(String message, Game game){
         int index = game.getCurrentPlayerIndex();
         return String.format("%s:%d", message, index);
+    }
+
+    private String getEnhancedFinishedGameMessage(String message, Game game){
+        int party = game.getParty();
+        return String.format("%s:%d", message, party);
     }
 
     public static PushMessage getLastMessage() {

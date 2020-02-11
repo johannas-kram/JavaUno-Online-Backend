@@ -63,6 +63,7 @@ public class GameService {
             giveCards(game.getPlayers(), deck);
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
+            game.nextParty();
             housekeepingService.updateLastAction(game);
             LOGGER.info("Started new round. Game: {}", game.getUuid());
             pushService.push(PushMessage.STARTED_GAME, game);

@@ -23,6 +23,7 @@ public class Game{
     private int drawDuties;
     private boolean skip;
 	private int toDeleteIndex;
+	private int party;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -164,5 +165,13 @@ public class Game{
 	@JsonIgnore
 	public int getToDeleteIndex(){
 		return toDeleteIndex;
+	}
+
+	public void nextParty() {
+		party++;
+	}
+
+	public int getParty() {
+		return party;
 	}
 }
