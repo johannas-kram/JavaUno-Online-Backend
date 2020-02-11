@@ -109,6 +109,7 @@ public class GameServiceTest {
         assertThat(game.getDrawPile().size()).isEqualTo(86);
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(0);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.STARTED_GAME);
+        assertThat(game.getParty()).isEqualTo(1);
     }
 
     private void prepareGame(){
