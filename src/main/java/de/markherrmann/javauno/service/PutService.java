@@ -43,6 +43,7 @@ public class PutService {
             turnService.pushAction(PushMessage.PUT_CARD, game);
             if(player.getCards().isEmpty()){
                 turnService.pushAction(PushMessage.FINISHED_GAME, game);
+                LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", gameUuid, game.getParty(), playerUuid);
                 return;
             }
         }

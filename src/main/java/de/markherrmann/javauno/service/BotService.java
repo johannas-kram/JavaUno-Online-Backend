@@ -43,6 +43,7 @@ public class BotService {
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
                 pushService.push(PushMessage.FINISHED_GAME, game);
+                LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }
         }
         boolean saidUno = maybeSayUno(game, player);
