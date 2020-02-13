@@ -3,7 +3,7 @@
 The cardgame as online game - the backend
 
 ## Version
-1.0_beta.12_release_candidate6 (2020, Feb. 11th)
+1.0_beta.13_release_candidate7 (2020, Feb. 13th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
