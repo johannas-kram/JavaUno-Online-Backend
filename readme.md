@@ -22,10 +22,6 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 * build it with maven (you will get a javauno-xx.jar file)
 * run following command in terminal: java -jar javauno-xx.jar\
   (xx is the version)
-  
-## Live
-You can play this version (my backend and my frontend) at:\
-https://java-uno.de/
 
 ### Spielanleitung
 https://java-uno.de/spielanleitung.pdf
