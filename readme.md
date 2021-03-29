@@ -24,7 +24,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
   (xx is the version)
 
 ### Spielanleitung
-https://java-uno.de/spielanleitung.pdf
+https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
   
 ## License
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
