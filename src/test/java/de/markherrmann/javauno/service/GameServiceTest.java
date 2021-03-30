@@ -67,7 +67,7 @@ public class GameServiceTest {
         assertThat(uuid).isNull();
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(InvalidTokenException.class);
-        assertThat(UnoState.getGamesEntrySet().size()).isEqualTo(0);
+        assertThat(UnoState.getGamesEntrySet()).isEmpty();
     }
 
     @Test
@@ -86,7 +86,7 @@ public class GameServiceTest {
         assertThat(uuid).isNull();
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(FileReadException.class);
-        assertThat(UnoState.getGamesEntrySet().size()).isEqualTo(0);
+        assertThat(UnoState.getGamesEntrySet()).isEmpty();
     }
 
     @Test
