@@ -46,7 +46,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldStartGame() throws Exception {
-        Game game = createGame();
+        Game game = TestHelper.createGame(gameService);
         addPlayer(game);
         addPlayer(game);
 
@@ -59,7 +59,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldFailStartGameCausedByInvalidUuid() throws Exception {
-        Game game = createGame();
+        Game game = TestHelper.createGame(gameService);
         addPlayer(game);
         String expectedMessage = String.format("failure: %s: %s", IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
 
@@ -72,7 +72,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldFailStartGameCausedByInvalidLifecycle() throws Exception {
-        Game game = createGame();
+        Game game = TestHelper.createGame(gameService);
         addPlayer(game);
         game.setGameLifecycle(GameLifecycle.RUNNING);
         String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
@@ -86,7 +86,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldFailStartGameCausedByNoPlayers() throws Exception {
-        Game game = createGame();
+        Game game = TestHelper.createGame(gameService);
         String expectedMessage = String.format("failure: %s: %s", IllegalStateException.class.getCanonicalName(), ExceptionMessage.NOT_ENOUGH_PLAYERS.getValue());
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/game/start/{gameUuid}", game.getUuid()))
@@ -94,11 +94,6 @@ public class GameControllerTest {
                 .andReturn();
 
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
-    }
-
-    private Game createGame(){
-        String gameUuid = gameService.createGame();
-        return UnoState.getGame(gameUuid);
     }
 
     private void addPlayer(Game game){

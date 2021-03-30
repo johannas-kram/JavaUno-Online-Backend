@@ -39,8 +39,7 @@ public class TurnControllerKeepTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.PUT_DRAWN);

@@ -40,8 +40,7 @@ public class TurnControllerNextTurnTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.FINAL_COUNTDOWN);

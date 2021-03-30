@@ -39,8 +39,7 @@ public class TurnControllerSelectColorTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
         game.setDesiredColor(null);

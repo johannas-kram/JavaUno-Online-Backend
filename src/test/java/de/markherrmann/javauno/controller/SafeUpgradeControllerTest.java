@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.controller;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.service.GameService;
@@ -38,7 +39,7 @@ public class SafeUpgradeControllerTest {
         List<String> toRemove = new ArrayList<>();
         UnoState.getGamesEntrySet().forEach(e->toRemove.add(e.getKey()));
         toRemove.forEach(UnoState::removeGame);
-        gameUuid = gameService.createGame();
+        gameUuid = TestHelper.createGame(gameService).getUuid();
     }
 
     @Test

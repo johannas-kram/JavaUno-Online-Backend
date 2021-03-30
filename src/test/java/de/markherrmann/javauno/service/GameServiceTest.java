@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -31,13 +32,12 @@ public class GameServiceTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
     }
 
     @Test
     public void shouldCreateGame(){
-        String uuid = gameService.createGame();
+        String uuid = TestHelper.createGame(gameService).getUuid();
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
