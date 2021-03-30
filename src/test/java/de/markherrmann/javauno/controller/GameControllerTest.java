@@ -38,7 +38,7 @@ public class GameControllerTest {
 
     @Test
     public void shouldCreateGame() throws Exception {
-        this.mockMvc.perform(post("/api/game/create"))
+        this.mockMvc.perform(post("/api/game/create/empty"))
                 .andExpect(status().is(HttpStatus.CREATED.value()));
 
         assertThat(UnoState.getGamesEntrySet()).isNotEmpty();
