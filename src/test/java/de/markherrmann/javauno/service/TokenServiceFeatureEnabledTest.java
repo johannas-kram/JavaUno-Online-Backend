@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.FileReadException;
 import de.markherrmann.javauno.exceptions.InvalidTokenException;
 import org.junit.After;
@@ -74,6 +75,7 @@ public class TokenServiceFeatureEnabledTest {
 
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(InvalidTokenException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_TOKEN.getValue());
     }
 
     @Test
@@ -117,6 +119,7 @@ public class TokenServiceFeatureEnabledTest {
 
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(FileReadException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.FILE_READ_ERROR.getValue());
     }
 
 }
