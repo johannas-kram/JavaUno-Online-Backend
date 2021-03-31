@@ -27,6 +27,10 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
 
 ## tokenized-game-create
+* This Feature is optional
+  * Disable: java -jar javauno-xx.jar --feature.tokenized_game_create=off
+  * Enable: java -jar javauno-xx.jar --feature.tokenized_game_create=on
+  * Default: Disabled
 * A valid token must be provided to create a game
 * Token is given via post field 'token'
 * Every authorized person should have their own token
