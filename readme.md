@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-1.1 (2021, March 30th)
+1.0 (2020, Feb. 13th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
