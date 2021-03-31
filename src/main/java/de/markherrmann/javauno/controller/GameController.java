@@ -19,14 +19,19 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<GeneralResponse> createGame(){
+    @PostMapping(value = "/create/{token}")
+    public ResponseEntity<GeneralResponse> createGame(@PathVariable String token){
         try {
-            GameCreateResponse response = new GameCreateResponse(gameService.createGame());
+            GameCreateResponse response = new GameCreateResponse(gameService.createGame(token));
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch(Exception exception){
             return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<GeneralResponse> createGame(){
+        return createGame("empty");
     }
 
     @PostMapping(value = "/start/{gameUuid}")

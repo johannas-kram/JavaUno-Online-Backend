@@ -27,18 +27,22 @@ public class GameService {
     private final FinalizeTurnService finalizeTurnService;
     private final HousekeepingService housekeepingService;
     private final PushService pushService;
+    private final TokenService tokenService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
-    public GameService(FinalizeTurnService finalizeTurnService, HousekeepingService housekeepingService, PushService pushService) {
+    public GameService(FinalizeTurnService finalizeTurnService, HousekeepingService housekeepingService,
+                       PushService pushService, TokenService tokenService) {
         this.finalizeTurnService = finalizeTurnService;
         this.housekeepingService = housekeepingService;
         this.pushService = pushService;
+        this.tokenService = tokenService;
     }
 
-    public String createGame(){
+    public String createGame(String token){
         housekeepingService.removeOldGames();
+        tokenService.checkForTokenizedGameCreate(token);
         Game game = new Game();
         UnoState.putGame(game);
         housekeepingService.updateLastAction(game);

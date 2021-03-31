@@ -2,7 +2,9 @@ package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.controller.response.ErrorResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
+import de.markherrmann.javauno.exceptions.FileReadException;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.InvalidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -14,6 +16,12 @@ class ErrorResponseUtil {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         if(exception instanceof RuntimeException) {
             status = exception instanceof IllegalArgumentException ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
+        }
+        if(exception instanceof InvalidTokenException) {
+            status = HttpStatus.UNAUTHORIZED;
+        }
+        if(exception instanceof FileReadException) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         ErrorResponse response = new ErrorResponse(exception);
         return ResponseEntity.status(status).body(response);

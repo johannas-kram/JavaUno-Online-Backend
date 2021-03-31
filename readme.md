@@ -1,6 +1,6 @@
 # JavaUno - Online Version - Backend
 
-The cardgame as online game - the backend
+The card game as online game - the backend
 
 ## Version
 1.0 (2020, Feb. 13th)
@@ -19,12 +19,28 @@ If you use own frontend, it has to use the same endpoints, like my frontend
     
 ## How to run the backend
 * Pre-requisite: Java (8+)
-* build it with maven (you will get a javauno-xx.jar file)
+* build it with 'mvn clean package' (you will get a javauno-xx.jar file)
 * run following command in terminal: java -jar javauno-xx.jar\
   (xx is the version)
 
 ### Spielanleitung
 https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
+
+## tokenized-game-create
+* A valid token must be provided to create a game
+* Token is given via post field 'token'
+* Every authorized person should have their own token
+* Token-Syntax: 2 random youtube-video-id-like strings, separated by a dot
+  * Example token: Dsnmn7Twqd1.j8yZ15Ji210
+* Creation and storing of tokens on backend-server
+  * Creation of tokens and storing of hashes happen externally\
+    (not concern of this application)
+  * For every token, a bcrypt-hash of the second youtube-video-id-like string is stored in ./tokens/\
+    while the first youtube-video-id-like string is the filename
+    * example: Hash of j8yZ15Ji210 is stored in file named Dsnmn7Twqd1
+* Token validation:
+  * First youtube-video-id-like string is used to search for a file named like that and load the hash from it.
+  * Second youtube-video-id-like string is checked with loaded hash to validate token.
   
 ## License
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
