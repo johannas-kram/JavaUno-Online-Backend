@@ -24,9 +24,6 @@ public class SwitchDeviceControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-   // @Autowired
-   // private SwitchDeviceService switchDeviceService;
-
     @Test
     public void shouldSwitchIn() throws Exception {
         String pushUuid = "testPushUuid";
@@ -38,7 +35,7 @@ public class SwitchDeviceControllerTest {
                 .andReturn();
 
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SWITCH_IN);
-        assertThat(mvcResult.getResponse().getContentAsString().contains("success"));
+        assertThat(mvcResult.getResponse().getContentAsString().contains("success")).isTrue();
     }
 
     @Test
@@ -51,7 +48,7 @@ public class SwitchDeviceControllerTest {
                 .andReturn();
 
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SWITCH_FINISHED);
-        assertThat(mvcResult.getResponse().getContentAsString().contains("success"));
+        assertThat(mvcResult.getResponse().getContentAsString().contains("success")).isTrue();
     }
 
 }
