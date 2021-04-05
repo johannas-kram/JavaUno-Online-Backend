@@ -17,6 +17,20 @@ public class PushService {
         this.pusher = pusher;
     }
 
+    public void pushDirectly(String pushUuid, String... parts){
+        StringBuilder sb = new StringBuilder();
+        for(String part : parts){
+            if(sb.toString().length() > 0){
+                sb.append(":");
+            }
+            sb.append(part);
+        }
+        String message = sb.toString();
+        String destination = "/api/push/"+pushUuid;
+        pusher.convertAndSend(destination, message);
+        lastMessage = PushMessage.valueOf(parts[0].replace("-", "_").toUpperCase());
+    }
+
     public void push(PushMessage pushMessage, Game game){
         String message = getEnhancedMessage(pushMessage, game);
         String destination = "/api/push/"+game.getUuid();
