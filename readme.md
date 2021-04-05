@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-1.0 (2020, Feb. 13th)
+2.0 (2021, April, 5th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -27,9 +27,14 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
 
 ## tokenized-game-create
+* This Feature is optional
+  * Disable: java -jar javauno-xx.jar --feature.tokenized_game_create=off
+  * Enable: java -jar javauno-xx.jar --feature.tokenized_game_create=on
+  * Default: Disabled
 * A valid token must be provided to create a game
 * Token is given via post field 'token'
 * Every authorized person should have their own token
+* frontend with this feature (enabled or disable) is not compatible with backend without the feature
 * Token-Syntax: 2 random youtube-video-id-like strings, separated by a dot
   * Example token: Dsnmn7Twqd1.j8yZ15Ji210
 * Creation and storing of tokens on backend-server
@@ -51,3 +56,9 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
   
 Notice: Mattel also offers an own free app to play UNO.
 See my version as fun project
+
+## ChangeLog
+
+### Version 2.0
+* New optional feature: tokenized-game-create (see #tokenized-game-create) (limited downwards compatibility)
+* New feature: You can switch the game to another device
