@@ -12,7 +12,10 @@ public enum PushMessage {
     SAID_UNO("said-uno"),
     NEXT_TURN("next-turn"),
     FINISHED_GAME("finished-game"),
-    END("end");
+    END("end"),
+    SWITCH_IN("switch-in"),
+    SWITCH_FINISHED("switch-finished")
+    ;
 
     private final String value;
 
