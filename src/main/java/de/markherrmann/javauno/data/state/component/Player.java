@@ -84,6 +84,10 @@ public class Player {
 		return botUuid;
 	}
 
+	public void setBotUuid(){
+		this.botUuid = UUID.randomUUID().toString();
+	}
+
 	public int getDrawPenalties() {
 		return drawPenalties;
 	}

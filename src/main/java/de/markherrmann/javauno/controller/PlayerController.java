@@ -44,6 +44,17 @@ public class PlayerController {
         return removePlayer(gameUuid, playerUuid, true);
     }
 
+    @PostMapping(value="/botify/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> botifyPlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            playerService.botifyPlayer(gameUuid, playerUuid);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
     private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot){
         try {
             playerService.removePlayer(gameUuid, playerUuid, bot);

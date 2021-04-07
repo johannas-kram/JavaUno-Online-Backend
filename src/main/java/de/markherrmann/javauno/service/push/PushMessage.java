@@ -5,6 +5,7 @@ public enum PushMessage {
     STARTED_GAME("started-game"),
     ADDED_PLAYER("added-player"),
     REMOVED_PLAYER("removed-player"),
+    BOTIFIED_PLAYER("botified-player"),
     PUT_CARD("put-card"),
     DRAWN_CARD("drawn-card"),
     KEPT_CARD("kept-card"),

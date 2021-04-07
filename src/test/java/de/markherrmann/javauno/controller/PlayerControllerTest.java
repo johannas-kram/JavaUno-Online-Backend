@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.request.AddPlayerRequest;
 import de.markherrmann.javauno.controller.response.SetPlayerResponse;
-import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -129,6 +128,19 @@ public class PlayerControllerTest {
     }
 
     @Test
+    public void shouldBotifyPlayer() throws Exception {
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+        Player player = addPlayer();
+
+        this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+                .andExpect(status().isOk());
+
+        assertThat(game.getBots().size()).isEqualTo(1);
+        assertThat(game.getBots().get(player.getBotUuid())).isNotNull();
+        assertThat(game.getBots().get(player.getBotUuid()).isBot()).isTrue();
+    }
+
+    @Test
     public void shouldFailRemovePlayerCausedByInvalidGameUuid() throws Exception {
         Player player = addPlayer();
 
@@ -173,6 +185,47 @@ public class PlayerControllerTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
         MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/remove/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
+                .andReturn();
+
+
+        assertThat(game.getPlayers()).isNotEmpty();
+        assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
+    }
+
+    @Test
+    public void shouldFailBotifyPlayerCausedByInvalidGameUuid() throws Exception {
+        Player player = addPlayer();
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
+
+
+        assertThat(game.getPlayers()).isNotEmpty();
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
+    }
+
+    @Test
+    public void shouldFailBotifyPlayerCausedByInvalidPlayerUuid() throws Exception {
+        addPlayer();
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
+
+
+        assertThat(game.getPlayers()).isNotEmpty();
+        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
+    }
+
+    @Test
+    public void shouldFailBotifyPlayerCausedByInvalidLifecycle() throws Exception {
+        Player player = addPlayer();
+        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andReturn();
 

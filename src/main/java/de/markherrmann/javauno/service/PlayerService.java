@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class PlayerService {
 
@@ -64,6 +66,24 @@ public class PlayerService {
         logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
     }
 
+    public void botifyPlayer(String gameUuid, String playerUuid) throws IllegalStateException {
+        Game game = gameService.getGame(gameUuid);
+        synchronized (game){
+            if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+                logger.error("Game is not started. Players can not be botified in this state. Game: {}", gameUuid);
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+            }
+            botify(game, playerUuid);
+            boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+            if(removedGame){
+                pushService.push(PushMessage.END, game);
+            } else {
+                pushService.push(PushMessage.BOTIFIED_PLAYER, game);
+            }
+        }
+        logger.info("Botified Player. Game: {}; Player: {}", gameUuid, playerUuid);
+    }
+
     private Player addPlayer(Game game, String name, boolean bot){
         Player player = new Player(name, bot);
         if(bot){
@@ -91,6 +111,16 @@ public class PlayerService {
         } else {
             game.removeHuman(player);
         }
+    }
+
+    private void botify(Game game, String playerUuid){
+        Player player = getPlayer(playerUuid, game);
+        int index = game.getPlayers().indexOf(player);
+        player.setBot(true);
+        player.setBotUuid();
+        game.setToDeleteIndex(index);
+        game.removeHuman(player);
+        game.putBot(player);
     }
 
     private void fixCurrentPlayerIndex(Game game, Player player){

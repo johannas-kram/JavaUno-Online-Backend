@@ -42,6 +42,7 @@ public class PushService {
         switch(pushMessage){
             case ADDED_PLAYER: return getEnhancedAddedPlayerMessage(pushMessage.getValue(), game);
             case REMOVED_PLAYER: return getEnhancedRemovedPlayerMessage(pushMessage.getValue(), game);
+            case BOTIFIED_PLAYER: return getEnhancedBotifiedPlayerMessage(pushMessage.getValue(), game);
             case PUT_CARD: return getEnhancedPutCardMessage(pushMessage.getValue(), game);
             case DRAWN_CARD: return getEnhancedDrawnCardMessage(pushMessage.getValue(), game);
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
@@ -60,6 +61,11 @@ public class PushService {
     private String getEnhancedRemovedPlayerMessage(String message, Game game){
         int index = game.getToDeleteIndex();
         return String.format("%s:%d", message, index);
+    }
+
+    private String getEnhancedBotifiedPlayerMessage(String message, Game game){
+        int index = game.getToDeleteIndex();
+        return String.format("%s:%d:%s", message, index, game.getPlayers().get(index).getBotUuid());
     }
 
     private String getEnhancedPutCardMessage(String message, Game game){
