@@ -13,6 +13,9 @@ public enum PushMessage {
     SAID_UNO("said-uno"),
     NEXT_TURN("next-turn"),
     FINISHED_GAME("finished-game"),
+    REQUEST_STOP_PARTY("request-stop-party"),
+    REVOKE_REQUEST_STOP_PARTY("revoke-request-stop-party"),
+    STOP_PARTY("stop-party"),
     END("end"),
     SWITCH_IN("switch-in"),
     SWITCH_FINISHED("switch-finished")

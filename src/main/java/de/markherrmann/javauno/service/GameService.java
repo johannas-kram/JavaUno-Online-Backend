@@ -76,7 +76,15 @@ public class GameService {
         finalizeTurnService.handleBotTurn(game, currentPlayer);
     }
 
+    void stopParty(Game game){
+        game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
+        game.resetStopPartyRequested();
+        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+    }
+
     private void resetGame(Game game){
+        game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
+        game.resetStopPartyRequested();
         for(Player player : game.getPlayers()){
             player.clearCards();
         }

@@ -17,6 +17,7 @@ public class Player {
 	private boolean bot;
 	private boolean unoSaid;
 	private int drawPenalties;
+	private boolean stopPartyRequested;
 
 	private Player(){}
 
@@ -94,5 +95,13 @@ public class Player {
 
 	public void setDrawPenalties(int drawPenalties) {
 		this.drawPenalties = drawPenalties;
+	}
+
+	public boolean isStopPartyRequested() {
+		return stopPartyRequested;
+	}
+
+	public void setStopPartyRequested(boolean stopPartyRequested) {
+		this.stopPartyRequested = stopPartyRequested;
 	}
 }

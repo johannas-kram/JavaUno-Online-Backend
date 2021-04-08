@@ -22,8 +22,9 @@ public class Game{
     private TurnState turnState;
     private int drawDuties;
     private boolean skip;
-	private int toDeleteIndex;
+	private int playerIndexForPush;
 	private int party;
+	private int stopPartyRequested;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -158,13 +159,13 @@ public class Game{
 		this.skip = skip;
 	}
 
-	public void setToDeleteIndex(int toDeleteIndex) {
-		this.toDeleteIndex = toDeleteIndex;
+	public void setPlayerIndexForPush(int playerIndexForPush) {
+		this.playerIndexForPush = playerIndexForPush;
 	}
 
 	@JsonIgnore
-	public int getToDeleteIndex(){
-		return toDeleteIndex;
+	public int getPlayerIndexForPush(){
+		return playerIndexForPush;
 	}
 
 	public void nextParty() {
@@ -173,5 +174,21 @@ public class Game{
 
 	public int getParty() {
 		return party;
+	}
+
+	public int getStopPartyRequested() {
+		return stopPartyRequested;
+	}
+
+	public int incrementAndGetStopPartyRequested(){
+		return ++stopPartyRequested;
+	}
+
+	public int decrementAndGetStopPartyRequested(){
+		return --stopPartyRequested;
+	}
+
+	public void resetStopPartyRequested() {
+		this.stopPartyRequested = 0;
 	}
 }

@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class PlayerService {
 
@@ -84,6 +82,37 @@ public class PlayerService {
         logger.info("Botified Player. Game: {}; Player: {}", gameUuid, playerUuid);
     }
 
+    public void requestStopParty(String gameUuid, String playerUuid){
+        Game game = gameService.getGame(gameUuid);
+        synchronized (game){
+            if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+                logger.error("Game is not started. Players can not request party stop in this state. Game: {}", gameUuid);
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+            }
+        }
+        boolean stoppedParty = requestStopParty(game, playerUuid);
+        if(stoppedParty){
+            pushService.push(PushMessage.STOP_PARTY, game);
+            logger.info("Stopped Party successfully. Game: {}", game.getUuid());
+        } else {
+            pushService.push(PushMessage.REQUEST_STOP_PARTY, game);
+            logger.info("Requested Stop Party successfully. Game: {}; Player: {}", game.getUuid(), playerUuid);
+        }
+    }
+
+    public void revokeRequestStopParty(String gameUuid, String playerUuid){
+        Game game = gameService.getGame(gameUuid);
+        synchronized (game){
+            if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+                logger.error("Game is not started. Players can not revoke request party stop in this state. Game: {}", gameUuid);
+                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+            }
+        }
+        revokeRequestStopParty(game, playerUuid);
+        pushService.push(PushMessage.REVOKE_REQUEST_STOP_PARTY, game);
+        logger.info("Revoked Request to Stop Party successfully. Game: {}; Player: {}", game.getUuid(), playerUuid);
+    }
+
     private Player addPlayer(Game game, String name, boolean bot){
         Player player = new Player(name, bot);
         if(bot){
@@ -104,7 +133,7 @@ public class PlayerService {
             player = getPlayer(playerUuid, game);
         }
         int index = game.getPlayers().indexOf(player);
-        game.setToDeleteIndex(index);
+        game.setPlayerIndexForPush(index);
         fixCurrentPlayerIndex(game, player);
         if(bot){
             game.removeBot(player);
@@ -118,9 +147,40 @@ public class PlayerService {
         int index = game.getPlayers().indexOf(player);
         player.setBot(true);
         player.setBotUuid();
-        game.setToDeleteIndex(index);
+        game.setPlayerIndexForPush(index);
         game.removeHuman(player);
         game.putBot(player);
+    }
+
+    private boolean requestStopParty(Game game, String playerUuid){
+        Player player = getPlayer(playerUuid, game);
+        if(player.isStopPartyRequested()){
+            return false;
+        }
+        int index = game.getPlayers().indexOf(player);
+        game.setPlayerIndexForPush(index);
+        game.incrementAndGetStopPartyRequested();
+        player.setStopPartyRequested(true);
+        if(game.getHumans().size() == game.getStopPartyRequested()){
+            stopParty(game);
+            return true;
+        }
+        return false;
+    }
+
+    private void revokeRequestStopParty(Game game, String playerUuid){
+        Player player = getPlayer(playerUuid, game);
+        if(!player.isStopPartyRequested()){
+            return;
+        }
+        int index = game.getPlayers().indexOf(player);
+        game.setPlayerIndexForPush(index);
+        game.decrementAndGetStopPartyRequested();
+        player.setStopPartyRequested(false);
+    }
+
+    private void stopParty(Game game){
+        gameService.stopParty(game);
     }
 
     private void fixCurrentPlayerIndex(Game game, Player player){

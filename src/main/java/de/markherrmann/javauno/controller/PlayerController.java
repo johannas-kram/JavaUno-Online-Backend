@@ -55,6 +55,28 @@ public class PlayerController {
         }
     }
 
+    @PostMapping(value="/request-stop-party/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> requestStopParty(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            playerService.requestStopParty(gameUuid, playerUuid);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
+    @PostMapping(value="/revoke-request-stop-party/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> revokeRequestStopParty(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            playerService.revokeRequestStopParty(gameUuid, playerUuid);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
     private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot){
         try {
             playerService.removePlayer(gameUuid, playerUuid, bot);

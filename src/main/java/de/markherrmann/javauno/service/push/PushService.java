@@ -48,6 +48,9 @@ public class PushService {
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
             case SELECTED_COLOR: return getEnhancedSelectColorMessage(pushMessage.getValue(), game);
             case FINISHED_GAME: return getEnhancedFinishedGameMessage(pushMessage.getValue(), game);
+            case REQUEST_STOP_PARTY: return getEnhancedRequestStopPartyMessage(pushMessage.getValue(), game);
+            case REVOKE_REQUEST_STOP_PARTY: return getEnhancedRevokeRequestStopPartyMessage(pushMessage.getValue(), game);
+            case STOP_PARTY: return getEnhancedStopPartyMessage(pushMessage.getValue(), game);
             default: return pushMessage.getValue();
         }
     }
@@ -59,12 +62,12 @@ public class PushService {
     }
 
     private String getEnhancedRemovedPlayerMessage(String message, Game game){
-        int index = game.getToDeleteIndex();
+        int index = game.getPlayerIndexForPush();
         return String.format("%s:%d", message, index);
     }
 
     private String getEnhancedBotifiedPlayerMessage(String message, Game game){
-        int index = game.getToDeleteIndex();
+        int index = game.getPlayerIndexForPush();
         return String.format("%s:%d:%s", message, index, game.getPlayers().get(index).getBotUuid());
     }
 
@@ -95,6 +98,21 @@ public class PushService {
     }
 
     private String getEnhancedFinishedGameMessage(String message, Game game){
+        int party = game.getParty();
+        return String.format("%s:%d", message, party);
+    }
+
+    private String getEnhancedRequestStopPartyMessage(String message, Game game){
+        int index = game.getPlayerIndexForPush();
+        return String.format("%s:%d", message, index);
+    }
+
+    private String getEnhancedRevokeRequestStopPartyMessage(String message, Game game){
+        int index = game.getPlayerIndexForPush();
+        return String.format("%s:%d", message, index);
+    }
+
+    private String getEnhancedStopPartyMessage(String message, Game game){
         int party = game.getParty();
         return String.format("%s:%d", message, party);
     }
