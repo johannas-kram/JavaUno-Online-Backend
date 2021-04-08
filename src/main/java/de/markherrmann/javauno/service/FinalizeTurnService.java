@@ -1,6 +1,7 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -37,9 +38,9 @@ public class FinalizeTurnService {
     }
 
     void handleBotTurn(Game game, Player player){
-        if(player.isBot()){
+        if(player.isBot() && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
             botService.makeTurn(game, player);
-            if(player.getCardCount() > 0){
+            if(player.getCardCount() > 0 && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
                 finalize(game);
             }
         }

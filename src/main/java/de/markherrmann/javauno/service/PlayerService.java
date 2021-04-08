@@ -192,6 +192,9 @@ public class PlayerService {
         if(deletedPlayerIndex == currentPlayerIndex){
             game.setCurrentPlayerIndex(0);
         }
+        if(deletedPlayerIndex == game.getLastWinner()){
+            game.setLastWinner(-1);
+        }
     }
 
     Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {

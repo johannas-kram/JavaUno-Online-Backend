@@ -25,6 +25,7 @@ public class Game{
 	private int playerIndexForPush;
 	private int party;
 	private int stopPartyRequested;
+	private int lastWinner = -1;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -190,5 +191,14 @@ public class Game{
 
 	public void resetStopPartyRequested() {
 		this.stopPartyRequested = 0;
+	}
+
+	@JsonIgnore
+	public int getLastWinner() {
+		return lastWinner;
+	}
+
+	public void setLastWinner(int lastWinner) {
+		this.lastWinner = lastWinner;
 	}
 }

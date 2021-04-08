@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 @Service
@@ -80,10 +81,15 @@ public class GameService {
         game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
         game.resetStopPartyRequested();
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+        game.setTurnState(TurnState.FINAL_COUNTDOWN);
     }
 
     private void resetGame(Game game){
+        game.setCurrentPlayerIndex(setAndGetCurrentPlayerIndex(game));
         game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
+        if(game.getCurrentPlayerIndex() > 0){
+            System.out.println("stop");
+        }
         game.resetStopPartyRequested();
         for(Player player : game.getPlayers()){
             player.clearCards();
@@ -98,6 +104,15 @@ public class GameService {
         if(game.isReversed()){
             game.toggleReversed();
         }
+    }
+
+    private int setAndGetCurrentPlayerIndex(Game game){
+        int lastWinner = game.getLastWinner();
+        if(lastWinner >= 0){
+            return lastWinner;
+        }
+        int players = game.getPlayers().size();
+        return new Random().nextInt(players);
     }
 
     private void resetPlayers(Game game){

@@ -29,7 +29,9 @@ public class TestHelper {
 
     public static Game createGame(GameService gameService){
         String uuid = gameService.createGame("empty");
-        return UnoState.getGame(uuid);
+        Game game = UnoState.getGame(uuid);;
+        game.setLastWinner(0);
+        return game;
     }
 
     public static void assertPutCard(Game game, Card card, int discardPileSize, Exception exception){
