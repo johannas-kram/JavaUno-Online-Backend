@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class PlayerControllerTest {
+public class PlayerControllerAddRemoveTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,7 +50,7 @@ public class PlayerControllerTest {
     public void shouldAddHumanPlayer() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", false)))
+                .content(getAddPlayerRequestAsJson(false)))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn();
         Player player = game.getPlayers().get(0);
@@ -64,7 +64,7 @@ public class PlayerControllerTest {
     public void shouldAddBotPlayer() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", true)))
+                .content(getAddPlayerRequestAsJson(true)))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn();
         Player player = game.getPlayers().get(0);
@@ -76,7 +76,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldFailAddPlayerCausedByInvalidGameUuid() throws Exception {
-        AddPlayerRequest invalidRequest = getAddPlayerRequest("player name", false);
+        AddPlayerRequest invalidRequest = getAddPlayerRequest(false);
         invalidRequest.setGameUuid("invalid");
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
@@ -94,7 +94,7 @@ public class PlayerControllerTest {
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", false)))
+                .content(getAddPlayerRequestAsJson(false)))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andReturn();
 
@@ -125,19 +125,6 @@ public class PlayerControllerTest {
 
         assertThat(game.getPlayers()).isEmpty();
         assertRemovePlayerResponse(mvcResult);
-    }
-
-    @Test
-    public void shouldBotifyPlayer() throws Exception {
-        game.setGameLifecycle(GameLifecycle.RUNNING);
-        Player player = addPlayer();
-
-        this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
-                .andExpect(status().isOk());
-
-        assertThat(game.getBots().size()).isEqualTo(1);
-        assertThat(game.getBots().get(player.getBotUuid())).isNotNull();
-        assertThat(game.getBots().get(player.getBotUuid()).isBot()).isTrue();
     }
 
     @Test
@@ -193,47 +180,6 @@ public class PlayerControllerTest {
         assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
     }
 
-    @Test
-    public void shouldFailBotifyPlayerCausedByInvalidGameUuid() throws Exception {
-        Player player = addPlayer();
-
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
-                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
-                .andReturn();
-
-
-        assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such game.");
-    }
-
-    @Test
-    public void shouldFailBotifyPlayerCausedByInvalidPlayerUuid() throws Exception {
-        addPlayer();
-        game.setGameLifecycle(GameLifecycle.RUNNING);
-
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
-                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
-                .andReturn();
-
-
-        assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
-    }
-
-    @Test
-    public void shouldFailBotifyPlayerCausedByInvalidLifecycle() throws Exception {
-        Player player = addPlayer();
-        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
-                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                .andReturn();
-
-
-        assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
-    }
-
     private void assertRemovePlayerResponse(MvcResult mvcResult) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
         SetPlayerResponse setPlayerResponse = jsonToObject(response);
@@ -258,15 +204,15 @@ public class PlayerControllerTest {
         assertThat(setPlayerResponse.getMessage()).isEqualTo(expectedMessage);
     }
 
-    private String getAddPlayerRequestAsJson(String name, boolean bot){
-        AddPlayerRequest addPlayerRequest = getAddPlayerRequest(name, bot);
+    private String getAddPlayerRequestAsJson(boolean bot){
+        AddPlayerRequest addPlayerRequest = getAddPlayerRequest(bot);
         return asJsonString(addPlayerRequest);
     }
 
-    private AddPlayerRequest getAddPlayerRequest(String name, boolean bot){
+    private AddPlayerRequest getAddPlayerRequest(boolean bot){
         AddPlayerRequest addPlayerRequest = new AddPlayerRequest();
         addPlayerRequest.setGameUuid(game.getUuid());
-        addPlayerRequest.setName(name);
+        addPlayerRequest.setName("player name");
         addPlayerRequest.setBot(bot);
         return addPlayerRequest;
     }
