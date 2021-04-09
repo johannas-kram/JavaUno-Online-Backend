@@ -20,14 +20,17 @@ public class PlayerService {
     private final GameService gameService;
     private final HousekeepingService housekeepingService;
     private final PushService pushService;
+    private final FinalizeTurnService finalizeTurnService;
 
     private final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     @Autowired
-    public PlayerService(GameService gameService, HousekeepingService housekeepingService, PushService pushService) {
+    public PlayerService(GameService gameService, HousekeepingService housekeepingService, PushService pushService,
+                         FinalizeTurnService finalizeTurnService) {
         this.gameService = gameService;
         this.housekeepingService = housekeepingService;
         this.pushService = pushService;
+        this.finalizeTurnService = finalizeTurnService;
     }
 
     public String addPlayer(String gameUuid, String name, boolean bot) throws IllegalArgumentException, IllegalStateException {
@@ -150,6 +153,9 @@ public class PlayerService {
         game.setPlayerIndexForPush(index);
         game.removeHuman(player);
         game.putBot(player);
+        if(isPlayersTurn(game, player)){
+            finalizeTurnService.handleBotTurn(game, player);
+        }
     }
 
     private boolean requestStopParty(Game game, String playerUuid){
