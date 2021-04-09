@@ -6,6 +6,7 @@ import de.markherrmann.javauno.controller.response.SetPlayerResponse;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
@@ -46,6 +47,7 @@ public class PlayerControllerBotifyTest {
     public void shouldBotifyPlayer() throws Exception {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Player player = addPlayer();
+        game.setTurnState(TurnState.FINAL_COUNTDOWN);
 
         this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk());
