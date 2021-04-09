@@ -3,7 +3,6 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
-import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -72,9 +71,10 @@ public class PlayerServiceBotifyTest {
     public void shouldFailBotifyPlayerCausedByInvalidGameUuid(){
         prepareGame();
         Exception exception = null;
+        game.setGameLifecycle(GameLifecycle.RUNNING);
 
         try {
-            playerService.removePlayer("invalid uuid", game.getPlayers().get(0).getUuid(), false);
+            playerService.botifyPlayer("invalid uuid", game.getPlayers().get(0).getUuid());
         } catch(Exception ex){
             exception = ex;
         }
@@ -87,9 +87,10 @@ public class PlayerServiceBotifyTest {
     public void shouldFailBotifyPlayerCausedByInvalidPlayerUuid(){
         prepareGame();
         Exception exception = null;
+        game.setGameLifecycle(GameLifecycle.RUNNING);
 
         try {
-            playerService.removePlayer(game.getUuid(), "invalid uuid",false);
+            playerService.botifyPlayer(game.getUuid(), "invalid uuid");
         } catch(Exception ex){
             exception = ex;
         }
