@@ -46,6 +46,12 @@ public class FinalizeTurnService {
         }
     }
 
+    void handleBotifiedPlayerTurn(Game game, Player player){
+        Runnable runnable = () -> handleBotTurn(game, player);
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
     void finalizeTurn(Game game){
         this.game = game;
         setPlayersDrawPenalties();

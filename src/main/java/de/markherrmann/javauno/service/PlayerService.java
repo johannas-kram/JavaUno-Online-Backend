@@ -74,8 +74,7 @@ public class PlayerService {
                 logger.error("Game is not started. Players can not be botified in this state. Game: {}", gameUuid);
                 throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
-            botify(game, playerUuid);
-            boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+            boolean removedGame = botify(game, playerUuid);
             if(removedGame){
                 pushService.push(PushMessage.END, game);
             } else {
@@ -145,17 +144,22 @@ public class PlayerService {
         }
     }
 
-    private void botify(Game game, String playerUuid){
+    private boolean botify(Game game, String playerUuid){
         Player player = getPlayer(playerUuid, game);
         int index = game.getPlayers().indexOf(player);
         player.setBot(true);
         player.setBotUuid();
         game.setPlayerIndexForPush(index);
-        game.removeHuman(player);
-        game.putBot(player);
-        if(isPlayersTurn(game, player)){
-            finalizeTurnService.handleBotTurn(game, player);
+        game.getHumans().remove(playerUuid);
+        game.getBots().put(player.getBotUuid(), player);
+        boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+        if(removedGame){
+            return true;
         }
+        if(isPlayersTurn(game, player)){
+            finalizeTurnService.handleBotifiedPlayerTurn(game, player);
+        }
+        return false;
     }
 
     private boolean requestStopParty(Game game, String playerUuid){
