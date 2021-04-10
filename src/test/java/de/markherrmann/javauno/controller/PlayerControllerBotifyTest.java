@@ -84,20 +84,6 @@ public class PlayerControllerBotifyTest {
         assertFailure(mvcResult, "de.markherrmann.javauno.exceptions.IllegalArgumentException", "There is no such player in this game.");
     }
 
-    @Test
-    public void shouldFailBotifyPlayerCausedByInvalidLifecycle() throws Exception {
-        Player player = addPlayer();
-        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/botify/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
-                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                .andReturn();
-
-
-        assertThat(game.getPlayers()).isNotEmpty();
-        assertFailure(mvcResult, IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_GAME.getValue());
-    }
-
     private void assertFailure(MvcResult mvcResult, String exception, String message) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
         SetPlayerResponse setPlayerResponse = jsonToObject(response);

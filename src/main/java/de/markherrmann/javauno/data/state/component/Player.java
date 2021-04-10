@@ -18,6 +18,7 @@ public class Player {
 	private boolean unoSaid;
 	private int drawPenalties;
 	private boolean stopPartyRequested;
+	private boolean botifyPending;
 
 	private Player(){}
 
@@ -101,5 +102,13 @@ public class Player {
 
 	public void setStopPartyRequested(boolean stopPartyRequested) {
 		this.stopPartyRequested = stopPartyRequested;
+	}
+
+	public boolean isBotifyPending() {
+		return botifyPending;
+	}
+
+	public void setBotifyPending(boolean botifyPending) {
+		this.botifyPending = botifyPending;
 	}
 }

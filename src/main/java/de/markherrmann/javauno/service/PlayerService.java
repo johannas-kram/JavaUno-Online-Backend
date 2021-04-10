@@ -27,6 +27,8 @@ public class PlayerService {
 
     private final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
+    public int botifyPlayerByRequestCountdownMillis = 10000;
+
     @Autowired
     public PlayerService(GameService gameService, HousekeepingService housekeepingService, PushService pushService,
                          FinalizeTurnService finalizeTurnService) {
@@ -80,10 +82,6 @@ public class PlayerService {
     public void botifyPlayer(String gameUuid, String playerUuid) throws IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         synchronized (game){
-            if(!gameService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
-                logger.error("Game is not started. Players can not be botified in this state. Game: {}", gameUuid);
-                throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
-            }
             boolean removedGame = botify(game, playerUuid);
             if(removedGame){
                 pushService.push(PushMessage.END, game);
@@ -92,6 +90,37 @@ public class PlayerService {
             }
         }
         logger.info("Botified Player. Game: {}; Player: {}", gameUuid, playerUuid);
+    }
+
+    public void requestBotifyPlayer(String gameUuid, String kickUuid) throws IllegalStateException {
+        Game game = gameService.getGame(gameUuid);
+        synchronized (game){
+            Player player = getPlayerByKickUuid(kickUuid, game);
+            if(player.isBotifyPending()){
+                return;
+            }
+            player.setBotifyPending(true);
+            game.setPlayerIndexForPush(game.getPlayers().indexOf(player));
+            botifyPlayerByRequest(game, player);
+            pushService.push(PushMessage.REQUEST_BOTIFY_PLAYER, game);
+            logger.info("Successfully requested botification. Game: {}; Player (kickUuid): {}", gameUuid, kickUuid);
+        }
+    }
+
+    public void cancelBotifyPlayer(String gameUuid, String playerUuid) throws IllegalStateException {
+        Game game = gameService.getGame(gameUuid);
+        synchronized (game){
+            Player player = getPlayer(playerUuid, game);
+            if(!player.isBotifyPending()){
+                return;
+            }
+            player.setBotifyPending(false);
+            game.setPlayerIndexForPush(game.getPlayers().indexOf(player));
+            game.getBotifyPlayerByRequestThread().interrupt();
+            game.removeBotifyPlayerByRequestThread();
+            pushService.push(PushMessage.CANCEL_BOTIFY_PLAYER, game);
+            logger.info("Successfully canceled botification. Game: {}; Player (kickUuid): {}", gameUuid, playerUuid);
+        }
     }
 
     public void requestStopParty(String gameUuid, String playerUuid){
@@ -172,6 +201,24 @@ public class PlayerService {
             finalizeTurnService.handleBotifiedPlayerTurn(game, player);
         }
         return false;
+    }
+
+    private void botifyPlayerByRequest(Game game, Player player){
+        Runnable runnable = () -> botifyPlayerByRequestThread(game, player);
+        Thread thread = new Thread(runnable);
+        game.setBotifyPlayerByRequestThread(thread);
+        thread.start();
+    }
+
+    private void botifyPlayerByRequestThread(Game game, Player player){
+        try {
+            Thread.sleep(botifyPlayerByRequestCountdownMillis);
+            logger.info("botification: time's up. know doing botify. Game: {}; Player: {}", game.getUuid(), player.getUuid());
+            player.setBotifyPending(false);
+            botifyPlayer(game.getUuid(), player.getUuid());
+        } catch(InterruptedException exception){
+            logger.info("botification was canceled. doing nothing. Game: {}; Player: {}", game.getUuid(), player.getUuid());
+        }
     }
 
     private boolean requestStopParty(Game game, String playerUuid){
@@ -260,11 +307,21 @@ public class PlayerService {
         return game.getHumans().get(playerUuid);
     }
 
-    private Player getBot(String botUuid, Game game) throws IllegalArgumentException {
-        if(!game.getBots().containsKey(botUuid)){
-            logger.error("There is no such bot in this game. Game: {}; uuid: {}", game.getUuid(), botUuid);
+    public Player getPlayerByKickUuid(String kickUuid, Game game) throws IllegalArgumentException {
+        for(Player player : game.getPlayers()){
+            if(player.getKickUuid().equals(kickUuid)){
+                return player;
+            }
+        }
+        logger.error("There is no such player in this game. Game: {}; kickUuid: {}", game.getUuid(), kickUuid);
+        throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
+    }
+
+    private Player getBot(String kickUUid, Game game) throws IllegalArgumentException {
+        if(!game.getBots().containsKey(kickUUid)){
+            logger.error("There is no such bot in this game. Game: {}; uuid: {}", game.getUuid(), kickUUid);
             throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         }
-        return game.getBots().get(botUuid);
+        return game.getBots().get(kickUUid);
     }
 }

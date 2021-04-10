@@ -26,6 +26,7 @@ public class Game{
 	private int party;
 	private int stopPartyRequested;
 	private int lastWinner = -1;
+	private Thread botifyPlayerByRequestThread;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -200,5 +201,18 @@ public class Game{
 
 	public void setLastWinner(int lastWinner) {
 		this.lastWinner = lastWinner;
+	}
+
+	@JsonIgnore
+	public Thread getBotifyPlayerByRequestThread() {
+		return botifyPlayerByRequestThread;
+	}
+
+	public void setBotifyPlayerByRequestThread(Thread botifyPlayerByRequestThread) {
+		this.botifyPlayerByRequestThread = botifyPlayerByRequestThread;
+	}
+
+	public void removeBotifyPlayerByRequestThread() {
+		this.botifyPlayerByRequestThread = null;
 	}
 }

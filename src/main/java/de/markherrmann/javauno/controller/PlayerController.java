@@ -60,6 +60,28 @@ public class PlayerController {
         }
     }
 
+    @PostMapping(value="/request-botify/{gameUuid}/{kickUuid}")
+    public ResponseEntity<GeneralResponse> requestBotifyPlayer(@PathVariable String gameUuid, @PathVariable String kickUuid){
+        try {
+            playerService.requestBotifyPlayer(gameUuid, kickUuid);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
+    @PostMapping(value="/cancel-botify/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> cancelBotifyPlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            playerService.cancelBotifyPlayer(gameUuid, playerUuid);
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
     @PostMapping(value="/request-stop-party/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> requestStopParty(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {

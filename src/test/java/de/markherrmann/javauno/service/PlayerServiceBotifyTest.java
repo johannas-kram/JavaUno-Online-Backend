@@ -52,22 +52,6 @@ public class PlayerServiceBotifyTest {
     }
 
     @Test
-    public void shouldFailBotifyPlayerCausedByInvalidLifecycle(){
-        prepareGame();
-        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
-        Exception exception = null;
-
-        try {
-            playerService.botifyPlayer(game.getUuid(), game.getPlayers().get(0).getUuid());
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        assertThat(exception).isInstanceOf(IllegalStateException.class);
-        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
-    }
-
-    @Test
     public void shouldFailBotifyPlayerCausedByInvalidGameUuid(){
         prepareGame();
         Exception exception = null;

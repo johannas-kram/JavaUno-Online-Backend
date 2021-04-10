@@ -6,6 +6,8 @@ public enum PushMessage {
     ADDED_PLAYER("added-player"),
     REMOVED_PLAYER("removed-player"),
     BOTIFIED_PLAYER("botified-player"),
+    REQUEST_BOTIFY_PLAYER("request-botify-player"),
+    CANCEL_BOTIFY_PLAYER("cancel-botify-player"),
     PUT_CARD("put-card"),
     DRAWN_CARD("drawn-card"),
     KEPT_CARD("kept-card"),

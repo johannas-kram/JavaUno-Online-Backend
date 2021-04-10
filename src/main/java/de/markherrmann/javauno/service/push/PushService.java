@@ -1,6 +1,7 @@
 package de.markherrmann.javauno.service.push;
 
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -43,6 +44,8 @@ public class PushService {
             case ADDED_PLAYER: return getEnhancedAddedPlayerMessage(pushMessage.getValue(), game);
             case REMOVED_PLAYER: return getEnhancedRemovedPlayerMessage(pushMessage.getValue(), game);
             case BOTIFIED_PLAYER: return getEnhancedBotifiedPlayerMessage(pushMessage.getValue(), game);
+            case REQUEST_BOTIFY_PLAYER: return getEnhancedRequestBotifyPlayerMessage(pushMessage.getValue(), game);
+            case CANCEL_BOTIFY_PLAYER: return getEnhancedCancelBotifyPlayerMessage(pushMessage.getValue(), game);
             case PUT_CARD: return getEnhancedPutCardMessage(pushMessage.getValue(), game);
             case DRAWN_CARD: return getEnhancedDrawnCardMessage(pushMessage.getValue(), game);
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
@@ -69,6 +72,18 @@ public class PushService {
     private String getEnhancedBotifiedPlayerMessage(String message, Game game){
         int index = game.getPlayerIndexForPush();
         return String.format("%s:%d", message, index);
+    }
+
+    private String getEnhancedRequestBotifyPlayerMessage(String message, Game game){
+        int index = game.getPlayerIndexForPush();
+        Player player = game.getPlayers().get(index);
+        return String.format("%s:%s", message, player.getUuid());
+    }
+
+    private String getEnhancedCancelBotifyPlayerMessage(String message, Game game){
+        int index = game.getPlayerIndexForPush();
+        Player player = game.getPlayers().get(index);
+        return String.format("%s:%s", message, player.getKickUuid());
     }
 
     private String getEnhancedPutCardMessage(String message, Game game){
