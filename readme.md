@@ -62,3 +62,8 @@ See my version as fun project
 ### Version 2.0
 * New optional feature: tokenized-game-create (see #tokenized-game-create) (limited downwards compatibility)
 * New feature: You can switch the game to another device
+* Improvement: Beginning Player is selected randomly (or the last winner)
+
+#### Version 3.0 (maybe Winter 2021)
+* ability to join to a running game
+* end game when loser is known (not when winner is known)
