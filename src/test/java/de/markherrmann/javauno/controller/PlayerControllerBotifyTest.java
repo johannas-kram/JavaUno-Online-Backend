@@ -53,8 +53,8 @@ public class PlayerControllerBotifyTest {
                 .andExpect(status().isOk());
 
         assertThat(game.getBots().size()).isEqualTo(1);
-        assertThat(game.getBots().get(player.getBotUuid())).isNotNull();
-        assertThat(game.getBots().get(player.getBotUuid()).isBot()).isTrue();
+        assertThat(game.getBots().get(player.getKickUuid())).isNotNull();
+        assertThat(game.getBots().get(player.getKickUuid()).isBot()).isTrue();
     }
 
     @Test

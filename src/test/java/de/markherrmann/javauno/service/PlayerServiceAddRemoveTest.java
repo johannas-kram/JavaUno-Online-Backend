@@ -75,7 +75,7 @@ public class PlayerServiceAddRemoveTest {
 
         int playersBefore = game.getPlayers().size();
 
-        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, false);
+        playerService.removePlayer(game.getUuid(), bot.getKickUuid(), true, false);
         int playersNow = game.getPlayers().size();
 
         assertThat(playersBefore).isEqualTo(5);
@@ -95,7 +95,7 @@ public class PlayerServiceAddRemoveTest {
 
         int playersBefore = game.getPlayers().size();
 
-        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, true);
+        playerService.removePlayer(game.getUuid(), bot.getKickUuid(), true, true);
         int playersNow = game.getPlayers().size();
 
         assertThat(playersBefore).isEqualTo(5);
@@ -128,7 +128,7 @@ public class PlayerServiceAddRemoveTest {
         Player bot = addBot();
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, true);
+        playerService.removePlayer(game.getUuid(), bot.getKickUuid(), true, true);
         int playersNow = game.getPlayers().size();
 
         assertThat(playersNow).isEqualTo(1);

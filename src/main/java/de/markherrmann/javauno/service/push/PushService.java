@@ -68,7 +68,7 @@ public class PushService {
 
     private String getEnhancedBotifiedPlayerMessage(String message, Game game){
         int index = game.getPlayerIndexForPush();
-        return String.format("%s:%d:%s", message, index, game.getPlayers().get(index).getBotUuid());
+        return String.format("%s:%d", message, index);
     }
 
     private String getEnhancedPutCardMessage(String message, Game game){

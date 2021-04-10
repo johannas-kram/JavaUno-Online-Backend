@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Player {
 
 	private String uuid;
-	private String botUuid;
+	private String kickUuid;
 	private String name;
 	private List<Card> cards = new ArrayList<>();
 	private int cardCount;
@@ -25,9 +25,7 @@ public class Player {
 	    this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.bot = bot;
-		if(bot){
-		    botUuid = UUID.randomUUID().toString();
-        }
+		kickUuid = UUID.randomUUID().toString();
 	}
 
 
@@ -81,12 +79,12 @@ public class Player {
 		return cards.size();
 	}
 
-	public String getBotUuid(){
-		return botUuid;
+	public String getKickUuid(){
+		return kickUuid;
 	}
 
 	public void setBotUuid(){
-		this.botUuid = UUID.randomUUID().toString();
+		this.kickUuid = UUID.randomUUID().toString();
 	}
 
 	public int getDrawPenalties() {

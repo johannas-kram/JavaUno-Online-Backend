@@ -4,7 +4,6 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
@@ -162,10 +161,9 @@ public class PlayerService {
         Player player = getPlayer(playerUuid, game);
         int index = game.getPlayers().indexOf(player);
         player.setBot(true);
-        player.setBotUuid();
         game.setPlayerIndexForPush(index);
         game.getHumans().remove(playerUuid);
-        game.getBots().put(player.getBotUuid(), player);
+        game.getBots().put(player.getKickUuid(), player);
         boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
         if(removedGame){
             return true;

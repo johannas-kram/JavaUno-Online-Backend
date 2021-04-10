@@ -48,7 +48,7 @@ public class PlayerServiceBotifyTest {
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(2);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.BOTIFIED_PLAYER);
         assertThat(game.getPlayers().get(1).isBot()).isTrue();
-        assertThat(game.getPlayers().get(1).getBotUuid()).isNotNull();
+        assertThat(game.getPlayers().get(1).getKickUuid()).isNotNull();
     }
 
     @Test
