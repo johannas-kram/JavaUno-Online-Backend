@@ -4,6 +4,7 @@ import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
@@ -65,11 +66,16 @@ public class PlayerService {
             boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
             if(removedGame){
                 pushService.push(PushMessage.END, game);
-            } else {
-                pushService.push(PushMessage.REMOVED_PLAYER, game);
+                logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
+                return;
             }
+            if(inGame && GameLifecycle.SET_PLAYERS.equals(game.getGameLifecycle())) {
+                pushService.push(PushMessage.STOP_PARTY, game);
+                logger.info("Stopped Party successfully. Game: {}", game.getUuid());
+            }
+            pushService.push(PushMessage.REMOVED_PLAYER, game);
+            logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
         }
-        logger.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
     }
 
     public void botifyPlayer(String gameUuid, String playerUuid) throws IllegalStateException {
@@ -234,6 +240,10 @@ public class PlayerService {
                     "Bots only can be removed in running game, if it is not their turn. " +
                     "Game: {}", game.getUuid());
             throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+        }
+        if(game.getPlayers().size() <= 2){
+            gameService.stopParty(game);
+            return;
         }
         moveCardsToDrawPile(game, player);
     }

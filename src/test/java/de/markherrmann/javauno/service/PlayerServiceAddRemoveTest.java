@@ -6,6 +6,7 @@ import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -115,6 +116,25 @@ public class PlayerServiceAddRemoveTest {
 
         assertThat(game.getPlayers().size()).isEqualTo(1);
         assertThat(UnoState.containsGame(game.getUuid())).isFalse();
+    }
+
+    @Test
+    public void shouldStopPartyCausedByOnlyOneRemainingPlayer(){
+        prepareGame();
+        game.getHumans().clear();
+        game.getBots().clear();
+        game.getPlayers().clear();
+        addHuman();
+        Player bot = addBot();
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+
+        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, true);
+        int playersNow = game.getPlayers().size();
+
+        assertThat(playersNow).isEqualTo(1);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REMOVED_PLAYER);
+        assertThat(game.getGameLifecycle()).isEqualTo(GameLifecycle.SET_PLAYERS);
+        assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
     }
 
     @Test
@@ -306,5 +326,11 @@ public class PlayerServiceAddRemoveTest {
         Player bot = new Player("bot name", true);
         game.putBot(bot);
         return bot;
+    }
+
+    private Player addHuman(){
+        Player human = new Player("human name", true);
+        game.putHuman(human);
+        return human;
     }
 }
