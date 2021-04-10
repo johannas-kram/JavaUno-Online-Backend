@@ -130,7 +130,7 @@ public class GameService {
         }
     }
 
-    Game getGame(String gameUuid) throws IllegalArgumentException {
+    public Game getGame(String gameUuid) throws IllegalArgumentException {
         return UnoState.getGame(gameUuid);
     }
 

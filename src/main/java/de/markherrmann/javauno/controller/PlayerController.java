@@ -36,12 +36,17 @@ public class PlayerController {
 
     @DeleteMapping(value="/remove/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> removePlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return removePlayer(gameUuid, playerUuid, false);
+        return removePlayer(gameUuid, playerUuid, false, false);
     }
 
     @DeleteMapping(value="/removeBot/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> removeBot(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return removePlayer(gameUuid, playerUuid, true);
+        return removePlayer(gameUuid, playerUuid, true, false);
+    }
+
+    @DeleteMapping(value="/removeBotInGame/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> removeBotInGame(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        return removePlayer(gameUuid, playerUuid, true, true);
     }
 
     @PostMapping(value="/botify/{gameUuid}/{playerUuid}")
@@ -77,9 +82,9 @@ public class PlayerController {
         }
     }
 
-    private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot){
+    private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot, boolean inGame){
         try {
-            playerService.removePlayer(gameUuid, playerUuid, bot);
+            playerService.removePlayer(gameUuid, playerUuid, bot, inGame);
             SetPlayerResponse response = new SetPlayerResponse(true, "success", playerUuid);
             return ResponseEntity.ok(response);
         } catch (Exception exception){

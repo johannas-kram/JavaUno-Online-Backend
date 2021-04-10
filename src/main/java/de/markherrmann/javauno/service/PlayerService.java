@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerService {
@@ -49,14 +52,16 @@ public class PlayerService {
         }
     }
 
-    public void removePlayer(String gameUuid, String playerUuid, boolean bot) throws IllegalStateException {
+    public void removePlayer(String gameUuid, String playerUuid, boolean bot, boolean inGame) throws IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         synchronized (game){
-            if(!gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS)){
-                logger.error("Game is started. Players can not be removed anymore. Game: {}", gameUuid);
+            if(!isValidRemoveState(game, inGame)){
+                logger.error("Game is in wrong state. " +
+                        "Players can not be removed with this endpoint in this state. " +
+                        "Game: {}; inGame: {}; state: {}", gameUuid, inGame ? "yes" : "no", game.getGameLifecycle().name());
                 throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
-            remove(game, playerUuid, bot);
+            remove(game, playerUuid, bot, inGame);
             boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
             if(removedGame){
                 pushService.push(PushMessage.END, game);
@@ -127,12 +132,15 @@ public class PlayerService {
         return player;
     }
 
-    private void remove(Game game, String playerUuid, boolean bot){
+    private void remove(Game game, String playerUuid, boolean bot, boolean inGame){
         Player player;
         if(bot){
             player = getBot(playerUuid, game);
         } else {
             player = getPlayer(playerUuid, game);
+        }
+        if(inGame) {
+            removeInGame(game, player);
         }
         int index = game.getPlayers().indexOf(player);
         game.setPlayerIndexForPush(index);
@@ -207,7 +215,36 @@ public class PlayerService {
         }
     }
 
-    Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
+
+    private void moveCardsToDrawPile(Game game, Player player){
+        List<Card> cards = player.getCards();
+        game.getDrawPile().addAll(0, cards);
+    }
+
+    private boolean isValidRemoveState(Game game, boolean inGame){
+        if(inGame){
+            return gameService.isGameInLifecycle(game, GameLifecycle.RUNNING);
+        }
+        return gameService.isGameInLifecycle(game, GameLifecycle.SET_PLAYERS);
+    }
+
+    private void removeInGame(Game game, Player player){
+        if(isPlayersTurn(game, player)){
+            logger.error("Game is in wrong state. " +
+                    "Bots only can be removed in running game, if it is not their turn. " +
+                    "Game: {}", game.getUuid());
+            throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+        }
+        moveCardsToDrawPile(game, player);
+    }
+
+    private boolean isPlayersTurn(Game game, Player player){
+        int currentIndex = game.getCurrentPlayerIndex();
+        Player current = game.getPlayers().get(currentIndex);
+        return current.equals(player);
+    }
+
+    public Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
         if(!game.getHumans().containsKey(playerUuid)){
             logger.error("There is no such player in this game. Game: {}; uuid: {}", game.getUuid(), playerUuid);
             throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());

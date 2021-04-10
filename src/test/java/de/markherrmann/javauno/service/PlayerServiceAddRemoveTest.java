@@ -1,6 +1,7 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
+import de.markherrmann.javauno.data.fixed.CardType;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -54,7 +55,7 @@ public class PlayerServiceAddRemoveTest {
         game.setCurrentPlayerIndex(2);
         int playersBefore = game.getPlayers().size();
 
-        playerService.removePlayer(game.getUuid(), game.getPlayers().get(1).getUuid(), false);
+        playerService.removePlayer(game.getUuid(), game.getPlayers().get(1).getUuid(), false, false);
         int playersNow = game.getPlayers().size();
 
         assertThat(playersBefore).isEqualTo(4);
@@ -64,18 +65,43 @@ public class PlayerServiceAddRemoveTest {
     }
 
     @Test
-    public void shouldRemoveBot(){
+    public void shouldRemoveBot_NotInGame(){
         prepareGame();
         Player bot = addBot();
+        bot.getCards().clear();
+        bot.getCards().add(TestHelper.giveCardByString("JOKER"));
+        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
 
         int playersBefore = game.getPlayers().size();
 
-        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true);
+        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, false);
         int playersNow = game.getPlayers().size();
 
         assertThat(playersBefore).isEqualTo(5);
         assertThat(playersNow).isEqualTo(4);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REMOVED_PLAYER);
+        assertThat(game.getGameLifecycle()).isEqualTo(GameLifecycle.SET_PLAYERS);
+        assertThat(bot.getCards().get(0).getCardType()).isEqualTo(CardType.JOKER);
+    }
+
+    @Test
+    public void shouldRemoveBot_InGame(){
+        prepareGame();
+        Player bot = addBot();
+        bot.getCards().clear();
+        bot.getCards().add(TestHelper.giveCardByString("JOKER"));
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+
+        int playersBefore = game.getPlayers().size();
+
+        playerService.removePlayer(game.getUuid(), bot.getBotUuid(), true, true);
+        int playersNow = game.getPlayers().size();
+
+        assertThat(playersBefore).isEqualTo(5);
+        assertThat(playersNow).isEqualTo(4);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REMOVED_PLAYER);
+        assertThat(game.getGameLifecycle()).isEqualTo(GameLifecycle.RUNNING);
+        assertThat(game.getDrawPile().get(0).getCardType()).isEqualTo(CardType.JOKER);
     }
 
     @Test
@@ -84,7 +110,7 @@ public class PlayerServiceAddRemoveTest {
         addBot();
 
         for(int i = 0; i <= 3; i++){
-            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false);
+            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false, false);
         }
 
         assertThat(game.getPlayers().size()).isEqualTo(1);
@@ -147,14 +173,53 @@ public class PlayerServiceAddRemoveTest {
     }
 
     @Test
-    public void shouldFailRemovePlayerCausedByInvalidLifecycle(){
+    public void shouldFailRemovePlayerCausedByInvalidLifecycle_NotInGame(){
         prepareGame();
         int playersBefore = game.getPlayers().size();
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Exception exception = null;
 
         try {
-            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false);
+            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false, false);
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayers().size();
+        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
+    }
+
+    @Test
+    public void shouldFailRemovePlayerCausedByInvalidLifecycle_InGame(){
+        prepareGame();
+        int playersBefore = game.getPlayers().size();
+        game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
+        Exception exception = null;
+
+        try {
+            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false, true);
+        } catch(Exception ex){
+            exception = ex;
+        }
+
+        int playersNow = game.getPlayers().size();
+        assertThat(playersNow-playersBefore).isEqualTo(0);
+        assertThat(exception).isInstanceOf(IllegalStateException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INVALID_STATE_GAME.getValue());
+    }
+
+    @Test
+    public void shouldFailRemovePlayerInGameCausedByItsTheirTurn(){
+        prepareGame();
+        int playersBefore = game.getPlayers().size();
+        game.setGameLifecycle(GameLifecycle.RUNNING);
+        Exception exception = null;
+        game.setCurrentPlayerIndex(0);
+
+        try {
+            playerService.removePlayer(game.getUuid(), game.getPlayers().get(0).getUuid(), false, true);
         } catch(Exception ex){
             exception = ex;
         }
@@ -172,7 +237,7 @@ public class PlayerServiceAddRemoveTest {
         Exception exception = null;
 
         try {
-            playerService.removePlayer("invalid uuid", game.getPlayers().get(0).getUuid(), false);
+            playerService.removePlayer("invalid uuid", game.getPlayers().get(0).getUuid(), false, false);
         } catch(Exception ex){
             exception = ex;
         }
@@ -190,7 +255,7 @@ public class PlayerServiceAddRemoveTest {
         Exception exception = null;
 
         try {
-            playerService.removePlayer(game.getUuid(), "invalid uuid",false);
+            playerService.removePlayer(game.getUuid(), "invalid uuid",false, false);
         } catch(Exception ex){
             exception = ex;
         }
@@ -211,7 +276,7 @@ public class PlayerServiceAddRemoveTest {
         Exception exception = null;
 
         try {
-            playerService.removePlayer(game.getUuid(), "invalid uuid",true);
+            playerService.removePlayer(game.getUuid(), "invalid uuid",true, false);
         } catch(Exception ex){
             exception = ex;
         }
