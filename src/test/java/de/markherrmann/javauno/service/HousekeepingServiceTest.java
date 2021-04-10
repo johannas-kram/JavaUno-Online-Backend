@@ -54,7 +54,7 @@ public class HousekeepingServiceTest {
 
     @Test
     public void shouldRemoveOldGame(){
-        game.setLastAction(System.currentTimeMillis()-(HousekeepingService.MAX_DURATION_WITHOUT_ACTION+1));
+        game.setLastAction(System.currentTimeMillis()-(HousekeepingService.MAX_DURATION_WITHOUT_ACTION +100));
 
         housekeepingService.removeOldGames();
 

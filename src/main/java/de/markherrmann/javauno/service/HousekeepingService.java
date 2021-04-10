@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class HousekeepingService {
 
-    static final long MAX_DURATION_WITHOUT_ACTION = 30*60*1000; // 30 minutes
+    static final long MAX_DURATION_WITHOUT_ACTION = 8*60*60*1000; // 8 hours
 
     void updateLastAction(Game game){
         game.setLastAction(System.currentTimeMillis());
