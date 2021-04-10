@@ -62,6 +62,9 @@ See my version as fun project
 ### Version 2.0
 * New optional feature: tokenized-game-create (see #tokenized-game-create) (limited downwards compatibility)
 * New feature: You can switch the game to another device
+* New feature: You can leave the running game (will become a bot)
+* New feature: You can kick players (humans and bots, humans will become bots)
+* New feature: You and the other players can commit to stop running game
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
 
