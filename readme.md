@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-2.0 (2021, April, 5th)
+2.0 (2021, April, 11th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -63,6 +63,7 @@ See my version as fun project
 * New optional feature: tokenized-game-create (see #tokenized-game-create) (limited downwards compatibility)
 * New feature: You can switch the game to another device
 * Improvement: Beginning Player is selected randomly (or the last winner)
+* Improvement: Old game deletion threshold increased to 8 hours.
 
 #### Version 3.0 (maybe Winter 2021)
 * ability to join to a running game
