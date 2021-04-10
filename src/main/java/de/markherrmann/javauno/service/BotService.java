@@ -2,6 +2,7 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.fixed.Color;
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -36,12 +37,15 @@ public class BotService {
     }
 
     void makeTurn(Game game, Player player){
-        if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())){
+        if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())
+                && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
             doSleep(2000);
         }
-        while(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
+        while(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())
+                && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
+                game.setLastWinner(game.getCurrentPlayerIndex());
                 pushService.push(PushMessage.FINISHED_GAME, game);
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }
@@ -117,12 +121,18 @@ public class BotService {
     }
 
     private boolean maybeSayUno(Game game, Player player) {
+        if(!GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+            return false;
+        }
         Random random = new Random();
         if(player.getCards().size() == 1){
             int sayUnoRandomNumber = random.nextInt(10);
             lastSayUnoRandomNumber = sayUnoRandomNumber;
             if(sayUnoRandomNumber < 9){
                 doSleep(500);
+                if(!GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+                    return false;
+                }
                 SayUnoService.sayUno(game, player);
                 pushService.push(PushMessage.SAID_UNO, game);
                 return true;

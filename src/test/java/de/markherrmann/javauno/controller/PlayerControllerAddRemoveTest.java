@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.request.AddPlayerRequest;
 import de.markherrmann.javauno.controller.response.SetPlayerResponse;
-import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
@@ -32,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class PlayerControllerTest {
+public class PlayerControllerAddRemoveTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,7 +50,7 @@ public class PlayerControllerTest {
     public void shouldAddHumanPlayer() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", false)))
+                .content(getAddPlayerRequestAsJson(false)))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn();
         Player player = game.getPlayers().get(0);
@@ -65,7 +64,7 @@ public class PlayerControllerTest {
     public void shouldAddBotPlayer() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", true)))
+                .content(getAddPlayerRequestAsJson(true)))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn();
         Player player = game.getPlayers().get(0);
@@ -77,7 +76,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldFailAddPlayerCausedByInvalidGameUuid() throws Exception {
-        AddPlayerRequest invalidRequest = getAddPlayerRequest("player name", false);
+        AddPlayerRequest invalidRequest = getAddPlayerRequest(false);
         invalidRequest.setGameUuid("invalid");
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
@@ -95,7 +94,7 @@ public class PlayerControllerTest {
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getAddPlayerRequestAsJson("player name", false)))
+                .content(getAddPlayerRequestAsJson(false)))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andReturn();
 
@@ -119,7 +118,7 @@ public class PlayerControllerTest {
     public void shouldRemoveBot() throws Exception {
         Player bot = addBot();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getBotUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getKickUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -205,15 +204,15 @@ public class PlayerControllerTest {
         assertThat(setPlayerResponse.getMessage()).isEqualTo(expectedMessage);
     }
 
-    private String getAddPlayerRequestAsJson(String name, boolean bot){
-        AddPlayerRequest addPlayerRequest = getAddPlayerRequest(name, bot);
+    private String getAddPlayerRequestAsJson(boolean bot){
+        AddPlayerRequest addPlayerRequest = getAddPlayerRequest(bot);
         return asJsonString(addPlayerRequest);
     }
 
-    private AddPlayerRequest getAddPlayerRequest(String name, boolean bot){
+    private AddPlayerRequest getAddPlayerRequest(boolean bot){
         AddPlayerRequest addPlayerRequest = new AddPlayerRequest();
         addPlayerRequest.setGameUuid(game.getUuid());
-        addPlayerRequest.setName(name);
+        addPlayerRequest.setName("player name");
         addPlayerRequest.setBot(bot);
         return addPlayerRequest;
     }

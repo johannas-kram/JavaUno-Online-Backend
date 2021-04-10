@@ -2,6 +2,7 @@ package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
+import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,22 +34,11 @@ public class HousekeepingService {
 
     boolean removeGameIfNoHumans(Game game){
         if(game.getHumans().isEmpty()){
+            game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
             UnoState.removeGame(game.getUuid());
             return true;
         }
         return false;
-    }
-
-    public boolean isUpgradeSafe(){
-        long now = System.currentTimeMillis();
-        for(Map.Entry<String, Game> gameEntry : UnoState.getGamesEntrySet()){
-            Game game = gameEntry.getValue();
-            long lastAction = game.getLastAction();
-            if((now - lastAction) <= MAX_DURATION_WITHOUT_ACTION){
-                return false;
-            }
-        }
-        return true;
     }
 
 }
