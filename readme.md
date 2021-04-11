@@ -68,6 +68,9 @@ See my version as fun project
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
 
+### Future Updates
+
 #### Version 3.0 (maybe Winter 2021)
 * ability to join to a running game
 * end game when loser is known (not when winner is known)
+* configurable ruleset
