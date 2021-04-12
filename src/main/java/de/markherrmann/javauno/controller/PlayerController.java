@@ -36,77 +36,17 @@ public class PlayerController {
 
     @DeleteMapping(value="/remove/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> removePlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return removePlayer(gameUuid, playerUuid, false, false);
+        return removePlayer(gameUuid, playerUuid, false);
     }
 
     @DeleteMapping(value="/removeBot/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> removeBot(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return removePlayer(gameUuid, playerUuid, true, false);
+        return removePlayer(gameUuid, playerUuid, true);
     }
 
-    @DeleteMapping(value="/removeBotInGame/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> removeBotInGame(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        return removePlayer(gameUuid, playerUuid, true, true);
-    }
-
-    @PostMapping(value="/botify/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> botifyPlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
+    private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot){
         try {
-            playerService.botifyPlayer(gameUuid, playerUuid);
-            GeneralResponse response = new GeneralResponse(true, "success");
-            return ResponseEntity.ok(response);
-        } catch (Exception exception){
-            return ErrorResponseUtil.getExceptionResponseEntity(exception);
-        }
-    }
-
-    @PostMapping(value="/request-botify/{gameUuid}/{kickUuid}")
-    public ResponseEntity<GeneralResponse> requestBotifyPlayer(@PathVariable String gameUuid, @PathVariable String kickUuid){
-        try {
-            playerService.requestBotifyPlayer(gameUuid, kickUuid);
-            GeneralResponse response = new GeneralResponse(true, "success");
-            return ResponseEntity.ok(response);
-        } catch (Exception exception){
-            return ErrorResponseUtil.getExceptionResponseEntity(exception);
-        }
-    }
-
-    @PostMapping(value="/cancel-botify/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> cancelBotifyPlayer(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        try {
-            playerService.cancelBotifyPlayer(gameUuid, playerUuid);
-            GeneralResponse response = new GeneralResponse(true, "success");
-            return ResponseEntity.ok(response);
-        } catch (Exception exception){
-            return ErrorResponseUtil.getExceptionResponseEntity(exception);
-        }
-    }
-
-    @PostMapping(value="/request-stop-party/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> requestStopParty(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        try {
-            playerService.requestStopParty(gameUuid, playerUuid);
-            GeneralResponse response = new GeneralResponse(true, "success");
-            return ResponseEntity.ok(response);
-        } catch (Exception exception){
-            return ErrorResponseUtil.getExceptionResponseEntity(exception);
-        }
-    }
-
-    @PostMapping(value="/revoke-request-stop-party/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> revokeRequestStopParty(@PathVariable String gameUuid, @PathVariable String playerUuid){
-        try {
-            playerService.revokeRequestStopParty(gameUuid, playerUuid);
-            GeneralResponse response = new GeneralResponse(true, "success");
-            return ResponseEntity.ok(response);
-        } catch (Exception exception){
-            return ErrorResponseUtil.getExceptionResponseEntity(exception);
-        }
-    }
-
-    private ResponseEntity<GeneralResponse> removePlayer(String gameUuid, String playerUuid, boolean bot, boolean inGame){
-        try {
-            playerService.removePlayer(gameUuid, playerUuid, bot, inGame);
+            playerService.removePlayer(gameUuid, playerUuid, bot);
             SetPlayerResponse response = new SetPlayerResponse(true, "success", playerUuid);
             return ResponseEntity.ok(response);
         } catch (Exception exception){

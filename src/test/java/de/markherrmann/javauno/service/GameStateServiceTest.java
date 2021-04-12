@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -32,7 +31,8 @@ public class GameStateServiceTest {
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
     }
 
     @Test

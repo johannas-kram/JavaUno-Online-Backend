@@ -40,8 +40,4 @@ public class UnoState {
     public static synchronized boolean containsGame(String uuid){
 	    return games.containsKey(uuid);
     }
-
-    public static void clear(){
-	    games.clear();
-    }
 }

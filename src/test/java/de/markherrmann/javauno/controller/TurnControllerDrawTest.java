@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -44,7 +43,8 @@ public class TurnControllerDrawTest {
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
     }

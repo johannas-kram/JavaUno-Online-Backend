@@ -1,14 +1,11 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
-import de.markherrmann.javauno.exceptions.FileReadException;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.exceptions.InvalidTokenException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
@@ -16,12 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doThrow;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,60 +27,20 @@ public class GameServiceTest {
     @Autowired
     private PlayerService playerService;
 
-    @MockBean
-    private TokenService tokenService;
-
     private Game game;
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
     }
 
     @Test
     public void shouldCreateGame(){
-        String uuid = TestHelper.createGame(gameService).getUuid();
+        String uuid = gameService.createGame();
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
-    }
-
-    @Test
-    public void shouldFailCreateGameCausedByInvalidToken(){
-        UnoState.clear();
-        doThrow(InvalidTokenException.class).when(tokenService).checkForTokenizedGameCreate(isA(String.class));
-        Exception exception = null;
-        String uuid = null;
-
-        try {
-            uuid = TestHelper.createGame(gameService).getUuid();
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        assertThat(uuid).isNull();
-        assertThat(exception).isNotNull();
-        assertThat(exception).isInstanceOf(InvalidTokenException.class);
-        assertThat(UnoState.getGamesEntrySet()).isEmpty();
-    }
-
-    @Test
-    public void shouldFailCreateGameCausedByIOException(){
-        UnoState.clear();
-        doThrow(FileReadException.class).when(tokenService).checkForTokenizedGameCreate(isA(String.class));
-        Exception exception = null;
-        String uuid = null;
-
-        try {
-            uuid = TestHelper.createGame(gameService).getUuid();
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        assertThat(uuid).isNull();
-        assertThat(exception).isNotNull();
-        assertThat(exception).isInstanceOf(FileReadException.class);
-        assertThat(UnoState.getGamesEntrySet()).isEmpty();
     }
 
     @Test

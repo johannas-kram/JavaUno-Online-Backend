@@ -10,15 +10,13 @@ import java.util.UUID;
 public class Player {
 
 	private String uuid;
-	private String kickUuid;
+	private String botUuid;
 	private String name;
 	private List<Card> cards = new ArrayList<>();
 	private int cardCount;
 	private boolean bot;
 	private boolean unoSaid;
 	private int drawPenalties;
-	private boolean stopPartyRequested;
-	private boolean botifyPending;
 
 	private Player(){}
 
@@ -26,7 +24,9 @@ public class Player {
 	    this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.bot = bot;
-		kickUuid = UUID.randomUUID().toString();
+		if(bot){
+		    botUuid = UUID.randomUUID().toString();
+        }
 	}
 
 
@@ -80,12 +80,8 @@ public class Player {
 		return cards.size();
 	}
 
-	public String getKickUuid(){
-		return kickUuid;
-	}
-
-	public void setBotUuid(){
-		this.kickUuid = UUID.randomUUID().toString();
+	public String getBotUuid(){
+		return botUuid;
 	}
 
 	public int getDrawPenalties() {
@@ -94,21 +90,5 @@ public class Player {
 
 	public void setDrawPenalties(int drawPenalties) {
 		this.drawPenalties = drawPenalties;
-	}
-
-	public boolean isStopPartyRequested() {
-		return stopPartyRequested;
-	}
-
-	public void setStopPartyRequested(boolean stopPartyRequested) {
-		this.stopPartyRequested = stopPartyRequested;
-	}
-
-	public boolean isBotifyPending() {
-		return botifyPending;
-	}
-
-	public void setBotifyPending(boolean botifyPending) {
-		this.botifyPending = botifyPending;
 	}
 }

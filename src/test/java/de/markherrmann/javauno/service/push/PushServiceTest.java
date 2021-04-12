@@ -73,7 +73,7 @@ public class PushServiceTest {
     @Test
     public void shouldPushTestMessage() throws Exception {
         PushMessage testMessage = PushMessage.SAID_UNO;
-        CompletableFuture<String> resultKeeper = prepare(game.getUuid());
+        CompletableFuture<String> resultKeeper = prepare();
 
         pushService.push(testMessage, game);
 
@@ -81,33 +81,10 @@ public class PushServiceTest {
         assertThat(PushService.getLastMessage()).isEqualTo(testMessage);
     }
 
-    @Test
-    public void shouldPushTestMessageDirectlyByGameUuid() throws Exception {
-        String testMessageType = "switch-finished";
-        CompletableFuture<String> resultKeeper = prepare(game.getUuid());
-
-        pushService.pushDirectly(game.getUuid(), testMessageType, "testPlayerUuid");
-
-        assertThat(resultKeeper.get(2, SECONDS)).isEqualTo(testMessageType+":testPlayerUuid");
-        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.valueOf(testMessageType.replace("-", "_").toUpperCase()));
-    }
-
-    @Test
-    public void shouldPushTestMessageDirectlyByPushUuid() throws Exception {
-        String pushUuid = "testPushUuid";
-        String testMessageType = "switch-in";
-        CompletableFuture<String> resultKeeper = prepare(pushUuid);
-
-        pushService.pushDirectly(pushUuid, testMessageType, "testGameUUid", "testPlayerUuid");
-
-        assertThat(resultKeeper.get(2, SECONDS)).isEqualTo(testMessageType+":testGameUUid:testPlayerUuid");
-        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.valueOf(testMessageType.replace("-", "_").toUpperCase()));
-    }
-
-    private CompletableFuture<String> prepare(String pushUuid) throws Exception {
+    private CompletableFuture<String> prepare() throws Exception {
         CompletableFuture<String> resultKeeper = new CompletableFuture<>();
         stompSession.subscribe(
-                "/api/push/" + pushUuid,
+                "/api/push/" + game.getUuid(),
                 new MyStompFrameHandler(resultKeeper::complete));
         Thread.sleep(1000);
         return resultKeeper;

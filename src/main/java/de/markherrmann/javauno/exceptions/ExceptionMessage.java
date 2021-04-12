@@ -9,9 +9,7 @@ public enum ExceptionMessage {
     INVALID_STATE_TURN("The current turn of the game is in wrong state."),
     NOT_YOUR_TURN("It's not your turn."),
     NOT_ENOUGH_PLAYERS("There are not enough players in the game."),
-    PLAYERS_LIMIT_REACHED("There are already 10 players in the game. Players limit is reached."),
-    INVALID_TOKEN("Invalid Token provided."),
-    FILE_READ_ERROR("Could not read token file in backend. Please try again later or report this error to me.");
+    PLAYERS_LIMIT_REACHED("There are already 10 players in the game. Players limit is reached.");
 
     private String value;
 

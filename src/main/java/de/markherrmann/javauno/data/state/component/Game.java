@@ -22,11 +22,8 @@ public class Game{
     private TurnState turnState;
     private int drawDuties;
     private boolean skip;
-	private int playerIndexForPush;
+	private int toDeleteIndex;
 	private int party;
-	private int stopPartyRequested;
-	private int lastWinner = -1;
-	private Thread botifyPlayerByRequestThread;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -58,12 +55,12 @@ public class Game{
     }
 
     public void putBot(Player player){
-        bots.put(player.getKickUuid(), player);
+        bots.put(player.getBotUuid(), player);
         addPlayer(player);
     }
 
     public void removeBot(Player player){
-        bots.remove(player.getKickUuid());
+        bots.remove(player.getBotUuid());
         removePlayer(player);
     }
 
@@ -161,13 +158,13 @@ public class Game{
 		this.skip = skip;
 	}
 
-	public void setPlayerIndexForPush(int playerIndexForPush) {
-		this.playerIndexForPush = playerIndexForPush;
+	public void setToDeleteIndex(int toDeleteIndex) {
+		this.toDeleteIndex = toDeleteIndex;
 	}
 
 	@JsonIgnore
-	public int getPlayerIndexForPush(){
-		return playerIndexForPush;
+	public int getToDeleteIndex(){
+		return toDeleteIndex;
 	}
 
 	public void nextParty() {
@@ -176,43 +173,5 @@ public class Game{
 
 	public int getParty() {
 		return party;
-	}
-
-	public int getStopPartyRequested() {
-		return stopPartyRequested;
-	}
-
-	public int incrementAndGetStopPartyRequested(){
-		return ++stopPartyRequested;
-	}
-
-	public int decrementAndGetStopPartyRequested(){
-		return --stopPartyRequested;
-	}
-
-	public void resetStopPartyRequested() {
-		this.stopPartyRequested = 0;
-	}
-
-	@JsonIgnore
-	public int getLastWinner() {
-		return lastWinner;
-	}
-
-	public void setLastWinner(int lastWinner) {
-		this.lastWinner = lastWinner;
-	}
-
-	@JsonIgnore
-	public Thread getBotifyPlayerByRequestThread() {
-		return botifyPlayerByRequestThread;
-	}
-
-	public void setBotifyPlayerByRequestThread(Thread botifyPlayerByRequestThread) {
-		this.botifyPlayerByRequestThread = botifyPlayerByRequestThread;
-	}
-
-	public void removeBotifyPlayerByRequestThread() {
-		this.botifyPlayerByRequestThread = null;
 	}
 }

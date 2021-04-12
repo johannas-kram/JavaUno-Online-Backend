@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.CardType;
 import de.markherrmann.javauno.data.fixed.Color;
@@ -39,7 +38,8 @@ public class BotServiceTest {
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
         addHumanAndBot();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.PUT_DRAWN);
