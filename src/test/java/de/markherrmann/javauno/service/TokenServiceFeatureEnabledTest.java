@@ -106,20 +106,4 @@ public class TokenServiceFeatureEnabledTest {
         assertThat(exception).isInstanceOf(InvalidTokenException.class);
     }
 
-    @Test
-    public void shouldFailValidateTokenCausedByIOException(){
-        Exception exception = null;
-        new File("./tokens/"+TEST_TOKEN_FILE_NAME).setReadable(false, true);
-
-        try {
-            tokenService.checkForTokenizedGameCreate(TEST_TOKEN);
-        } catch(Exception ex){
-            exception = ex;
-        }
-
-        assertThat(exception).isNotNull();
-        assertThat(exception).isInstanceOf(FileReadException.class);
-        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.FILE_READ_ERROR.getValue());
-    }
-
 }
