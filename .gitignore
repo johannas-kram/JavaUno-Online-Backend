@@ -3,4 +3,4 @@ target/
 *.iml
 *.log
 *.log.*.gz
-token/
+tokens/
