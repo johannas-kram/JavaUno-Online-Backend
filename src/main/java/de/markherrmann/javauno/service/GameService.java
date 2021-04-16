@@ -51,6 +51,10 @@ public class GameService {
         return game.getUuid();
     }
 
+    public boolean isTokenizedGameCreateFeatureEnabled(){
+        return tokenService.isFeatureEnabled();
+    }
+
     public void startGame(String gameUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = getGame(gameUuid);
         synchronized (game) {
