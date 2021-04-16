@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 
 @RunWith(SpringRunner.class)
@@ -49,6 +50,22 @@ public class GameServiceTest {
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
+    }
+
+    @Test
+    public void shouldTellTokenizedGameCreateFeatureDisabled(){
+        boolean enabled = gameService.isTokenizedGameCreateFeatureEnabled();
+
+        assertThat(enabled).isFalse();
+    }
+
+    @Test
+    public void shouldTellTokenizedGameCreateFeatureEnabled(){
+        given(tokenService.isFeatureEnabled()).willReturn(true);
+
+        boolean enabled = gameService.isTokenizedGameCreateFeatureEnabled();
+
+        assertThat(enabled).isTrue();
     }
 
     @Test

@@ -28,4 +28,11 @@ public class TokenServiceFeatureDisabledTest {
         assertThat(exception).isNull();
     }
 
+    @Test
+    public void shouldTellFeatureDisabled(){
+        boolean enabled = tokenService.isFeatureEnabled();
+
+        assertThat(enabled).isFalse();
+    }
+
 }
