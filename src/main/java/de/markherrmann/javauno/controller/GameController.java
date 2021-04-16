@@ -29,6 +29,17 @@ public class GameController {
         }
     }
 
+    @GetMapping(value = "/tokenized-game-create-enabled")
+    public ResponseEntity<GeneralResponse> isTokenizedGameCreateFeatureEnabled(){
+        try {
+            boolean enabled = gameService.isTokenizedGameCreateFeatureEnabled();
+            GeneralResponse response = new GeneralResponse(true, enabled ? "on" : "off");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<GeneralResponse> createGame(){
         return createGame("empty");

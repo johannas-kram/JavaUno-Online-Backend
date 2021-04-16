@@ -51,6 +51,13 @@ public class TokenServiceFeatureEnabledTest {
     }
 
     @Test
+    public void shouldTellFeatureEnabled(){
+        boolean enabled = tokenService.isFeatureEnabled();
+
+        assertThat(enabled).isTrue();
+    }
+
+    @Test
     public void shouldValidateTokenValid(){
         Exception exception = null;
 

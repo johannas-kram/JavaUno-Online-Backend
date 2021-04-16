@@ -25,8 +25,10 @@ import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -49,6 +51,24 @@ public class GameControllerTest {
                 .andExpect(status().is(HttpStatus.CREATED.value()));
 
         assertThat(UnoState.getGamesEntrySet()).isNotEmpty();
+    }
+
+    @Test
+    public void shouldTellTokenizedGameCreateFeatureDisabled() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/game/tokenized-game-create-enabled"))
+                .andExpect(status().is(HttpStatus.OK.value())).andReturn();
+
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("off");
+    }
+
+    @Test
+    public void shouldTellTokenizedGameCreateFeatureEnabled() throws Exception {
+        given(tokenService.isFeatureEnabled()).willReturn(true);
+
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/game/tokenized-game-create-enabled"))
+                .andExpect(status().is(HttpStatus.OK.value())).andReturn();
+
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("on");
     }
 
     @Test

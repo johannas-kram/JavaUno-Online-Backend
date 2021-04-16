@@ -36,6 +36,10 @@ public class TokenService {
         }
     }
 
+    public boolean isFeatureEnabled(){
+        return this.featureEnabled;
+    }
+
     private boolean isValidToken(String token) {
         String tokenRegex = "^([a-zA-Z0-9_-]{11})\\.([a-zA-Z0-9_-]{11})$";
         if(!token.matches(tokenRegex)){
