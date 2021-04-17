@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.controller;
 
+import de.markherrmann.javauno.controller.request.SendMessageRequest;
 import de.markherrmann.javauno.controller.response.GameCreateResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.service.GameService;
@@ -51,6 +52,17 @@ public class GameController {
             gameService.startGame(gameUuid);
             GeneralResponse response = new GeneralResponse(true, "success");
             return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
+    @PostMapping(value = "/chat/send-message")
+    public ResponseEntity<GeneralResponse> addMessage(@RequestBody SendMessageRequest sendMessageRequest){
+        try {
+            gameService.addMessage(sendMessageRequest.getGameUuid(), sendMessageRequest.getPlayerUuid(), sendMessageRequest.getContent());
+            GeneralResponse response = new GeneralResponse(true, "success");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception exception){
             return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }

@@ -20,7 +20,8 @@ public enum PushMessage {
     STOP_PARTY("stop-party"),
     END("end"),
     SWITCH_IN("switch-in"),
-    SWITCH_FINISHED("switch-finished")
+    SWITCH_FINISHED("switch-finished"),
+    CHAT_MESSAGE("message")
     ;
 
     private final String value;

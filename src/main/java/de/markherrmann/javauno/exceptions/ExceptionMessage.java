@@ -11,7 +11,9 @@ public enum ExceptionMessage {
     NOT_ENOUGH_PLAYERS("There are not enough players in the game."),
     PLAYERS_LIMIT_REACHED("There are already 10 players in the game. Players limit is reached."),
     INVALID_TOKEN("Invalid Token provided."),
-    FILE_READ_ERROR("Could not read token file in backend. Please try again later or report this error to me.");
+    FILE_READ_ERROR("Could not read token file in backend. Please try again later or report this error to me."),
+    EMPTY_CHAT_MESSAGE("Chat message is empty. Will not save empty messages.")
+    ;
 
     private String value;
 
