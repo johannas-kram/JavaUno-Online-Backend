@@ -58,12 +58,12 @@ public class Game{
     }
 
     public void putBot(Player player){
-        bots.put(player.getKickUuid(), player);
+        bots.put(player.getPublicUuid(), player);
         addPlayer(player);
     }
 
     public void removeBot(Player player){
-        bots.remove(player.getKickUuid());
+        bots.remove(player.getPublicUuid());
         removePlayer(player);
     }
 

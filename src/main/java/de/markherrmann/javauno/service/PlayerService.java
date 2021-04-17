@@ -92,10 +92,10 @@ public class PlayerService {
         logger.info("Botified Player. Game: {}; Player: {}", gameUuid, playerUuid);
     }
 
-    public void requestBotifyPlayer(String gameUuid, String kickUuid) throws IllegalStateException {
+    public void requestBotifyPlayer(String gameUuid, String publicUuid) throws IllegalStateException {
         Game game = gameService.getGame(gameUuid);
         synchronized (game){
-            Player player = getPlayerByKickUuid(kickUuid, game);
+            Player player = getPlayerByPublicUuid(publicUuid, game);
             if(player.isBotifyPending()){
                 return;
             }
@@ -103,7 +103,7 @@ public class PlayerService {
             game.setPlayerIndexForPush(game.getPlayers().indexOf(player));
             botifyPlayerByRequest(game, player);
             pushService.push(PushMessage.REQUEST_BOTIFY_PLAYER, game);
-            logger.info("Successfully requested botification. Game: {}; Player (kickUuid): {}", gameUuid, kickUuid);
+            logger.info("Successfully requested botification. Game: {}; Player (publicUuid): {}", gameUuid, publicUuid);
         }
     }
 
@@ -119,7 +119,7 @@ public class PlayerService {
             game.getBotifyPlayerByRequestThread().interrupt();
             game.removeBotifyPlayerByRequestThread();
             pushService.push(PushMessage.CANCEL_BOTIFY_PLAYER, game);
-            logger.info("Successfully canceled botification. Game: {}; Player (kickUuid): {}", gameUuid, playerUuid);
+            logger.info("Successfully canceled botification. Game: {}; Player (publicUuid): {}", gameUuid, playerUuid);
         }
     }
 
@@ -192,7 +192,7 @@ public class PlayerService {
         player.setBot(true);
         game.setPlayerIndexForPush(index);
         game.getHumans().remove(playerUuid);
-        game.getBots().put(player.getKickUuid(), player);
+        game.getBots().put(player.getPublicUuid(), player);
         boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
         if(removedGame){
             return true;
@@ -307,13 +307,13 @@ public class PlayerService {
         return game.getHumans().get(playerUuid);
     }
 
-    public Player getPlayerByKickUuid(String kickUuid, Game game) throws IllegalArgumentException {
+    public Player getPlayerByPublicUuid(String publicUuid, Game game) throws IllegalArgumentException {
         for(Player player : game.getPlayers()){
-            if(player.getKickUuid().equals(kickUuid)){
+            if(player.getPublicUuid().equals(publicUuid)){
                 return player;
             }
         }
-        logger.error("There is no such player in this game. Game: {}; kickUuid: {}", game.getUuid(), kickUuid);
+        logger.error("There is no such player in this game. Game: {}; playerPublicUuid: {}", game.getUuid(), publicUuid);
         throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 

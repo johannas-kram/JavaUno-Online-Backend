@@ -83,7 +83,7 @@ public class PushService {
     private String getEnhancedCancelBotifyPlayerMessage(String message, Game game){
         int index = game.getPlayerIndexForPush();
         Player player = game.getPlayers().get(index);
-        return String.format("%s:%s", message, player.getKickUuid());
+        return String.format("%s:%s", message, player.getPublicUuid());
     }
 
     private String getEnhancedPutCardMessage(String message, Game game){

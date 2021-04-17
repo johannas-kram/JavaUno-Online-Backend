@@ -7,8 +7,6 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
-import de.markherrmann.javauno.exceptions.ExceptionMessage;
-import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,8 +51,8 @@ public class PlayerControllerBotifyTest {
                 .andExpect(status().isOk());
 
         assertThat(game.getBots().size()).isEqualTo(1);
-        assertThat(game.getBots().get(player.getKickUuid())).isNotNull();
-        assertThat(game.getBots().get(player.getKickUuid()).isBot()).isTrue();
+        assertThat(game.getBots().get(player.getPublicUuid())).isNotNull();
+        assertThat(game.getBots().get(player.getPublicUuid()).isBot()).isTrue();
     }
 
     @Test

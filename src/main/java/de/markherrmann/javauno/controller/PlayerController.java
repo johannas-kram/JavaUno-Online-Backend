@@ -60,10 +60,10 @@ public class PlayerController {
         }
     }
 
-    @PostMapping(value="/request-botify/{gameUuid}/{kickUuid}")
-    public ResponseEntity<GeneralResponse> requestBotifyPlayer(@PathVariable String gameUuid, @PathVariable String kickUuid){
+    @PostMapping(value="/request-botify/{gameUuid}/{publicUuid}")
+    public ResponseEntity<GeneralResponse> requestBotifyPlayer(@PathVariable String gameUuid, @PathVariable String publicUuid){
         try {
-            playerService.requestBotifyPlayer(gameUuid, kickUuid);
+            playerService.requestBotifyPlayer(gameUuid, publicUuid);
             GeneralResponse response = new GeneralResponse(true, "success");
             return ResponseEntity.ok(response);
         } catch (Exception exception){
