@@ -1,14 +1,12 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
-import de.markherrmann.javauno.exceptions.ExceptionMessage;
-import de.markherrmann.javauno.exceptions.FileReadException;
-import de.markherrmann.javauno.exceptions.IllegalArgumentException;
+import de.markherrmann.javauno.exceptions.*;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.exceptions.InvalidTokenException;
+import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
@@ -18,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.lang.IllegalStateException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
@@ -162,6 +162,76 @@ public class GameServiceTest {
         assertThat(exception).isInstanceOf(IllegalArgumentException.class);
         assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
         assertThat(game.getDrawPile()).isEmpty();
+    }
+
+    @Test
+    public void shouldAddMessage(){
+        prepareGame();
+        Player player = game.getPlayers().get(0);
+        String testContent = "test content";
+
+        gameService.addMessage(game.getUuid(), player.getUuid(), testContent);
+
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.CHAT_MESSAGE);
+        assertThat(game.getMessages().size()).isEqualTo(1);
+        assertThat(game.getMessages().get(0)).isNotNull();
+        assertThat(game.getMessages().get(0).getPlayerPublicUuid()).isEqualTo(player.getPublicUuid());
+        assertThat(game.getMessages().get(0).getContent()).isEqualTo(testContent);
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByInvalidGameUuid(){
+        prepareGame();
+        Player player = game.getPlayers().get(0);
+        String testContent = "test content";
+        Exception exception = null;
+
+        try {
+            gameService.addMessage("invalid", player.getUuid(), testContent);
+        } catch (Exception ex){
+            exception = ex;
+        }
+
+        assertThat(exception).isNotNull();
+        assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_GAME.getValue());
+        assertThat(game.getMessages()).isEmpty();
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByInvalidPlayerUuid(){
+        prepareGame();
+        String testContent = "test content";
+        Exception exception = null;
+
+        try {
+            gameService.addMessage(game.getUuid(), "", testContent);
+        } catch (Exception ex){
+            exception = ex;
+        }
+
+        assertThat(exception).isNotNull();
+        assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.NO_SUCH_PLAYER.getValue());
+        assertThat(game.getMessages()).isEmpty();
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByEmptyMessage(){
+        prepareGame();
+        Player player = game.getPlayers().get(0);
+        Exception exception = null;
+
+        try {
+            gameService.addMessage(game.getUuid(), player.getUuid(), "");
+        } catch (Exception ex){
+            exception = ex;
+        }
+
+        assertThat(exception).isNotNull();
+        assertThat(exception).isInstanceOf(EmptyArgumentException.class);
+        assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.EMPTY_CHAT_MESSAGE.getValue());
+        assertThat(game.getMessages()).isEmpty();
     }
 
     private void assertStartedGameState(){

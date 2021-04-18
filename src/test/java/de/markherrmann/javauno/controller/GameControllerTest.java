@@ -1,6 +1,9 @@
 package de.markherrmann.javauno.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.TestHelper;
+import de.markherrmann.javauno.controller.request.AddPlayerRequest;
+import de.markherrmann.javauno.controller.request.SendMessageRequest;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -11,11 +14,14 @@ import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
 
 import de.markherrmann.javauno.service.TokenService;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -151,9 +157,90 @@ public class GameControllerTest {
         assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
     }
 
+    @Test
+    public void shouldAddMessage() throws Exception {
+        Game game = TestHelper.createGame(gameService);
+        addPlayer(game);
+        Player player = game.getPlayers().get(0);
+        String testContent = "test content";
+
+        this.mockMvc.perform(post("/api/game/chat/send-message", game.getUuid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getSendMessageRequestAsJson(game.getUuid(), player.getUuid(), testContent)))
+                .andExpect(status().is(HttpStatus.CREATED.value()));
+
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.CHAT_MESSAGE);
+        assertThat(game.getMessages().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByInvalidGameUuid() throws Exception {
+        Game game = TestHelper.createGame(gameService);
+        addPlayer(game);
+        Player player = game.getPlayers().get(0);
+        String testContent = "test content";
+        String expectedMessage = String.format("failure: %s: %s", IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_GAME.getValue());
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/chat/send-message", game.getUuid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getSendMessageRequestAsJson("invalid", player.getUuid(), testContent)))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value())).andReturn();
+
+        assertThat(game.getMessages()).isEmpty();
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByInvalidPlayerUuid() throws Exception {
+        Game game = TestHelper.createGame(gameService);
+        addPlayer(game);
+        String testContent = "test content";
+        String expectedMessage = String.format("failure: %s: %s", IllegalArgumentException.class.getCanonicalName(), ExceptionMessage.NO_SUCH_PLAYER.getValue());
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/chat/send-message", game.getUuid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getSendMessageRequestAsJson(game.getUuid(), "", testContent)))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value())).andReturn();
+
+        assertThat(game.getMessages()).isEmpty();
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    public void shouldFailAddMessageCausedByEmptyMessage() throws Exception {
+        Game game = TestHelper.createGame(gameService);
+        addPlayer(game);
+        Player player = game.getPlayers().get(0);
+        String expectedMessage = String.format("failure: %s: %s", EmptyArgumentException.class.getCanonicalName(), ExceptionMessage.EMPTY_CHAT_MESSAGE.getValue());
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/game/chat/send-message", game.getUuid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getSendMessageRequestAsJson("invalid", player.getUuid(), "")))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value())).andReturn();
+
+        assertThat(game.getMessages()).isEmpty();
+        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo(expectedMessage);
+    }
+
     private void addPlayer(Game game){
         Player player = new Player("player name", false);
         game.putHuman(player);
+    }
+
+    private String getSendMessageRequestAsJson(String gameUuid, String playerUuid, String content){
+        SendMessageRequest sendMessageRequest = new SendMessageRequest();
+        sendMessageRequest.setGameUuid(gameUuid);
+        sendMessageRequest.setPlayerUuid(playerUuid);
+        sendMessageRequest.setContent(content);
+        return asJsonString(sendMessageRequest);
+    }
+
+    private static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

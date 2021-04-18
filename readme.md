@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-2.0 (2021, April, 16th)
+2.0 (2021, April, 18th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -65,6 +65,7 @@ See my version as fun project
 * New feature: You can leave the running game (will become a bot)
 * New feature: You can kick players (humans and bots, humans will become bots)
 * New feature: You and the other players can commit to stop running game
+* New feature: Chat
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
 
@@ -74,3 +75,4 @@ See my version as fun project
 * ability to join to a running game
 * end game when loser is known (not when winner is known)
 * configurable ruleset
+* win counting

@@ -118,7 +118,7 @@ public class PlayerControllerAddRemoveTest {
     public void shouldRemoveBot() throws Exception {
         Player bot = addBot();
 
-        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getKickUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/api/player/removeBot/{gameUuid}/{playerUuid}", game.getUuid(), bot.getPublicUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 

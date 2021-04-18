@@ -8,7 +8,6 @@ import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
-import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.service.PlayerService;
 import de.markherrmann.javauno.service.push.PushMessage;
@@ -65,7 +64,7 @@ public class PlayerControllerBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{kickUuid}", game.getUuid(), player.getKickUuid()))
+        this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{publicUuid}", game.getUuid(), player.getPublicUuid()))
                 .andExpect(status().isOk());
 
         assertThat(player.isBotifyPending()).isTrue();
@@ -77,13 +76,13 @@ public class PlayerControllerBotifyByRequestTest {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}
 
         playerService.cancelBotifyPlayer(game.getUuid(), player.getUuid());
-        this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{kickUuid}", game.getUuid(), player.getUuid()))
+        this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{publicUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk());
 
         assertThat(player.isBotifyPending()).isFalse();
@@ -96,7 +95,7 @@ public class PlayerControllerBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{kickUuid}", "invalid", player.getKickUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{publicUuid}", "invalid", player.getPublicUuid()))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
@@ -105,12 +104,12 @@ public class PlayerControllerBotifyByRequestTest {
     }
 
     @Test
-    public void shouldFailRequestBotifyPlayerCausedByInvalidKickUuid() throws Exception {
+    public void shouldFailRequestBotifyPlayerCausedByInvalidPublicUuid() throws Exception {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{kickUuid}", game.getUuid(), "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/request-botify/{gameUuid}/{publicUuid}", game.getUuid(), "invalid"))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
@@ -123,12 +122,12 @@ public class PlayerControllerBotifyByRequestTest {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{kickUuid}", "invalid", player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{publicUuid}", "invalid", player.getUuid()))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 
@@ -141,12 +140,12 @@ public class PlayerControllerBotifyByRequestTest {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{kickUuid}", game.getUuid(), "invalid"))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/player/cancel-botify/{gameUuid}/{publicUuid}", game.getUuid(), "invalid"))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn();
 

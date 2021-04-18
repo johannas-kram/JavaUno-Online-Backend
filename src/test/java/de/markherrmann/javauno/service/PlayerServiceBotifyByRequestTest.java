@@ -5,7 +5,6 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
-import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.After;
@@ -50,7 +49,7 @@ public class PlayerServiceBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
 
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
 
         assertThat(player.isBotifyPending()).isTrue();
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.REQUEST_BOTIFY_PLAYER);
@@ -63,7 +62,7 @@ public class PlayerServiceBotifyByRequestTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         playerService.botifyPlayerByRequestCountdownMillis = 100;
 
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(1100);
         } catch(InterruptedException ex){}
@@ -78,7 +77,7 @@ public class PlayerServiceBotifyByRequestTest {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}
@@ -95,7 +94,7 @@ public class PlayerServiceBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
         playerService.botifyPlayerByRequestCountdownMillis = 3500;
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(1000);
         } catch(InterruptedException ex){}
@@ -118,7 +117,7 @@ public class PlayerServiceBotifyByRequestTest {
         Exception exception = null;
 
         try {
-            playerService.requestBotifyPlayer("invalid", player.getKickUuid());
+            playerService.requestBotifyPlayer("invalid", player.getPublicUuid());
         } catch(Exception ex){
             exception = ex;
         }
@@ -129,7 +128,7 @@ public class PlayerServiceBotifyByRequestTest {
     }
 
     @Test
-    public void shouldFailRequestBotifyPlayerCausedByInvalidKickUuid(){
+    public void shouldFailRequestBotifyPlayerCausedByInvalidPublicUuid(){
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
@@ -152,7 +151,7 @@ public class PlayerServiceBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Exception exception = null;
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}
@@ -174,7 +173,7 @@ public class PlayerServiceBotifyByRequestTest {
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Exception exception = null;
-        playerService.requestBotifyPlayer(game.getUuid(), player.getKickUuid());
+        playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(2000);
         } catch(InterruptedException ex){}

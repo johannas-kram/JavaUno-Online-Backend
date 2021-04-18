@@ -4,7 +4,6 @@ import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
-import de.markherrmann.javauno.exceptions.IllegalStateException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
@@ -48,7 +47,7 @@ public class PlayerServiceBotifyTest {
         assertThat(game.getCurrentPlayerIndex()).isEqualTo(2);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.BOTIFIED_PLAYER);
         assertThat(game.getPlayers().get(1).isBot()).isTrue();
-        assertThat(game.getPlayers().get(1).getKickUuid()).isNotNull();
+        assertThat(game.getPlayers().get(1).getPublicUuid()).isNotNull();
     }
 
     @Test

@@ -27,6 +27,7 @@ public class Game{
 	private int stopPartyRequested;
 	private int lastWinner = -1;
 	private Thread botifyPlayerByRequestThread;
+	private List<Message> messages = new ArrayList<>();
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -58,12 +59,12 @@ public class Game{
     }
 
     public void putBot(Player player){
-        bots.put(player.getKickUuid(), player);
+        bots.put(player.getPublicUuid(), player);
         addPlayer(player);
     }
 
     public void removeBot(Player player){
-        bots.remove(player.getKickUuid());
+        bots.remove(player.getPublicUuid());
         removePlayer(player);
     }
 
@@ -214,5 +215,13 @@ public class Game{
 
 	public void removeBotifyPlayerByRequestThread() {
 		this.botifyPlayerByRequestThread = null;
+	}
+
+	public void addMessage(Message message){
+		messages.add(message);
+	}
+
+	public List<Message> getMessages() {
+		return messages;
 	}
 }

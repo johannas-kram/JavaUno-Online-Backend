@@ -3,10 +3,8 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
-import de.markherrmann.javauno.data.state.component.Game;
-import de.markherrmann.javauno.data.state.component.GameLifecycle;
-import de.markherrmann.javauno.data.state.component.Player;
-import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.data.state.component.*;
+import de.markherrmann.javauno.exceptions.EmptyArgumentException;
 import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
@@ -79,6 +77,22 @@ public class GameService {
         }
         Player currentPlayer = game.getPlayers().get(game.getCurrentPlayerIndex());
         finalizeTurnService.handleBotTurn(game, currentPlayer);
+    }
+
+    public void addMessage(String gameUuid, String playerUuid, String content){
+        if(content == null || content.trim().isEmpty()){
+            throw new EmptyArgumentException(ExceptionMessage.EMPTY_CHAT_MESSAGE.getValue());
+        }
+        content = content.trim();
+        Game game = getGame(gameUuid);
+        synchronized (game) {
+            Player player = PlayerService.getPlayerStatic(playerUuid, game);
+            String publicUuid = player.getPublicUuid();
+            Message message = new Message(content, publicUuid);
+            game.addMessage(message);
+            pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, content);
+            LOGGER.info("Successfully added message. Game: {}; Player: {}; Message: {}", gameUuid, playerUuid, content);
+        }
     }
 
     void stopParty(Game game){
