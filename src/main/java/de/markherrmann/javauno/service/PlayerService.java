@@ -321,11 +321,11 @@ public class PlayerService {
         throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
     }
 
-    private Player getBot(String kickUUid, Game game) throws IllegalArgumentException {
-        if(!game.getBots().containsKey(kickUUid)){
-            LOGGER.error("There is no such bot in this game. Game: {}; uuid: {}", game.getUuid(), kickUUid);
+    private Player getBot(String publicUUid, Game game) throws IllegalArgumentException {
+        if(!game.getBots().containsKey(publicUUid)){
+            LOGGER.error("There is no such bot in this game. Game: {}; botPublicUuid: {}", game.getUuid(), publicUUid);
             throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         }
-        return game.getBots().get(kickUUid);
+        return game.getBots().get(publicUUid);
     }
 }
