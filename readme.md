@@ -24,7 +24,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
   (xx is the version)
 
 ### Spielanleitung
-https://github.com/tomatenmark/JavaUno-Online-Frontend/ -> Desired Branch -> file: /manual.docs\
+https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 (pdf can be generated, it's git-ignored)
 
 ## tokenized-game-create
@@ -35,7 +35,6 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ -> Desired Branch -> fil
 * A valid token must be provided to create a game
 * Token is given via post field 'token'
 * Every authorized person should have their own token
-* frontend with this feature (enabled or disable) is not compatible with backend without the feature
 * Token-Syntax: 2 random youtube-video-id-like strings, separated by a dot
   * Example token: Dsnmn7Twqd1.j8yZ15Ji210
 * Creation and storing of tokens on backend-server
@@ -57,6 +56,11 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ -> Desired Branch -> fil
   
 Notice: Mattel also offers an own free app to play UNO.
 See my version as fun project
+
+## Compatibility
+If you want to use this backend together with my frontend, please note the following compatibility information:
+* Version 2.x frontend is NOT compatible with version 1.x backend
+* Version 2.x backend is compatible with version 1.x frontend
 
 ## ChangeLog
 
