@@ -59,8 +59,11 @@ See my version as fun project
 
 ## Compatibility
 If you want to use this backend together with my frontend, please note the following compatibility information:
-* Version 2.x frontend is NOT compatible with version 1.x backend
-* Version 2.x backend is compatible with version 1.x frontend
+* version 2.x frontend <-> version 1.x backend
+  * NOT compatible
+* Version 2.x backend <-> version 1.x frontend
+  * Compatible, if tokenized-game-create feature is disabled
+  * manual should be modified (the beginning player of first round is selected randomly since backend version 2.x)
 
 ## ChangeLog
 
