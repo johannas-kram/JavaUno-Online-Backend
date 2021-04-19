@@ -63,7 +63,7 @@ If you want to use this backend together with my frontend, please note the follo
   * NOT compatible
 * Version 2.x backend <-> version 1.x frontend
   * Compatible, if tokenized-game-create feature is disabled
-  * manual should be modified (the beginning player of first round is selected randomly since backend version 2.x)
+  * manual should be modified (due to randomized selection of the beginning player)
 
 ## ChangeLog
 
