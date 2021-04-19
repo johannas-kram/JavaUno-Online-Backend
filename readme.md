@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-2.0 (2021, April, 19th)
+2.0 (2021, April, 20th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -24,7 +24,8 @@ If you use own frontend, it has to use the same endpoints, like my frontend
   (xx is the version)
 
 ### Spielanleitung
-https://github.com/tomatenmark/JavaUno-Online-Frontend/blob/master/manual.pdf
+https://github.com/tomatenmark/JavaUno-Online-Frontend/ -> Desired Branch -> file: /manual.docs\
+(pdf can be generated, it's git-ignored)
 
 ## tokenized-game-create
 * This Feature is optional
