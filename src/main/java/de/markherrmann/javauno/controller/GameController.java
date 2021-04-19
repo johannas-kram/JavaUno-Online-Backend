@@ -30,6 +30,11 @@ public class GameController {
         }
     }
 
+    @PostMapping(value = "/create")
+    public ResponseEntity<GeneralResponse> createGame(){
+        return createGame("empty");
+    }
+
     @GetMapping(value = "/tokenized-game-create-enabled")
     public ResponseEntity<GeneralResponse> isTokenizedGameCreateFeatureEnabled(){
         try {
@@ -39,11 +44,6 @@ public class GameController {
         } catch(Exception exception){
             return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
-    }
-
-    @PostMapping(value = "/create")
-    public ResponseEntity<GeneralResponse> createGame(){
-        return createGame("empty");
     }
 
     @PostMapping(value = "/start/{gameUuid}")
