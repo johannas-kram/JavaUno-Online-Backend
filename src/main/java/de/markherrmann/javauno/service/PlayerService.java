@@ -155,7 +155,7 @@ public class PlayerService {
     }
 
     private Player addPlayer(Game game, String name, boolean bot){
-        Player player = new Player(name, bot);
+        Player player = new Player(sanitizePlayerName(name), bot);
         if(bot){
             game.putBot(player);
         } else {
@@ -327,5 +327,10 @@ public class PlayerService {
             throw new IllegalArgumentException(ExceptionMessage.NO_SUCH_PLAYER.getValue());
         }
         return game.getBots().get(publicUUid);
+    }
+
+    private String sanitizePlayerName(String name){
+        name = name.replaceAll("[<>'\"]", "");
+        return name.trim();
     }
 }
