@@ -41,6 +41,7 @@ public class PushService {
 
     private String getEnhancedMessage(PushMessage pushMessage, Game game){
         switch(pushMessage){
+            case STARTED_GAME: return getEnhancedStartedGameMessage(pushMessage.getValue(), game);
             case ADDED_PLAYER: return getEnhancedAddedPlayerMessage(pushMessage.getValue(), game);
             case REMOVED_PLAYER: return getEnhancedRemovedPlayerMessage(pushMessage.getValue(), game);
             case BOTIFIED_PLAYER: return getEnhancedBotifiedPlayerMessage(pushMessage.getValue(), game);
@@ -56,6 +57,11 @@ public class PushService {
             case STOP_PARTY: return getEnhancedStopPartyMessage(pushMessage.getValue(), game);
             default: return pushMessage.getValue();
         }
+    }
+
+    private String getEnhancedStartedGameMessage(String message, Game game){
+        int index = game.getCurrentPlayerIndex();
+        return String.format("%s:%d", message, index);
     }
 
     private String getEnhancedAddedPlayerMessage(String message, Game game){
