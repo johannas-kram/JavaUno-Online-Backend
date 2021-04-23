@@ -18,7 +18,7 @@ public class SwitchDeviceController {
         this.switchDeviceService = switchDeviceService;
     }
 
-    @PostMapping(value="/switch-finished/{gameUuid}/{playerUuid}")
+    @PostMapping(value="/finished/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> setSwitchFinished(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
             switchDeviceService.setSwitchFinished(gameUuid, playerUuid);
@@ -29,10 +29,12 @@ public class SwitchDeviceController {
         }
     }
 
-    @PostMapping(value="/switch-in/{pushUuid}/{gameUuid}/{playerUuid}")
-    public ResponseEntity<GeneralResponse> switchIn(@PathVariable String pushUuid, @PathVariable String gameUuid, @PathVariable String playerUuid){
+    @PostMapping(value="/in/{pushUuid}/{gameUuid}/{playerUuid}/{sayUno}/{readMessages}")
+    public ResponseEntity<GeneralResponse> switchIn(@PathVariable String pushUuid,
+                                                    @PathVariable String gameUuid, @PathVariable String playerUuid,
+                                                    @PathVariable String sayUno, @PathVariable String readMessages){
         try {
-            switchDeviceService.switchIn(pushUuid, gameUuid, playerUuid);
+            switchDeviceService.switchIn(pushUuid, gameUuid, playerUuid, sayUno, readMessages);
             GeneralResponse response = new GeneralResponse(true, "success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception exception){
