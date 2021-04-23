@@ -44,7 +44,9 @@ public class SwitchDeviceControllerTest {
         String gameUuid = "testGameUuid";
         String playerUuid = "testPlayerUuid";
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/switch/switch-in/{pushUuid}/{gameUuid}/{playerUuid}", pushUuid, gameUuid, playerUuid))
+        MvcResult mvcResult = this.mockMvc.perform(post(
+                "/api/switch/switch-in/{pushUuid}/{gameUuid}/{playerUuid}/{sayUno}/{readMessages}",
+                            pushUuid, gameUuid, playerUuid, "empty", "empty"))
                 .andExpect(status().isOk())
                 .andReturn();
 

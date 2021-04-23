@@ -32,9 +32,9 @@ public class SwitchDeviceService {
         logger.info("Pushing to tell switch {}:{} is finished.", gameUuid, playerUuid);
     }
 
-    public void switchIn(String pushUuid, String gameUuid, String playerUuid){
+    public void switchIn(String pushUuid, String gameUuid, String playerUuid, String sayUno, String readMessages){
         logger.info("Pushing to switch {}:{} to another (qr-generator) device, using pushUuid {}", gameUuid, playerUuid, pushUuid);
-        pushService.pushDirectly(pushUuid, "switch-in", gameUuid, playerUuid);
+        pushService.pushDirectly(pushUuid, "switch-in", gameUuid, playerUuid, sayUno, readMessages);
     }
 
 }

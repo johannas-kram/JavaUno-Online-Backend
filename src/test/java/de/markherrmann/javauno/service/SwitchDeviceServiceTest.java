@@ -36,7 +36,7 @@ public class SwitchDeviceServiceTest {
         String gameUuid = "testGameUuid";
         String playerUuid = "testPlayerUuid";
 
-        switchDeviceService.switchIn(pushUuid, gameUuid, playerUuid);
+        switchDeviceService.switchIn(pushUuid, gameUuid, playerUuid, "empty", "empty");
 
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.SWITCH_IN);
     }
