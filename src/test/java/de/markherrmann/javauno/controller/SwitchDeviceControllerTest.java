@@ -4,7 +4,6 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.service.GameService;
 import de.markherrmann.javauno.service.PlayerService;
-import de.markherrmann.javauno.service.SwitchDeviceService;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class SwitchDeviceControllerTest {
         String playerUuid = "testPlayerUuid";
 
         MvcResult mvcResult = this.mockMvc.perform(post(
-                "/api/switch/switch-in/{pushUuid}/{gameUuid}/{playerUuid}/{sayUno}/{readMessages}",
+                "/api/switch/in/{pushUuid}/{gameUuid}/{playerUuid}/{sayUno}/{readMessages}",
                             pushUuid, gameUuid, playerUuid, "empty", "empty"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -63,7 +62,7 @@ public class SwitchDeviceControllerTest {
         given(gameService.getGame(gameUuid)).willReturn(game);
         given(playerService.getPlayer(eq(playerUuid), any(Game.class))).willReturn(player);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/switch/switch-finished/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/switch/finished/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
                 .andExpect(status().isOk())
                 .andReturn();
 
