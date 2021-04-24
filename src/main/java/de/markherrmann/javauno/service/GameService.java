@@ -90,7 +90,7 @@ public class GameService {
             String publicUuid = player.getPublicUuid();
             Message message = new Message(content, publicUuid, System.currentTimeMillis());
             game.addMessage(message);
-            pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, content);
+            pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, ""+ message.getTime() ,content);
             LOGGER.info("Successfully added message. Game: {}; Player: {}; Message: {}", gameUuid, playerUuid, content);
         }
     }
