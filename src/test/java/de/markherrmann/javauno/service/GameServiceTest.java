@@ -9,6 +9,7 @@ import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
+import org.assertj.core.data.Percentage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -176,6 +177,7 @@ public class GameServiceTest {
         assertThat(game.getMessages().size()).isEqualTo(1);
         assertThat(game.getMessages().get(0)).isNotNull();
         assertThat(game.getMessages().get(0).getPlayerPublicUuid()).isEqualTo(player.getPublicUuid());
+        assertThat(game.getMessages().get(0).getTime()).isCloseTo(System.currentTimeMillis(), Percentage.withPercentage(0.000001));
         assertThat(game.getMessages().get(0).getContent()).isEqualTo(testContent);
     }
 

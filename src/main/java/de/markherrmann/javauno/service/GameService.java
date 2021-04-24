@@ -88,7 +88,7 @@ public class GameService {
         synchronized (game) {
             Player player = PlayerService.getPlayerStatic(playerUuid, game);
             String publicUuid = player.getPublicUuid();
-            Message message = new Message(content, publicUuid);
+            Message message = new Message(content, publicUuid, System.currentTimeMillis());
             game.addMessage(message);
             pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, content);
             LOGGER.info("Successfully added message. Game: {}; Player: {}; Message: {}", gameUuid, playerUuid, content);
