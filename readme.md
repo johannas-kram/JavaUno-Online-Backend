@@ -3,7 +3,7 @@
 The card game as online game - the backend
 
 ## Version
-2.0 (2021, April, 24th)
+2.0 (2021, April, 26th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -79,8 +79,12 @@ If you want to use this backend together with my frontend, please note the follo
 
 ### Future Updates
 
-#### Version 3.0 (maybe Winter 2021)
-* ability to join a running game
+#### Version 3.0 (maybe Summer 2022)
+* ability to join to a running game
 * end game when loser is known (not when winner is known)
 * configurable ruleset
 * win counting
+* chat:
+  * voice records
+  * attachments
+  * checkmarks (message is received/read)
