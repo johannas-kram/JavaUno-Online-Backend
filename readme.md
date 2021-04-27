@@ -1,9 +1,10 @@
 # JavaUno - Online Version - Backend
 
 The card game as online game - the backend
+This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, April, 26th)
+2.0 (2021, April, 27th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -25,7 +26,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 
 ### Spielanleitung
 https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
-(pdf can be generated, it's git-ignored)
+(generated https://play.java-uno.de)
 
 ## tokenized-game-create
 * This Feature is optional
@@ -39,7 +40,7 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
   * Example token: Dsnmn7Twqd1.j8yZ15Ji210
 * Creation and storing of tokens on backend-server
   * Creation of tokens and storing of hashes happen externally\
-    (not concern of this application)
+    (not concern of this application, see: )
   * For every token, a bcrypt-hash of the second youtube-video-id-like string is stored in ./tokens/\
     while the first youtube-video-id-like string is the filename
     * example: Hash of j8yZ15Ji210 is stored in file named Dsnmn7Twqd1
@@ -51,14 +52,8 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
    * License: https://creativecommons.org/licenses/by-nc-sa/4.0/
    * Creator: Mark Herrmann (Nickname: Tomatenmark)
-* For the original card game all rights are reserved to Mattel games.\
-  (I have no co-operation with Mattel)
-  
-Notice: Mattel also offers an own free app to play UNO.
-See my version as fun project
 
 ## Compatibility
-If you want to use this backend together with my frontend, please note the following compatibility information:
 * version 2.x frontend <-> version 1.x backend
   * NOT compatible
 * Version 2.x backend <-> version 1.x frontend
