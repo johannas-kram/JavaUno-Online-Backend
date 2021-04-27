@@ -76,5 +76,3 @@ If you want to use this backend together with my frontend, please note the follo
 * New feature: Chat
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
-
-### Future Updates
