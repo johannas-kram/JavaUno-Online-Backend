@@ -78,13 +78,3 @@ If you want to use this backend together with my frontend, please note the follo
 * Improvement: Old game deletion threshold increased to 8 hours.
 
 ### Future Updates
-
-#### Version 3.0 (maybe Summer 2022)
-* ability to join to a running game
-* end game when loser is known (not when winner is known)
-* configurable ruleset
-* win counting
-* chat:
-  * voice records
-  * attachments
-  * checkmarks (message is received/read)
