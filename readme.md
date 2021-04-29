@@ -1,9 +1,10 @@
 # JavaUno - Online Version - Backend
 
 The card game as online game - the backend
+This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, April, 23rd)
+2.0 (2021, April, 29th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -25,7 +26,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 
 ### Spielanleitung
 https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
-(pdf can be generated, it's git-ignored)
+(generated to https://play.java-uno.de/manual.pdf)
 
 ## tokenized-game-create
 * This Feature is optional
@@ -51,14 +52,8 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
    * License: https://creativecommons.org/licenses/by-nc-sa/4.0/
    * Creator: Mark Herrmann (Nickname: Tomatenmark)
-* For the original card game all rights are reserved to Mattel games.\
-  (I have no co-operation with Mattel)
-  
-Notice: Mattel also offers an own free app to play UNO.
-See my version as fun project
 
 ## Compatibility
-If you want to use this backend together with my frontend, please note the following compatibility information:
 * version 2.x frontend <-> version 1.x backend
   * NOT compatible
 * Version 2.x backend <-> version 1.x frontend
@@ -76,11 +71,3 @@ If you want to use this backend together with my frontend, please note the follo
 * New feature: Chat
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
-
-### Future Updates
-
-#### Version 3.0 (maybe Winter 2021)
-* ability to join a running game
-* end game when loser is known (not when winner is known)
-* configurable ruleset
-* win counting
