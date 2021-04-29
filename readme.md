@@ -4,7 +4,7 @@ The card game as online game - the backend
 This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, April, 27th)
+2.0 (2021, April, 29th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -26,7 +26,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 
 ### Spielanleitung
 https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
-(generated https://play.java-uno.de)
+(generated to https://play.java-uno.de)
 
 ## tokenized-game-create
 * This Feature is optional
@@ -40,7 +40,7 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
   * Example token: Dsnmn7Twqd1.j8yZ15Ji210
 * Creation and storing of tokens on backend-server
   * Creation of tokens and storing of hashes happen externally\
-    (not concern of this application, see: )
+    (not concern of this application)
   * For every token, a bcrypt-hash of the second youtube-video-id-like string is stored in ./tokens/\
     while the first youtube-video-id-like string is the filename
     * example: Hash of j8yZ15Ji210 is stored in file named Dsnmn7Twqd1
