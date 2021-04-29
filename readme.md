@@ -26,7 +26,7 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 
 ### Spielanleitung
 https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
-(generated to https://play.java-uno.de)
+(generated to https://play.java-uno.de/manual.pdf)
 
 ## tokenized-game-create
 * This Feature is optional
