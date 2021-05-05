@@ -4,7 +4,7 @@ The card game as online game - the backend
 This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, April, 29th)
+2.0 (2021, May, 5th)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -63,6 +63,7 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 ## ChangeLog
 
 ### Version 2.0
+* Bugfix: If next round was started very quick after a bots last turn, the fronted got misleading next turn pushes
 * New optional feature: tokenized-game-create (see #tokenized-game-create) (limited downwards compatibility)
 * New feature: You can switch the game to another device
 * New feature: You can leave the running game (will become a bot)

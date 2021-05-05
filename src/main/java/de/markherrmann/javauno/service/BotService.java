@@ -37,12 +37,13 @@ public class BotService {
     }
 
     void makeTurn(Game game, Player player){
+        int party = game.getParty();
         if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())
                 && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
             doSleep(2000);
         }
         while(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())
-                && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+                && GameLifecycle.RUNNING.equals(game.getGameLifecycle()) && game.getParty() == party){
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
                 game.setLastWinner(game.getCurrentPlayerIndex());
@@ -50,8 +51,11 @@ public class BotService {
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }
         }
-        boolean saidUno = maybeSayUno(game, player);
-        doSleep(saidUno ? 2500 : 3000);
+        if(!player.getCards().isEmpty()){
+            boolean saidUno = maybeSayUno(game, player);
+            doSleep(saidUno ? 2500 : 3000);
+        }
+
     }
 
     private void handleTurnState(Game game, Player player){
