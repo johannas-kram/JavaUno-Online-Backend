@@ -1,7 +1,6 @@
 package de.markherrmann.javauno.service;
 
 import de.markherrmann.javauno.TestHelper;
-import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -54,40 +53,26 @@ public class DrawServiceTest {
     }
 
     @Test
-    public void shouldDrawCardInUnoMistakeStateTwoCards(){
-        game.getPlayers().get(0).setDrawPenalties(2);
-        shouldDraw(TurnState.DRAW_PENALTIES, TurnState.DRAW_PENALTIES);
+    public void shouldDrawCardsInDrawPenaltyState(){
+        shouldDrawMultiple(TurnState.DRAW_PENALTIES, TurnState.PUT_OR_DRAW, 2);
     }
 
     @Test
-    public void shouldDrawCardInUnoMistakeStateOneCardDrawDuties(){
+    public void shouldDrawCardsInDrawPenaltyStateThenDrawDuties(){
         game.setDrawDuties(2);
-        game.getPlayers().get(0).setDrawPenalties(1);
-        shouldDraw(TurnState.DRAW_PENALTIES, TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+        shouldDrawMultiple(TurnState.DRAW_PENALTIES, TurnState.DRAW_DUTIES_OR_CUMULATIVE, 2);
     }
 
     @Test
-    public void shouldDrawCardInUnoMistakeStateOneCardNoDrawDuties(){
-        game.getPlayers().get(0).setDrawPenalties(1);
-        shouldDraw(TurnState.DRAW_PENALTIES, TurnState.PUT_OR_DRAW);
+    public void shouldDrawCardsInDrawDutiesStateTwoCards(){
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+        shouldDrawMultiple(TurnState.DRAW_DUTIES_OR_CUMULATIVE, TurnState.PUT_OR_DRAW, 2);
     }
 
     @Test
-    public void shouldDrawCardInDrawDutiesStateOneCard(){
-        game.setDrawDuties(1);
-        shouldDraw(TurnState.DRAW_DUTIES, TurnState.PUT_OR_DRAW);
-    }
-
-    @Test
-    public void shouldDrawCardInDrawDutiesStateTwoCards(){
-        game.setDrawDuties(2);
-        shouldDraw(TurnState.DRAW_DUTIES, TurnState.DRAW_DUTIES);
-    }
-
-    @Test
-    public void shouldDrawCardInDrawDutiesOrCumulativeState(){
-        game.setDrawDuties(2);
-        shouldDraw(TurnState.DRAW_DUTIES_OR_CUMULATIVE, TurnState.DRAW_DUTIES);
+    public void shouldDrawCardsInDrawDutiesStateEightCards(){
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+        shouldDrawMultiple(TurnState.DRAW_DUTIES_OR_CUMULATIVE, TurnState.PUT_OR_DRAW, 8);
     }
 
     @Test
@@ -115,16 +100,38 @@ public class DrawServiceTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Exception exception = null;
-        DrawnCardResponse drawnCardResponse = null;
 
         try {
-            drawnCardResponse = drawService.draw(gameUuid, playerUuid);
+            drawService.draw(gameUuid, playerUuid);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertDrawn(drawnCardResponse, exception, turnStateOut);
+        assertDrawn(exception, turnStateOut);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARD);
+    }
+
+    private void shouldDrawMultiple(TurnState turnStateIn, TurnState turnStateOut, int count){
+        game.setTurnState(turnStateIn);
+        String gameUuid = game.getUuid();
+        String playerUuid = game.getPlayers().get(0).getUuid();
+        Exception exception = null;
+        String reason = "duties";
+        if(turnStateIn.equals(TurnState.DRAW_PENALTIES)){
+            game.getPlayers().get(0).setDrawPenalties(2);
+            reason = "penalties";
+        } else {
+            game.setDrawDuties(count);
+        }
+
+        try {
+            drawService.drawMultiple(gameUuid, playerUuid);
+        } catch (Exception ex){
+            exception = ex;
+        }
+
+        assertDrawnMultiple(exception, turnStateOut, count, reason);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARDS);
     }
 
     private void shouldFail(TurnState turnState, Exception expectedException){
@@ -132,34 +139,38 @@ public class DrawServiceTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
         Exception exception = null;
-        DrawnCardResponse drawnCardResponse = null;
 
         try {
-            drawnCardResponse = drawService.draw(gameUuid, playerUuid);
+            drawService.draw(gameUuid, playerUuid);
         } catch (Exception ex){
             exception = ex;
         }
 
-        assertNotDrawn(drawnCardResponse, exception, turnState, expectedException);
+        assertNotDrawn(exception, turnState, expectedException);
     }
 
-    private void assertDrawn(DrawnCardResponse drawnCardResponse, Exception exception, TurnState expectedTurnState){
+    private void assertDrawn(Exception exception, TurnState expectedTurnState){
         assertThat(exception).isNull();
-        assertThat(drawnCardResponse).isNotNull();
         assertThat(game.getDrawPile().size()).isEqualTo(78);
         assertThat(game.getPlayers().get(0).getCardCount()).isEqualTo(8);
-        assertThat(game.getPlayers().get(0).getCards().get(7)).isEqualTo(drawnCardResponse.getCard());
-        if(TurnState.PUT_DRAWN.equals(expectedTurnState) && !drawnCardResponse.isMatch()){
+        assertThat(game.getTurnState()).isEqualTo(expectedTurnState);
+    }
+
+    private void assertDrawnMultiple(Exception exception, TurnState expectedTurnState, int count, String reason){
+        assertThat(exception).isNull();
+        assertThat(game.getDrawPile().size()).isEqualTo(79-count);
+        assertThat(game.getPlayers().get(0).getCardCount()).isEqualTo(7+count);
+        assertThat(game.getDrawnCards()).isEqualTo(count);
+        assertThat(game.getDrawReason()).isEqualTo(reason);
+        if(TurnState.PUT_DRAWN.equals(expectedTurnState)){
             assertThat(game.getTurnState()).isEqualTo(TurnState.FINAL_COUNTDOWN);
         } else {
             assertThat(game.getTurnState()).isEqualTo(expectedTurnState);
         }
-
     }
 
-    private void assertNotDrawn(DrawnCardResponse drawnCardResponse, Exception exception, TurnState expectedTurnState, Exception expectedException){
+    private void assertNotDrawn(Exception exception, TurnState expectedTurnState, Exception expectedException){
         assertThat(exception).isNotNull();
-        assertThat(drawnCardResponse).isNull();
         assertThat(exception).isInstanceOf(expectedException.getClass());
         assertThat(exception.getMessage()).isEqualTo(expectedException.getMessage());
         assertThat(game.getDrawPile().size()).isEqualTo(79);

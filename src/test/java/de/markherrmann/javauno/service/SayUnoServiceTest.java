@@ -59,7 +59,7 @@ public class SayUnoServiceTest {
     @Test
     public void shouldFailCausedByInvalidTurnState(){
         Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
-        shouldFail(TurnState.DRAW_DUTIES, expectedException);
+        shouldFail(TurnState.DRAW_DUTIES_OR_CUMULATIVE, expectedException);
     }
 
     @Test

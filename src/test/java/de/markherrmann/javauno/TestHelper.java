@@ -2,6 +2,7 @@ package de.markherrmann.javauno;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
+import de.markherrmann.javauno.controller.response.PutCardResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -63,6 +64,14 @@ public class TestHelper {
     public static GeneralResponse jsonToObject(final String json) {
         try {
             return new ObjectMapper().readValue(json, GeneralResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static PutCardResponse jsonToPutCardResponseObject(final String json) {
+        try {
+            return new ObjectMapper().readValue(json, PutCardResponse.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
