@@ -28,6 +28,8 @@ public class Game{
 	private int lastWinner = -1;
 	private Thread botifyPlayerByRequestThread;
 	private List<Message> messages = new ArrayList<>();
+	private int drawnCards = 0;
+	private String drawReason;
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -223,5 +225,23 @@ public class Game{
 
 	public List<Message> getMessages() {
 		return messages;
+	}
+
+	@JsonIgnore
+	public int getDrawnCards() {
+		return drawnCards;
+	}
+
+	public void setDrawnCards(int drawnCards) {
+		this.drawnCards = drawnCards;
+	}
+
+	@JsonIgnore
+	public String getDrawReason() {
+		return drawReason;
+	}
+
+	public void setDrawReason(String drawReason) {
+		this.drawReason = drawReason;
 	}
 }
