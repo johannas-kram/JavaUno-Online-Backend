@@ -29,7 +29,7 @@ public class PutService {
         this.turnService = turnService;
     }
 
-    public void put(String gameUuid, String playerUuid, Card card, int cardIndex)
+    public Card put(String gameUuid, String playerUuid, Card card, int cardIndex)
             throws IllegalArgumentException, IllegalStateException, CardDoesNotMatchException {
         Game game = turnService.getGame(gameUuid);
         synchronized (game){
@@ -47,6 +47,7 @@ public class PutService {
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", gameUuid, game.getParty(), playerUuid);
             }
         }
+        return game.getTopCard();
     }
 
     private void preChecks(Game game, Player player, Card card, int cardIndex) throws IllegalStateException, IllegalArgumentException {
@@ -72,9 +73,7 @@ public class PutService {
         game.getDiscardPile().push(card);
         setGameVars(game, card);
         switchTurnState(game);
-        if(!card.isJokerCard()){
-            game.setDesiredColor(null);
-        }
+        game.setDesiredColor(null);
         LOGGER.info("Put card successfully. Game: {}; Player: {}; playersCard: {}; topCard: {}",
                 game.getUuid(),
                 player.getUuid(),
