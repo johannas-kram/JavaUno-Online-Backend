@@ -1,12 +1,12 @@
 package de.markherrmann.javauno.controller;
 
 import de.markherrmann.javauno.controller.request.PutCardRequest;
-import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
+import de.markherrmann.javauno.controller.response.PutCardResponse;
+import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +36,8 @@ public class TurnController {
     @PostMapping(value = "/put")
     public ResponseEntity<GeneralResponse> putCard(@RequestBody PutCardRequest putCardRequest){
         try {
-            putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
-            GeneralResponse response = new GeneralResponse(true, "success");
+            Card topCard = putService.put(putCardRequest.getGameUuid(), putCardRequest.getPlayerUuid(), putCardRequest.getCard(), putCardRequest.getCardIndex());
+            GeneralResponse response = new PutCardResponse(topCard);
             return ResponseEntity.ok(response);
         } catch(Exception exception){
             return ErrorResponseUtil.getExceptionResponseEntity(exception);
@@ -47,8 +47,18 @@ public class TurnController {
     @PostMapping(value = "/draw/{gameUuid}/{playerUuid}")
     public ResponseEntity<GeneralResponse> drawCard(@PathVariable String gameUuid, @PathVariable String playerUuid){
         try {
-            DrawnCardResponse drawnCardResponse = drawService.draw(gameUuid, playerUuid);
-            return ResponseEntity.ok(drawnCardResponse);
+            drawService.draw(gameUuid, playerUuid);
+            return ResponseEntity.ok(new GeneralResponse(true, "success"));
+        } catch(Exception exception){
+            return ErrorResponseUtil.getExceptionResponseEntity(exception);
+        }
+    }
+
+    @PostMapping(value = "/draw-multiple/{gameUuid}/{playerUuid}")
+    public ResponseEntity<GeneralResponse> drawCards(@PathVariable String gameUuid, @PathVariable String playerUuid){
+        try {
+            drawService.drawMultiple(gameUuid, playerUuid);
+            return ResponseEntity.ok(new GeneralResponse(true, "success"));
         } catch(Exception exception){
             return ErrorResponseUtil.getExceptionResponseEntity(exception);
         }
