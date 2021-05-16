@@ -1,6 +1,5 @@
 package de.markherrmann.javauno.service;
 
-import de.markherrmann.javauno.controller.response.DrawnCardResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -29,7 +28,7 @@ public class DrawService {
         this.turnService = turnService;
     }
 
-    public DrawnCardResponse draw(String gameUuid, String playerUuid) throws IllegalArgumentException, IllegalStateException {
+    public void draw(String gameUuid, String playerUuid) throws IllegalArgumentException, IllegalStateException {
         Game game = turnService.getGame(gameUuid);
         Card card;
         boolean matches;
@@ -44,12 +43,23 @@ public class DrawService {
         }
         turnService.updateLastAction(game);
         turnService.pushAction(PushMessage.DRAWN_CARD, game);
-        return new DrawnCardResponse(card, matches);
+    }
+
+    public void drawMultiple(String gameUuid, String playerUuid){
+        Game game = turnService.getGame(gameUuid);
+        synchronized (game){
+            Player player = turnService.getPlayer(playerUuid, game);
+            preChecksMultiple(game, player);
+            drawCards(game, player);
+            turnService.updateLastAction(game);
+            turnService.pushAction(PushMessage.DRAWN_CARDS, game);
+        }
     }
 
     static Card drawCard(Game game, Player player){
         Card card = game.getDrawPile().pop();
         player.addCard(card);
+        player.incrementDrawn();
         maybeRearrangePiles(game);
         setTurnState(game, player);
         LOGGER.info(
@@ -59,6 +69,15 @@ public class DrawService {
                 card);
         player.setUnoSaid(false);
         return card;
+    }
+
+    static void drawCards(Game game, Player player){
+        game.setDrawReason(player.getDrawPenalties() > 0 ? "penalties" : "duties");
+        int count = player.getDrawPenalties() > 0 ? player.getDrawPenalties() : game.getDrawDuties();
+        for(int i = 0; i < count; i++){
+            drawCard(game, player);
+        }
+        game.setDrawnCards(count);
     }
 
     private static void maybeRearrangePiles(Game game){
@@ -83,9 +102,7 @@ public class DrawService {
 
     private static void handleDrawDuty(Game game){
         setDrawDuties(game);
-        if(isDrawDutyLeft(game)){
-            game.setTurnState(TurnState.DRAW_DUTIES);
-        } else {
+        if(!isDrawDutyLeft(game)){
             game.setTurnState(TurnState.PUT_OR_DRAW);
         }
     }
@@ -133,10 +150,22 @@ public class DrawService {
                 game,
                 player.getUuid(),
                 this.getClass(),
-                TurnState.DRAW_PENALTIES,
-                TurnState.DRAW_DUTIES,
-                TurnState.DRAW_DUTIES_OR_CUMULATIVE,
                 TurnState.PUT_OR_DRAW);
+        if(!turnService.isPlayersTurn(game, player)){
+            throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
+        }
+    }
+
+    private void preChecksMultiple(Game game, Player player) throws IllegalStateException {
+        if(!turnService.isGameInLifecycle(game, GameLifecycle.RUNNING)){
+            throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
+        }
+        turnService.failIfInvalidTurnState(
+                game,
+                player.getUuid(),
+                this.getClass(),
+                TurnState.DRAW_PENALTIES,
+                TurnState.DRAW_DUTIES_OR_CUMULATIVE);
         if(!turnService.isPlayersTurn(game, player)){
             throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
         }

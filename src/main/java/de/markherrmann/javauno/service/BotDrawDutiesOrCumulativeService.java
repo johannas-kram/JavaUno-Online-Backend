@@ -11,12 +11,12 @@ public class BotDrawDutiesOrCumulativeService {
     boolean handleDrawDutiesOrCumulative(Game game, Player player) {
         Card topCard = game.getTopCard();
         if(!topCard.isDrawCard()){
-            DrawService.drawCard(game, player);
+            DrawService.drawCards(game, player);
             return false;
         }
         boolean put = putCumulative(game, player, topCard.getDrawValue());
         if(!put){
-            DrawService.drawCard(game, player);
+            DrawService.drawCards(game, player);
         }
         return put;
     }
