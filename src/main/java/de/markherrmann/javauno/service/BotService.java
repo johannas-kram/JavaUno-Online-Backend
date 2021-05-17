@@ -37,12 +37,12 @@ public class BotService {
     }
 
     void makeTurn(Game game, Player player){
-        if(TurnState.PUT_OR_DRAW.equals(game.getTurnState())
-                && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
-            doSleep(2000);
+        int party = game.getParty();
+        if(GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+            doSleep(1200);
         }
         while(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())
-                && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+                && GameLifecycle.RUNNING.equals(game.getGameLifecycle()) && game.getParty() == party){
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
                 game.setLastWinner(game.getCurrentPlayerIndex());
@@ -50,15 +50,17 @@ public class BotService {
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }
         }
-        boolean saidUno = maybeSayUno(game, player);
-        doSleep(saidUno ? 2500 : 3000);
+        if(!player.getCards().isEmpty()){
+            boolean saidUno = maybeSayUno(game, player);
+            doSleep(saidUno ? 2500 : 3000);
+        }
+
     }
 
     private void handleTurnState(Game game, Player player){
         switch(game.getTurnState()){
             case DRAW_PENALTIES: handleDrawPenalties(game, player); break;
             case DRAW_DUTIES_OR_CUMULATIVE: handleDrawDutiesOrCumulative(game, player); break;
-            case DRAW_DUTIES: handleDrawDuties(game, player); break;
             case PUT_OR_DRAW: handlePutOrDraw(game, player); break;
             case PUT_DRAWN: handlePutDrawn(game, player); break;
             case SELECT_COLOR: handleSelectColor(game, player); break;
@@ -67,31 +69,19 @@ public class BotService {
 
 
     private void handleDrawPenalties(Game game, Player player) {
-        DrawService.drawCard(game, player);
-        pushService.push(PushMessage.DRAWN_CARD, game);
-        int drawPenalties = player.getDrawPenalties();
-        int sleepDurance = drawPenalties > 0 ? 500: 2000;
-        doSleep(sleepDurance);
+        DrawService.drawCards(game, player);
+        pushService.push(PushMessage.DRAWN_CARDS, game);
+        doSleep(game.getDrawDuties() > 0 ? 1000 : 2000);
     }
 
 
     private void handleDrawDutiesOrCumulative(Game game, Player player) {
         boolean put = botDrawDutiesOrCumulativeService.handleDrawDutiesOrCumulative(game, player);
-        pushService.push(put ? PushMessage.PUT_CARD : PushMessage.DRAWN_CARD, game);
+        pushService.push(put ? PushMessage.PUT_CARD : PushMessage.DRAWN_CARDS, game);
         if(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
-            doSleep(500);
+            doSleep(1000);
         }
     }
-
-
-    private void handleDrawDuties(Game game, Player player) {
-        DrawService.drawCard(game, player);
-        pushService.push(PushMessage.DRAWN_CARD, game);
-        int drawDuties = game.getDrawDuties();
-        int sleepDurance = drawDuties > 0 ? 500: 2000;
-        doSleep(sleepDurance);
-    }
-
 
     private void handlePutOrDraw(Game game, Player player) {
         boolean put = botMaybePutService.maybePut(game, player, false);
@@ -100,7 +90,7 @@ public class BotService {
         }
         pushService.push(put ? PushMessage.PUT_CARD : PushMessage.DRAWN_CARD, game);
         if(!TurnState.FINAL_COUNTDOWN.equals(game.getTurnState())){
-            doSleep(500);
+            doSleep(1000);
         }
     }
 
@@ -110,6 +100,9 @@ public class BotService {
         pushService.push(put ? PushMessage.PUT_CARD : PushMessage.KEPT_CARD, game);
         if(!put){
             KeepService.keep(game, player);
+        }
+        if(put && game.getTopCard().isJokerCard()){
+            doSleep(1000);
         }
     }
 
@@ -129,7 +122,7 @@ public class BotService {
             int sayUnoRandomNumber = random.nextInt(10);
             lastSayUnoRandomNumber = sayUnoRandomNumber;
             if(sayUnoRandomNumber < 9){
-                doSleep(500);
+                doSleep(1000);
                 if(!GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
                     return false;
                 }

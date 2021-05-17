@@ -10,6 +10,7 @@ public enum PushMessage {
     CANCEL_BOTIFY_PLAYER("cancel-botify-player"),
     PUT_CARD("put-card"),
     DRAWN_CARD("drawn-card"),
+    DRAWN_CARDS("drawn-cards"),
     KEPT_CARD("kept-card"),
     SELECTED_COLOR("selected-color"),
     SAID_UNO("said-uno"),

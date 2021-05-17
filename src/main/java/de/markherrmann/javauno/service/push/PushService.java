@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service.push;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
@@ -49,6 +50,7 @@ public class PushService {
             case CANCEL_BOTIFY_PLAYER: return getEnhancedCancelBotifyPlayerMessage(pushMessage.getValue(), game);
             case PUT_CARD: return getEnhancedPutCardMessage(pushMessage.getValue(), game);
             case DRAWN_CARD: return getEnhancedDrawnCardMessage(pushMessage.getValue(), game);
+            case DRAWN_CARDS: return getEnhancedDrawnCardsMessage(pushMessage.getValue(), game);
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
             case SELECTED_COLOR: return getEnhancedSelectColorMessage(pushMessage.getValue(), game);
             case FINISHED_GAME: return getEnhancedFinishedGameMessage(pushMessage.getValue(), game);
@@ -93,11 +95,7 @@ public class PushService {
     }
 
     private String getEnhancedPutCardMessage(String message, Game game){
-        boolean joker = game.getTopCard().isJokerCard();
-        if(joker){
-            return message+":joker";
-        }
-        return message;
+        return message + ":" + asJsonString(game.getTopCard());
     }
 
     private String getEnhancedDrawnCardMessage(String message, Game game){
@@ -106,6 +104,10 @@ public class PushService {
             return message+":countdown";
         }
         return message;
+    }
+
+    private String getEnhancedDrawnCardsMessage(String message, Game game){
+        return String.format("%s:%d:%s", message, game.getDrawnCards(), game.getDrawReason());
     }
 
     private String getEnhancedSelectColorMessage(String message, Game game){
@@ -140,5 +142,13 @@ public class PushService {
 
     public static PushMessage getLastMessage() {
         return lastMessage;
+    }
+
+    private static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

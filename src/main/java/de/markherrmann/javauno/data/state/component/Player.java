@@ -19,6 +19,7 @@ public class Player {
 	private int drawPenalties;
 	private boolean stopPartyRequested;
 	private boolean botifyPending;
+	private int drawn = 0;
 
 	private Player(){}
 
@@ -110,5 +111,13 @@ public class Player {
 
 	public void setBotifyPending(boolean botifyPending) {
 		this.botifyPending = botifyPending;
+	}
+
+	public int getDrawn() {
+		return drawn;
+	}
+
+	public void incrementDrawn() {
+		this.drawn++;
 	}
 }

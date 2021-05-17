@@ -93,7 +93,7 @@ public class PlayerServiceBotifyByRequestTest {
         Player player = prepareGame();
         game.setCurrentPlayerIndex(0);
         game.setGameLifecycle(GameLifecycle.RUNNING);
-        playerService.botifyPlayerByRequestCountdownMillis = 3500;
+        playerService.botifyPlayerByRequestCountdownMillis = 3000;
         playerService.requestBotifyPlayer(game.getUuid(), player.getPublicUuid());
         try {
             Thread.sleep(1000);
@@ -101,7 +101,7 @@ public class PlayerServiceBotifyByRequestTest {
 
         playerService.cancelBotifyPlayer(game.getUuid(), player.getUuid());
         try {
-            Thread.sleep(3200);
+            Thread.sleep(200);
         } catch(InterruptedException ex){}
 
         assertThat(player.isBotifyPending()).isFalse();

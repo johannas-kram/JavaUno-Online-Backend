@@ -76,7 +76,7 @@ public class SelectColorServiceTest {
 
     @Test
     public void shouldFailCausedByInvalidTurnState(){
-        game.setTurnState(TurnState.DRAW_DUTIES);
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
         Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail("RED", expectedException);
     }

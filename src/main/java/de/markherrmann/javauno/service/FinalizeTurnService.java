@@ -39,8 +39,9 @@ public class FinalizeTurnService {
 
     void handleBotTurn(Game game, Player player){
         if(player.isBot() && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+            int party = game.getParty();
             botService.makeTurn(game, player);
-            if(player.getCardCount() > 0 && GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
+            if(!player.getCards().isEmpty() && GameLifecycle.RUNNING.equals(game.getGameLifecycle()) && game.getParty() == party){
                 finalize(game);
             }
         }

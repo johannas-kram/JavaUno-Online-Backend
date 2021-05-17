@@ -77,7 +77,7 @@ public class TurnControllerSayUnoTest {
 
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
-        game.setTurnState(TurnState.DRAW_DUTIES);
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
         Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(expectedException, HttpStatus.BAD_REQUEST);
     }

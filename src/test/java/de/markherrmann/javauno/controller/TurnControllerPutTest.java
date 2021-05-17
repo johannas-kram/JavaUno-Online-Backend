@@ -64,7 +64,7 @@ public class TurnControllerPutTest {
         int putNow = game.getDiscardPile().size();
 
         assertThat(putNow - putBefore).isEqualTo(1);
-        assertThat(TestHelper.jsonToObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
+        assertThat(TestHelper.jsonToPutCardResponseObject(mvcResult.getResponse().getContentAsString()).getMessage()).isEqualTo("success");
     }
 
     @Test
@@ -93,7 +93,7 @@ public class TurnControllerPutTest {
     @Test
     public void shouldFailCausedByInvalidState() throws Exception {
         String expectedMessage = buildExpectedMessage(IllegalStateException.class.getCanonicalName(), ExceptionMessage.INVALID_STATE_TURN.getValue());
-        shouldFail(game.getTopCard(), 0, TurnState.DRAW_DUTIES, expectedMessage, HttpStatus.BAD_REQUEST);
+        shouldFail(game.getTopCard(), 0, TurnState.FINAL_COUNTDOWN, expectedMessage, HttpStatus.BAD_REQUEST);
     }
 
     @Test
