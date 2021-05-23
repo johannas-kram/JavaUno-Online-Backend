@@ -73,4 +73,5 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 * New feature: Chat
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
+* Improved card dealing (improved first receiver)
 * Various modifications to help the vue.js frontend with transitions
