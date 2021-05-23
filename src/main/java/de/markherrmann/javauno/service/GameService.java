@@ -68,7 +68,7 @@ public class GameService {
             resetGame(game);
             Stack<Card> deck = Deck.getShuffled();
             game.getDiscardPile().push(deck.pop());
-            giveCards(game.getPlayers(), deck);
+            giveCards(game, deck);
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
             game.nextParty();
@@ -100,6 +100,14 @@ public class GameService {
         }
     }
 
+    public Game getGame(String gameUuid) throws IllegalArgumentException {
+        return UnoState.getGame(gameUuid);
+    }
+
+    boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){
+        return game.getGameLifecycle().equals(gameLifecycle);
+    }
+
     void stopParty(Game game){
         game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
         game.resetStopPartyRequested();
@@ -107,12 +115,20 @@ public class GameService {
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
     }
 
+    void giveCards(Game game, Stack<Card> deck){
+        List<Player> playerList = game.getPlayers();
+        int firstCardReceiver = handleAndGetFirstCardReceiver(game, playerList);
+        for(int cards = 0; cards < 7; cards++){
+            for(int index = firstCardReceiver; playerList.get(index).getCards().size() == cards; index=(index+1)%playerList.size()){
+                Player player = playerList.get(index);
+                player.addCard(deck.pop());
+            }
+        }
+    }
+
     private void resetGame(Game game){
         game.setCurrentPlayerIndex(setAndGetCurrentPlayerIndex(game));
         game.getHumans().values().forEach(e->e.setStopPartyRequested(false));
-        if(game.getCurrentPlayerIndex() > 0){
-            System.out.println("stop");
-        }
         game.resetStopPartyRequested();
         for(Player player : game.getPlayers()){
             player.clearCards();
@@ -145,19 +161,15 @@ public class GameService {
         }
     }
 
-    private void giveCards(List<Player> playerList, Stack<Card> deck){
-        for(int cards = 0; cards < 7; cards++){
-            for(Player player : playerList){
-                player.addCard(deck.pop());
-            }
-        }
-    }
-
-    public Game getGame(String gameUuid) throws IllegalArgumentException {
-        return UnoState.getGame(gameUuid);
-    }
-
-    boolean isGameInLifecycle(Game game, GameLifecycle gameLifecycle){
-        return game.getGameLifecycle().equals(gameLifecycle);
+    private int handleAndGetFirstCardReceiver(Game game, List<Player> playerList){
+        Random random = UnoRandom.getRandom();
+        int firstCardReceiver;
+        String uuid;
+        do {
+            firstCardReceiver = random.nextInt(playerList.size());
+            uuid = playerList.get(firstCardReceiver).getUuid();
+        }while(game.wasAlreadyFirstCardReceiver(uuid));
+        game.addPreviousFirstCardReceiver(uuid);
+        return firstCardReceiver;
     }
 }
