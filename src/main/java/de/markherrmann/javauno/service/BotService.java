@@ -5,14 +5,13 @@ import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
 import de.markherrmann.javauno.data.state.component.Player;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.helper.UnoRandom;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 @Service
 public class BotService {
@@ -45,7 +44,7 @@ public class BotService {
                 && GameLifecycle.RUNNING.equals(game.getGameLifecycle()) && game.getParty() == party){
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
-                game.setLastWinner(game.getCurrentPlayerIndex());
+                GameService.finishGame(game, player);
                 pushService.push(PushMessage.FINISHED_GAME, game);
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }
@@ -117,9 +116,8 @@ public class BotService {
         if(!GameLifecycle.RUNNING.equals(game.getGameLifecycle())){
             return false;
         }
-        Random random = new Random();
         if(player.getCards().size() == 1){
-            int sayUnoRandomNumber = random.nextInt(10);
+            int sayUnoRandomNumber = UnoRandom.getRandom().nextInt(10);
             lastSayUnoRandomNumber = sayUnoRandomNumber;
             if(sayUnoRandomNumber < 9){
                 doSleep(1000);

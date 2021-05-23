@@ -42,7 +42,7 @@ public class PutService {
             turnService.updateLastAction(game);
             turnService.pushAction(PushMessage.PUT_CARD, game);
             if(player.getCards().isEmpty()){
-                game.setLastWinner(game.getCurrentPlayerIndex());
+                GameService.finishGame(game, player);
                 turnService.pushAction(PushMessage.FINISHED_GAME, game);
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", gameUuid, game.getParty(), playerUuid);
             }

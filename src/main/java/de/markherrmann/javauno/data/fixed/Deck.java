@@ -1,5 +1,7 @@
 package de.markherrmann.javauno.data.fixed;
 
+import de.markherrmann.javauno.helper.UnoRandom;
+
 import java.util.Collections;
 import java.util.Stack;
 
@@ -17,7 +19,7 @@ public class Deck {
         do {
             shuffled = new Stack<>();
             shuffled.addAll(cards);
-            Collections.shuffle(shuffled);
+            Collections.shuffle(shuffled, UnoRandom.getRandom());
             numberCard = (shuffled.peek().isNumberCard());
         } while(!numberCard);
         return shuffled;

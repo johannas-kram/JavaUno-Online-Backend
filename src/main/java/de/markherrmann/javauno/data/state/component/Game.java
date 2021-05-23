@@ -7,12 +7,12 @@ import java.util.*;
 
 public class Game{
 	
-	private String uuid;
-	private Map<String, Player> humans = new HashMap<>();
-	private Map<String, Player> bots = new HashMap<>();
-	private List<Player> players = new ArrayList<>();
-	private Stack<Card> discardPile = new Stack<>();
-	private Stack<Card> drawPile = new Stack<>();
+	private final String uuid;
+	private final Map<String, Player> humans = new HashMap<>();
+	private final Map<String, Player> bots = new HashMap<>();
+	private final List<Player> players = new ArrayList<>();
+	private final Stack<Card> discardPile = new Stack<>();
+	private final Stack<Card> drawPile = new Stack<>();
 	private boolean reversed;
 	private String desiredColor;
 	private int currentPlayerIndex;
@@ -27,9 +27,10 @@ public class Game{
 	private int stopPartyRequested;
 	private int lastWinner = -1;
 	private Thread botifyPlayerByRequestThread;
-	private List<Message> messages = new ArrayList<>();
+	private final List<Message> messages = new ArrayList<>();
 	private int drawnCards = 0;
 	private String drawReason;
+	private List<String> previousFirstCardReceivers = new ArrayList<>();
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -185,12 +186,12 @@ public class Game{
 		return stopPartyRequested;
 	}
 
-	public int incrementAndGetStopPartyRequested(){
-		return ++stopPartyRequested;
+	public void incrementStopPartyRequested(){
+		stopPartyRequested++;
 	}
 
-	public int decrementAndGetStopPartyRequested(){
-		return --stopPartyRequested;
+	public void decrementStopPartyRequested(){
+		stopPartyRequested--;
 	}
 
 	public void resetStopPartyRequested() {
@@ -243,5 +244,20 @@ public class Game{
 
 	public void setDrawReason(String drawReason) {
 		this.drawReason = drawReason;
+	}
+
+	public void addPreviousFirstCardReceiver(String uuid){
+		previousFirstCardReceivers.add(uuid);
+	}
+
+	public void removePreviousFirstCardReceiver(String uuid){
+		previousFirstCardReceivers.remove(uuid);
+	}
+
+	public boolean wasAlreadyFirstCardReceiver(String uuid){
+		if(previousFirstCardReceivers.size() == this.players.size()){
+			previousFirstCardReceivers.clear();
+		}
+		return previousFirstCardReceivers.contains(uuid);
 	}
 }

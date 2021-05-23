@@ -4,7 +4,7 @@ The card game as online game - the backend
 This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, May, 16th)
+2.0 (2021, June, 1st)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
@@ -73,4 +73,5 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 * New feature: Chat
 * Improvement: Beginning Player is selected randomly (or the last winner)
 * Improvement: Old game deletion threshold increased to 8 hours.
+* Improved card dealing (improved first receiver)
 * Various modifications to help the vue.js frontend with transitions

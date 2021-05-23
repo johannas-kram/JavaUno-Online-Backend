@@ -184,6 +184,7 @@ public class PlayerService {
         } else {
             game.removeHuman(player);
         }
+        game.removePreviousFirstCardReceiver(playerUuid);
     }
 
     private boolean botify(Game game, String playerUuid){
@@ -228,7 +229,7 @@ public class PlayerService {
         }
         int index = game.getPlayers().indexOf(player);
         game.setPlayerIndexForPush(index);
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
         if(game.getHumans().size() == game.getStopPartyRequested()){
             stopParty(game);
@@ -244,7 +245,7 @@ public class PlayerService {
         }
         int index = game.getPlayers().indexOf(player);
         game.setPlayerIndexForPush(index);
-        game.decrementAndGetStopPartyRequested();
+        game.decrementStopPartyRequested();
         player.setStopPartyRequested(false);
     }
 
