@@ -130,7 +130,7 @@ public class GameService {
             return lastWinner;
         }
         int players = game.getPlayers().size();
-        return new Random().nextInt(players);
+        return UnoRandom.getRandom().nextInt(players);
     }
 
     private void resetPlayers(Game game){
