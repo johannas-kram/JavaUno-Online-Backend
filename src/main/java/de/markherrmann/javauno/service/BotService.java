@@ -44,7 +44,7 @@ public class BotService {
                 && GameLifecycle.RUNNING.equals(game.getGameLifecycle()) && game.getParty() == party){
             handleTurnState(game, player);
             if(player.getCards().isEmpty()){
-                game.setLastWinner(game.getCurrentPlayerIndex());
+                GameService.finishGame(game, player);
                 pushService.push(PushMessage.FINISHED_GAME, game);
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", game.getUuid(), game.getParty(), player.getUuid());
             }

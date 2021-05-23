@@ -9,6 +9,7 @@ import de.markherrmann.javauno.exceptions.ExceptionMessage;
 import de.markherrmann.javauno.exceptions.IllegalArgumentException;
 import de.markherrmann.javauno.exceptions.IllegalStateException;
 
+import de.markherrmann.javauno.helper.UnoRandom;
 import de.markherrmann.javauno.service.push.PushMessage;
 import de.markherrmann.javauno.service.push.PushService;
 import org.slf4j.Logger;
@@ -77,6 +78,10 @@ public class GameService {
         }
         Player currentPlayer = game.getPlayers().get(game.getCurrentPlayerIndex());
         finalizeTurnService.handleBotTurn(game, currentPlayer);
+    }
+
+    public static void finishGame(Game game, Player player){
+        game.setLastWinner(game.getPlayers().indexOf(player));
     }
 
     public void addMessage(String gameUuid, String playerUuid, String content){
