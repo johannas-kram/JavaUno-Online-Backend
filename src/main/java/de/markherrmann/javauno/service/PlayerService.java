@@ -228,7 +228,7 @@ public class PlayerService {
         }
         int index = game.getPlayers().indexOf(player);
         game.setPlayerIndexForPush(index);
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
         if(game.getHumans().size() == game.getStopPartyRequested()){
             stopParty(game);
@@ -244,7 +244,7 @@ public class PlayerService {
         }
         int index = game.getPlayers().indexOf(player);
         game.setPlayerIndexForPush(index);
-        game.decrementAndGetStopPartyRequested();
+        game.decrementStopPartyRequested();
         player.setStopPartyRequested(false);
     }
 

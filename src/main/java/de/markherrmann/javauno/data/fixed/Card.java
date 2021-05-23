@@ -10,28 +10,29 @@ public final class Card {
     private boolean numberCard;
     private boolean jokerCard;
     private boolean drawCard;
-    private boolean reverseCard;
     private int drawValue;
-    private String uuid;
+    private final String uuid;
 
-    private Card(){}
+    private Card(){
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     private Card(CardType cardType, Color color, int value){
-        this.uuid = UUID.randomUUID().toString();
+        this();
         this.cardType = cardType;
 	    this.color = color.name();
         this.value = value;
     }
 
     private Card(CardType cardType, Color color){
-        this.uuid = UUID.randomUUID().toString();
+        this();
         this.cardType = cardType;
         this.color = color.name();
         this.value = 20;
     }
 
     private Card(CardType cardType){
-        this.uuid = UUID.randomUUID().toString();
+        this();
         this.cardType = cardType;
         this.value = 50;
         this.color = "joker";
@@ -84,10 +85,6 @@ public final class Card {
 
     public boolean isDrawCard() {
         return CardType.DRAW_2.equals(cardType) || CardType.DRAW_4.equals(cardType);
-    }
-
-    public boolean isReverseCard(){
-        return CardType.REVERSE.equals(cardType);
     }
 
     public int getDrawValue() {

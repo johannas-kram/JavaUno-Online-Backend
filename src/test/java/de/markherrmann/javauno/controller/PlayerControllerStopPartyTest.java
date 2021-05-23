@@ -60,7 +60,7 @@ public class PlayerControllerStopPartyTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Player player = addPlayer();
         addPlayer();
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
 
         this.mockMvc.perform(post("/api/player/revoke-request-stop-party/{gameUuid}/{playerUuid}", game.getUuid(), player.getUuid()))
@@ -75,7 +75,7 @@ public class PlayerControllerStopPartyTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Player player1 = addPlayer();
         Player player2 = addPlayer();
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player1.setStopPartyRequested(true);
 
         this.mockMvc.perform(post("/api/player/request-stop-party/{gameUuid}/{playerUuid}", game.getUuid(), player2.getUuid()))
@@ -149,7 +149,7 @@ public class PlayerControllerStopPartyTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Player player = addPlayer();
         addPlayer();
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/revoke-request-stop-party/{gameUuid}/{playerUuid}", "invalid", player.getUuid()))
@@ -165,7 +165,7 @@ public class PlayerControllerStopPartyTest {
         game.setGameLifecycle(GameLifecycle.RUNNING);
         Player player = addPlayer();
         addPlayer();
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/revoke-request-stop-party/{gameUuid}/{playerUuid}", game.getUuid(), "invalid"))
@@ -181,7 +181,7 @@ public class PlayerControllerStopPartyTest {
         game.setGameLifecycle(GameLifecycle.SET_PLAYERS);
         Player player = addPlayer();
         addPlayer();
-        game.incrementAndGetStopPartyRequested();
+        game.incrementStopPartyRequested();
         player.setStopPartyRequested(true);
 
         MvcResult mvcResult = this.mockMvc.perform(post("/api/player/revoke-request-stop-party/{gameUuid}/{playerUuid}",
