@@ -4,7 +4,7 @@ The card game as online game - the backend
 This is the Backend for play.java-uno.de
 
 ## Version
-2.0 (2021, May, 16th)
+2.0 (2021, June, 1st)
 
 ## Description
 The backend offers the api endpoints for the frontend and controls all game instances.
