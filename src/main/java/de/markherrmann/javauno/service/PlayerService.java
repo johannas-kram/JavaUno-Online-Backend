@@ -184,7 +184,7 @@ public class PlayerService {
         } else {
             game.removeHuman(player);
         }
-        game.removePreviousFirstCardReceiver(playerUuid);
+        game.removePreviousFirstCardReceiver(player.getUuid());
     }
 
     private boolean botify(Game game, String playerUuid){
