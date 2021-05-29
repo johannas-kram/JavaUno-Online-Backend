@@ -53,6 +53,7 @@ public class PushService {
             case DRAWN_CARDS: return getEnhancedDrawnCardsMessage(pushMessage.getValue(), game);
             case NEXT_TURN: return getEnhancedNextTurnMessage(pushMessage.getValue(), game);
             case SELECTED_COLOR: return getEnhancedSelectColorMessage(pushMessage.getValue(), game);
+            case SAID_UNO: return getEnhancedSaidUnoMessage(pushMessage.getValue(), game);
             case FINISHED_GAME: return getEnhancedFinishedGameMessage(pushMessage.getValue(), game);
             case REQUEST_STOP_PARTY: return getEnhancedRequestStopPartyMessage(pushMessage.getValue(), game);
             case REVOKE_REQUEST_STOP_PARTY: return getEnhancedRevokeRequestStopPartyMessage(pushMessage.getValue(), game);
@@ -113,6 +114,12 @@ public class PushService {
     private String getEnhancedSelectColorMessage(String message, Game game){
         String color = game.getDesiredColor();
         return String.format("%s:%s", message, color);
+    }
+
+    private String getEnhancedSaidUnoMessage(String message, Game game){
+        int index = game.getPlayerIndexForPush();
+        int cardCount = game.getPlayers().get(index).getCardCount();
+        return String.format("%s:%d", message, cardCount);
     }
 
     private String getEnhancedNextTurnMessage(String message, Game game){
