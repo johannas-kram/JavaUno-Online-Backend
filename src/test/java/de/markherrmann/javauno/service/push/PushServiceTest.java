@@ -77,7 +77,7 @@ public class PushServiceTest {
 
         pushService.push(testMessage, game);
 
-        assertThat(resultKeeper.get(2, SECONDS)).isEqualTo(testMessage.getValue());
+        assertThat(resultKeeper.get(2, SECONDS)).isEqualTo(testMessage.getValue()+":7");
         assertThat(PushService.getLastMessage()).isEqualTo(testMessage);
     }
 
