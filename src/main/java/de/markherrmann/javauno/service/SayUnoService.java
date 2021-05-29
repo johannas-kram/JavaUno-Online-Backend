@@ -36,6 +36,7 @@ public class SayUnoService {
 
     static void sayUno(Game game, Player player){
         player.setUnoSaid(true);
+        game.setPlayerIndexForPush(game.getPlayers().indexOf(player));
         LOGGER.info("Successfully said uno. Game: {}; Player: {}", game.getUuid(), player.getUuid());
     }
 
