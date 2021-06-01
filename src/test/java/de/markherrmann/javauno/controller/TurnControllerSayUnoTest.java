@@ -39,7 +39,8 @@ public class TurnControllerSayUnoTest {
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
         addPlayers();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.FINAL_COUNTDOWN);

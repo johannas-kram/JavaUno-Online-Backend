@@ -24,7 +24,7 @@ public class Player {
 	private Player(){}
 
 	public Player(String name, boolean bot){
-	    this.uuid = UUID.randomUUID().toString();
+		this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.bot = bot;
 		publicUuid = UUID.randomUUID().toString();
@@ -35,7 +35,7 @@ public class Player {
 	public String getUuid(){
 		return uuid;
 	}
-	
+
 	public String getName(){
 		return name;
 	}
@@ -46,20 +46,20 @@ public class Player {
 	}
 
 	public void removeCard(Card card){
-	    cards.remove(card);
-    }
+		cards.remove(card);
+	}
 
 	public void removeCard(int index){
 		cards.remove(index);
 	}
 
-    public void addCard(Card card){
-        cards.add(card);
-    }
+	public void addCard(Card card){
+		cards.add(card);
+	}
 
-    public void clearCards(){
-	    cards.clear();
-    }
+	public void clearCards(){
+		cards.clear();
+	}
 
 	public boolean isBot() {
 		return bot;
@@ -69,13 +69,13 @@ public class Player {
 		this.bot = bot;
 	}
 
-    public boolean isUnoSaid() {
-        return unoSaid;
-    }
+	public boolean isUnoSaid() {
+		return unoSaid;
+	}
 
-    public void setUnoSaid(boolean unoSaid) {
-        this.unoSaid = unoSaid;
-    }
+	public void setUnoSaid(boolean unoSaid) {
+		this.unoSaid = unoSaid;
+	}
 
 	public int getCardCount(){
 		return cards.size();

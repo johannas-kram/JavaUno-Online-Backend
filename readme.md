@@ -15,9 +15,9 @@ If you use own frontend, it has to use the same endpoints, like my frontend
 
 ## API Documentation
 * Swagger
-    * API Doc: /v2/api-docs
-    * UI: /swagger-ui.html
-    
+  * API Doc: /v2/api-docs
+  * UI: /swagger-ui.html
+
 ## How to run the backend
 * Pre-requisite: Java (8+)
 * build it with 'mvn clean package' (you will get a javauno-xx.jar file)
@@ -47,11 +47,11 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 * Token validation:
   * First youtube-video-id-like string is used to search for a file named like that and load the hash from it.
   * Second youtube-video-id-like string is checked with loaded hash to validate token.
-  
+
 ## License
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
-   * License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-   * Creator: Mark Herrmann (Nickname: Tomatenmark)
+  * License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  * Creator: Mark Herrmann (Nickname: Tomatenmark)
 
 ## Compatibility
 * version 2.x frontend <-> version 1.x backend

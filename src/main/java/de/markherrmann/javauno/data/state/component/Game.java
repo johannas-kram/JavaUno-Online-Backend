@@ -6,7 +6,7 @@ import de.markherrmann.javauno.data.fixed.Card;
 import java.util.*;
 
 public class Game{
-	
+
 	private final String uuid;
 	private final Map<String, Player> humans = new HashMap<>();
 	private final Map<String, Player> bots = new HashMap<>();
@@ -19,9 +19,9 @@ public class Game{
 	private GameLifecycle gameLifecycle = GameLifecycle.SET_PLAYERS;
 	private Card topCard;
 	private long lastAction;
-    private TurnState turnState;
-    private int drawDuties;
-    private boolean skip;
+	private TurnState turnState;
+	private int drawDuties;
+	private boolean skip;
 	private int playerIndexForPush;
 	private int party;
 	private int stopPartyRequested;
@@ -33,10 +33,10 @@ public class Game{
 	private List<String> previousFirstCardReceivers = new ArrayList<>();
 
 	public Game(){
-	    this.uuid = UUID.randomUUID().toString();
-    }
+		this.uuid = UUID.randomUUID().toString();
+	}
 
-    @JsonIgnore
+	@JsonIgnore
 	public String getUuid(){
 		return uuid;
 	}
@@ -47,37 +47,37 @@ public class Game{
 	}
 
 	public void putHuman(Player player){
-	    humans.put(player.getUuid(), player);
-	    addPlayer(player);
-    }
+		humans.put(player.getUuid(), player);
+		addPlayer(player);
+	}
 
-    public void removeHuman(Player player){
-        humans.remove(player.getUuid());
-        removePlayer(player);
-    }
-
-    @JsonIgnore
-    public Map<String, Player> getBots(){
-        return bots;
-    }
-
-    public void putBot(Player player){
-        bots.put(player.getPublicUuid(), player);
-        addPlayer(player);
-    }
-
-    public void removeBot(Player player){
-        bots.remove(player.getPublicUuid());
-        removePlayer(player);
-    }
+	public void removeHuman(Player player){
+		humans.remove(player.getUuid());
+		removePlayer(player);
+	}
 
 	@JsonIgnore
-    public List<Player> getPlayers() {
-        return players;
-    }
+	public Map<String, Player> getBots(){
+		return bots;
+	}
+
+	public void putBot(Player player){
+		bots.put(player.getPublicUuid(), player);
+		addPlayer(player);
+	}
+
+	public void removeBot(Player player){
+		bots.remove(player.getPublicUuid());
+		removePlayer(player);
+	}
 
 	@JsonIgnore
-    public Stack<Card> getDiscardPile(){
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	@JsonIgnore
+	public Stack<Card> getDiscardPile(){
 		return discardPile;
 	}
 
@@ -86,25 +86,25 @@ public class Game{
 		return drawPile;
 	}
 
-    public boolean isReversed() {
-        return reversed;
-    }
+	public boolean isReversed() {
+		return reversed;
+	}
 
-    public String getDesiredColor(){
+	public String getDesiredColor(){
 		return desiredColor;
 	}
 
-    public void toggleReversed(){
-	    reversed = !reversed;
-    }
+	public void toggleReversed(){
+		reversed = !reversed;
+	}
 
-    public void setDesiredColor(String desiredColor) {
-        this.desiredColor = desiredColor;
-    }
+	public void setDesiredColor(String desiredColor) {
+		this.desiredColor = desiredColor;
+	}
 
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
+	public int getCurrentPlayerIndex() {
+		return currentPlayerIndex;
+	}
 
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
 		this.currentPlayerIndex = currentPlayerIndex;
@@ -118,13 +118,13 @@ public class Game{
 		this.gameLifecycle = gameLifecycle;
 	}
 
-    public void setLastAction(long lastAction) {
-        this.lastAction = lastAction;
-    }
+	public void setLastAction(long lastAction) {
+		this.lastAction = lastAction;
+	}
 
-    public long getLastAction(){
-	    return lastAction;
-    }
+	public long getLastAction(){
+		return lastAction;
+	}
 
 	public Card getTopCard(){
 		if(discardPile.isEmpty()){
@@ -134,20 +134,20 @@ public class Game{
 	}
 
 	private void addPlayer(Player player){
-	    players.add(player);
-    }
+		players.add(player);
+	}
 
-    private void removePlayer(Player player){
-        players.remove(player);
-    }
+	private void removePlayer(Player player){
+		players.remove(player);
+	}
 
-    public TurnState getTurnState() {
-        return turnState;
-    }
+	public TurnState getTurnState() {
+		return turnState;
+	}
 
-    public void setTurnState(TurnState turnState) {
-        this.turnState = turnState;
-    }
+	public void setTurnState(TurnState turnState) {
+		this.turnState = turnState;
+	}
 
 	public int getDrawDuties() {
 		return drawDuties;

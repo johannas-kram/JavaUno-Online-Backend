@@ -1,7 +1,6 @@
 package de.markherrmann.javauno.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.GameLifecycle;
@@ -43,7 +42,8 @@ public class GameStateControllerTest {
 
     @Before
     public void setup(){
-        game = TestHelper.createGame(gameService);
+        String uuid = gameService.createGame();
+        game = UnoState.getGame(uuid);
         addPlayer();
     }
 
