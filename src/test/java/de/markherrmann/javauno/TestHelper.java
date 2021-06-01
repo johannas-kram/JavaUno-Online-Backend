@@ -19,13 +19,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestHelper {
 
     public static Game prepareAndStartGame(GameService gameService, PlayerService playerService){
-        String uuid = gameService.createGame();
-        Game game = UnoState.getGame(uuid);
+        Game game = createGame(gameService);
         playerService.addPlayer(game.getUuid(), "Max", false);
         playerService.addPlayer(game.getUuid(), "Maria", false);
         playerService.addPlayer(game.getUuid(), "Jana", false);
         playerService.addPlayer(game.getUuid(), "A Name", false);
         gameService.startGame(game.getUuid());
+        return game;
+    }
+
+    public static Game createGame(GameService gameService){
+        String uuid = gameService.createGame("empty");
+        Game game = UnoState.getGame(uuid);;
+        game.setLastWinner(0);
         return game;
     }
 
