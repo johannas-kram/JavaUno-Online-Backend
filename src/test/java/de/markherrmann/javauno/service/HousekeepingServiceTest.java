@@ -1,5 +1,6 @@
 package de.markherrmann.javauno.service;
 
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
 import org.junit.Before;
@@ -28,8 +29,7 @@ public class HousekeepingServiceTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class HousekeepingServiceTest {
 
     @Test
     public void shouldRemoveOldGame(){
-        game.setLastAction(System.currentTimeMillis()-(HousekeepingService.MAX_DURATION_WITHOUT_ACTION+1));
+        game.setLastAction(System.currentTimeMillis()-(HousekeepingService.MAX_DURATION_WITHOUT_ACTION +100));
 
         housekeepingService.removeOldGames();
 

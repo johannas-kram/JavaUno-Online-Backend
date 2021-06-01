@@ -10,7 +10,7 @@
     </parent>
     <groupId>de.tomatenmarkwebapps</groupId>
     <artifactId>javauno</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <name>JavaUno</name>
     <description>The Card Game Uno as an online game written in Java with SpringBoot (Backend)</description>
 
@@ -28,14 +28,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.2.1.RELEASE</version>
+            <version>2.3.2.RELEASE</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>RELEASE</version>
+            <version>2.3.2.RELEASE</version>
             <scope>compile</scope>
         </dependency>
 
@@ -54,6 +54,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>5.3.3.RELEASE</version>
         </dependency>
         
     </dependencies>

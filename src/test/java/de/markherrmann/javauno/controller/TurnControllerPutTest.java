@@ -45,8 +45,7 @@ public class TurnControllerPutTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
     }
