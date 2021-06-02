@@ -10,13 +10,16 @@ import java.util.UUID;
 public class Player {
 
 	private String uuid;
-	private String botUuid;
+	private String publicUuid;
 	private String name;
 	private List<Card> cards = new ArrayList<>();
 	private int cardCount;
 	private boolean bot;
 	private boolean unoSaid;
 	private int drawPenalties;
+	private boolean stopPartyRequested;
+	private boolean botifyPending;
+	private int drawn = 0;
 
 	private Player(){}
 
@@ -24,9 +27,7 @@ public class Player {
 	    this.uuid = UUID.randomUUID().toString();
 		this.name = name;
 		this.bot = bot;
-		if(bot){
-		    botUuid = UUID.randomUUID().toString();
-        }
+		publicUuid = UUID.randomUUID().toString();
 	}
 
 
@@ -80,8 +81,12 @@ public class Player {
 		return cards.size();
 	}
 
-	public String getBotUuid(){
-		return botUuid;
+	public String getPublicUuid(){
+		return publicUuid;
+	}
+
+	public void setBotUuid(){
+		this.publicUuid = UUID.randomUUID().toString();
 	}
 
 	public int getDrawPenalties() {
@@ -90,5 +95,29 @@ public class Player {
 
 	public void setDrawPenalties(int drawPenalties) {
 		this.drawPenalties = drawPenalties;
+	}
+
+	public boolean isStopPartyRequested() {
+		return stopPartyRequested;
+	}
+
+	public void setStopPartyRequested(boolean stopPartyRequested) {
+		this.stopPartyRequested = stopPartyRequested;
+	}
+
+	public boolean isBotifyPending() {
+		return botifyPending;
+	}
+
+	public void setBotifyPending(boolean botifyPending) {
+		this.botifyPending = botifyPending;
+	}
+
+	public int getDrawn() {
+		return drawn;
+	}
+
+	public void incrementDrawn() {
+		this.drawn++;
 	}
 }

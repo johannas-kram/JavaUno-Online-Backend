@@ -7,12 +7,12 @@ import java.util.*;
 
 public class Game{
 	
-	private String uuid;
-	private Map<String, Player> humans = new HashMap<>();
-	private Map<String, Player> bots = new HashMap<>();
-	private List<Player> players = new ArrayList<>();
-	private Stack<Card> discardPile = new Stack<>();
-	private Stack<Card> drawPile = new Stack<>();
+	private final String uuid;
+	private final Map<String, Player> humans = new HashMap<>();
+	private final Map<String, Player> bots = new HashMap<>();
+	private final List<Player> players = new ArrayList<>();
+	private final Stack<Card> discardPile = new Stack<>();
+	private final Stack<Card> drawPile = new Stack<>();
 	private boolean reversed;
 	private String desiredColor;
 	private int currentPlayerIndex;
@@ -22,8 +22,15 @@ public class Game{
     private TurnState turnState;
     private int drawDuties;
     private boolean skip;
-	private int toDeleteIndex;
+	private int playerIndexForPush;
 	private int party;
+	private int stopPartyRequested;
+	private int lastWinner = -1;
+	private Thread botifyPlayerByRequestThread;
+	private final List<Message> messages = new ArrayList<>();
+	private int drawnCards = 0;
+	private String drawReason;
+	private List<String> previousFirstCardReceivers = new ArrayList<>();
 
 	public Game(){
 	    this.uuid = UUID.randomUUID().toString();
@@ -55,12 +62,12 @@ public class Game{
     }
 
     public void putBot(Player player){
-        bots.put(player.getBotUuid(), player);
+        bots.put(player.getPublicUuid(), player);
         addPlayer(player);
     }
 
     public void removeBot(Player player){
-        bots.remove(player.getBotUuid());
+        bots.remove(player.getPublicUuid());
         removePlayer(player);
     }
 
@@ -158,13 +165,13 @@ public class Game{
 		this.skip = skip;
 	}
 
-	public void setToDeleteIndex(int toDeleteIndex) {
-		this.toDeleteIndex = toDeleteIndex;
+	public void setPlayerIndexForPush(int playerIndexForPush) {
+		this.playerIndexForPush = playerIndexForPush;
 	}
 
 	@JsonIgnore
-	public int getToDeleteIndex(){
-		return toDeleteIndex;
+	public int getPlayerIndexForPush(){
+		return playerIndexForPush;
 	}
 
 	public void nextParty() {
@@ -173,5 +180,84 @@ public class Game{
 
 	public int getParty() {
 		return party;
+	}
+
+	public int getStopPartyRequested() {
+		return stopPartyRequested;
+	}
+
+	public void incrementStopPartyRequested(){
+		stopPartyRequested++;
+	}
+
+	public void decrementStopPartyRequested(){
+		stopPartyRequested--;
+	}
+
+	public void resetStopPartyRequested() {
+		this.stopPartyRequested = 0;
+	}
+
+	@JsonIgnore
+	public int getLastWinner() {
+		return lastWinner;
+	}
+
+	public void setLastWinner(int lastWinner) {
+		this.lastWinner = lastWinner;
+	}
+
+	@JsonIgnore
+	public Thread getBotifyPlayerByRequestThread() {
+		return botifyPlayerByRequestThread;
+	}
+
+	public void setBotifyPlayerByRequestThread(Thread botifyPlayerByRequestThread) {
+		this.botifyPlayerByRequestThread = botifyPlayerByRequestThread;
+	}
+
+	public void removeBotifyPlayerByRequestThread() {
+		this.botifyPlayerByRequestThread = null;
+	}
+
+	public void addMessage(Message message){
+		messages.add(message);
+	}
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	@JsonIgnore
+	public int getDrawnCards() {
+		return drawnCards;
+	}
+
+	public void setDrawnCards(int drawnCards) {
+		this.drawnCards = drawnCards;
+	}
+
+	@JsonIgnore
+	public String getDrawReason() {
+		return drawReason;
+	}
+
+	public void setDrawReason(String drawReason) {
+		this.drawReason = drawReason;
+	}
+
+	public void addPreviousFirstCardReceiver(String uuid){
+		previousFirstCardReceivers.add(uuid);
+	}
+
+	public void removePreviousFirstCardReceiver(String uuid){
+		previousFirstCardReceivers.remove(uuid);
+	}
+
+	public boolean wasAlreadyFirstCardReceiver(String uuid){
+		if(previousFirstCardReceivers.size() == this.players.size()){
+			previousFirstCardReceivers.clear();
+		}
+		return previousFirstCardReceivers.contains(uuid);
 	}
 }

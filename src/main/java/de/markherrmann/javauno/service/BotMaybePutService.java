@@ -3,11 +3,11 @@ package de.markherrmann.javauno.service;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.Player;
+import de.markherrmann.javauno.helper.UnoRandom;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class BotMaybePutService {
@@ -46,8 +46,7 @@ public class BotMaybePutService {
     }
 
     private Card chooseRandomly(List<Card> matches){
-        Random random = new Random();
-        int randomIndex = random.nextInt(matches.size());
+        int randomIndex = UnoRandom.getRandom().nextInt(matches.size());
         return matches.get(randomIndex);
     }
 

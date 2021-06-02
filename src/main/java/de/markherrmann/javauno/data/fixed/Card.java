@@ -1,5 +1,7 @@
 package de.markherrmann.javauno.data.fixed;
 
+import java.util.UUID;
+
 public final class Card {
 
     private CardType cardType;
@@ -9,22 +11,28 @@ public final class Card {
     private boolean jokerCard;
     private boolean drawCard;
     private int drawValue;
+    private final String uuid;
 
-    private Card(){}
+    private Card(){
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     private Card(CardType cardType, Color color, int value){
+        this();
         this.cardType = cardType;
 	    this.color = color.name();
         this.value = value;
     }
 
     private Card(CardType cardType, Color color){
+        this();
         this.cardType = cardType;
         this.color = color.name();
         this.value = 20;
     }
 
     private Card(CardType cardType){
+        this();
         this.cardType = cardType;
         this.value = 50;
         this.color = "joker";
@@ -87,6 +95,10 @@ public final class Card {
             return 4;
         }
         return 0;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     @Override

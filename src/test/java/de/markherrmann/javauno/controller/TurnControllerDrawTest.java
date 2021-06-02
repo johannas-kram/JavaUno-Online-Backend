@@ -1,6 +1,6 @@
 package de.markherrmann.javauno.controller;
 
-import de.markherrmann.javauno.controller.response.DrawnCardResponse;
+import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
 import de.markherrmann.javauno.data.state.UnoState;
 import de.markherrmann.javauno.data.state.component.Game;
@@ -43,8 +43,7 @@ public class TurnControllerDrawTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
     }
@@ -54,11 +53,23 @@ public class TurnControllerDrawTest {
         String gameUuid = game.getUuid();
         String playerUuid = game.getPlayers().get(0).getUuid();
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/turn/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
-                .andExpect(status().isOk())
-                .andReturn();
+        this.mockMvc.perform(post("/api/turn/draw/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+                .andExpect(status().isOk());
 
-        assertDrawn(mvcResult);
+        assertThat(game.getDrawPile().size()).isEqualTo(92);
+    }
+
+    @Test
+    public void shouldDrawCards() throws Exception {
+        String gameUuid = game.getUuid();
+        String playerUuid = game.getPlayers().get(0).getUuid();
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
+        game.setDrawDuties(4);
+
+        this.mockMvc.perform(post("/api/turn/draw-multiple/{gameUuid}/{playerUuid}", gameUuid, playerUuid))
+                .andExpect(status().isOk());
+
+        assertThat(game.getDrawPile().size()).isEqualTo(89);
     }
 
     @Test
@@ -104,15 +115,6 @@ public class TurnControllerDrawTest {
         assertNotDrawn(mvcResult, expectedException);
     }
 
-    private void assertDrawn(MvcResult mvcResult) throws Exception {
-        DrawnCardResponse drawnCardResponse = jsonToDrawnCardResponse(mvcResult.getResponse().getContentAsString());
-        assertThat(drawnCardResponse.isSuccess()).isTrue();
-        assertThat(drawnCardResponse.getMessage()).isEqualTo("success");
-        assertThat(drawnCardResponse.getCard()).isNotNull();
-        assertThat(game.getDrawPile().size()).isEqualTo(92);
-        assertThat(drawnCardResponse.getCard()).isEqualTo(game.getPlayers().get(0).getCards().get(7));
-    }
-
     private void assertNotDrawn(MvcResult mvcResult, Exception expectedException) throws Exception {
         GeneralResponse generalResponse = jsonToGeneralResponse(mvcResult.getResponse().getContentAsString());
         assertThat(generalResponse.isSuccess()).isFalse();
@@ -124,14 +126,6 @@ public class TurnControllerDrawTest {
     private GeneralResponse jsonToGeneralResponse(final String json){
         try {
             return new ObjectMapper().readValue(json, GeneralResponse.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private DrawnCardResponse jsonToDrawnCardResponse(final String json){
-        try {
-            return new ObjectMapper().readValue(json, DrawnCardResponse.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

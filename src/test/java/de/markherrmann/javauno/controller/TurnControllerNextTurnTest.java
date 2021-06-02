@@ -40,8 +40,7 @@ public class TurnControllerNextTurnTest {
 
     @Before
     public void setup(){
-        String uuid = gameService.createGame();
-        game = UnoState.getGame(uuid);
+        game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
@@ -85,7 +84,7 @@ public class TurnControllerNextTurnTest {
 
     @Test
     public void shouldFailCausedByInvalidTurnState() throws Exception {
-        game.setTurnState(TurnState.DRAW_DUTIES);
+        game.setTurnState(TurnState.DRAW_DUTIES_OR_CUMULATIVE);
         Exception expectedException = new IllegalStateException(ExceptionMessage.INVALID_STATE_TURN.getValue());
         shouldFail(expectedException, HttpStatus.BAD_REQUEST);
     }

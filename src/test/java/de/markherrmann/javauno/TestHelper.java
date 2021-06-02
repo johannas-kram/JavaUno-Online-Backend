@@ -2,6 +2,7 @@ package de.markherrmann.javauno;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.markherrmann.javauno.controller.response.GeneralResponse;
+import de.markherrmann.javauno.controller.response.PutCardResponse;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.fixed.Deck;
 import de.markherrmann.javauno.data.state.UnoState;
@@ -18,13 +19,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestHelper {
 
     public static Game prepareAndStartGame(GameService gameService, PlayerService playerService){
-        String uuid = gameService.createGame();
-        Game game = UnoState.getGame(uuid);
+        Game game = createGame(gameService);
         playerService.addPlayer(game.getUuid(), "Max", false);
         playerService.addPlayer(game.getUuid(), "Maria", false);
         playerService.addPlayer(game.getUuid(), "Jana", false);
         playerService.addPlayer(game.getUuid(), "A Name", false);
         gameService.startGame(game.getUuid());
+        return game;
+    }
+
+    public static Game createGame(GameService gameService){
+        String uuid = gameService.createGame("empty");
+        Game game = UnoState.getGame(uuid);;
+        game.setLastWinner(0);
         return game;
     }
 
@@ -57,6 +64,14 @@ public class TestHelper {
     public static GeneralResponse jsonToObject(final String json) {
         try {
             return new ObjectMapper().readValue(json, GeneralResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static PutCardResponse jsonToPutCardResponseObject(final String json) {
+        try {
+            return new ObjectMapper().readValue(json, PutCardResponse.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

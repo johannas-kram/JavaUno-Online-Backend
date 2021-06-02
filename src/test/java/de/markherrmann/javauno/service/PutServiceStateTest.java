@@ -57,12 +57,6 @@ public class PutServiceStateTest {
     }
 
     @Test
-    public void shouldFailCausedByInvalidStateDrawDuties(){
-        game.setTurnState(TurnState.DRAW_DUTIES);
-        shouldFailCausedByInvalidState();
-    }
-
-    @Test
     public void shouldFailCausedByInvalidStateSelectColor(){
         game.setTurnState(TurnState.SELECT_COLOR);
         shouldFailCausedByInvalidState();

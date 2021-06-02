@@ -4,6 +4,8 @@ import de.markherrmann.javauno.TestHelper;
 import de.markherrmann.javauno.data.fixed.Card;
 import de.markherrmann.javauno.data.state.component.Game;
 import de.markherrmann.javauno.data.state.component.TurnState;
+import de.markherrmann.javauno.service.push.PushMessage;
+import de.markherrmann.javauno.service.push.PushService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -184,6 +186,7 @@ public class PutServicePlayableTest {
         }
 
         TestHelper.assertPutCard(game, playersCard, discardPileSize, exception);
+        assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){
