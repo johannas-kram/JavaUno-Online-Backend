@@ -10,7 +10,7 @@ This is the Backend for play.java-uno.de
 The backend offers the api endpoints for the frontend and controls all game instances.
 
 ## Frontend
-You can use your own frontend or use my frontend under https://github.com/tomatenmark/JavaUno-Online-Frontend\
+You can use your own frontend or use my frontend under https://github.com/marks-kram/JavaUno-Online-Frontend\
 If you use own frontend, it has to use the same endpoints, like my frontend
 
 ## API Documentation
