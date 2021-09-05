@@ -21,4 +21,4 @@ jobs:
           cp ./target/$fileName /opt/webapps/JavaUno/live/$fileName
           ln -sf /opt/webapps/JavaUno/live/$fileName /opt/webapps/JavaUno/live/JavaUno.jar
           cp /opt/webapps/JavaUno/live/next-config.sh /opt/webapps/JavaUno/live/config.sh
-          touch /opt/webapps/JavaUno/live/restart
+          echo "$(date)" > /opt/webapps/JavaUno/live/restarted
