@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155 26">
+  <symbol id="picture" viewBox="0 0 155 26">
+    <style>@font-face{font-family:"Arial";src:url("/test/webfonts/arial.ttf");}</style>
+    <path d="M 13 13 L 13 1 A 12 12 0 0 1 25 13 Z"  fill="#e3e101"/>
+    <path d="M 13 13 L 25 13 A 12 12 0 0 1 13 25 Z" fill="#ca0000"/>
+    <path d="M 13 13 L 13 25 A 12 12 0 0 1 1 13 Z"  fill="#14ca00"/>
+    <path d="M 13 13 L 1 13 A 12 12 0 0 1 13 1 Z"   fill="#0092eb"/>
+    <text x="29" y="24" style="font-size: 30px; font-family: Arial; font-weight: bold; fill:white">JavaUno</text>
+  </symbol>
+</svg>

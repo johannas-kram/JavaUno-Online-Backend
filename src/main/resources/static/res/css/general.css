@@ -1,0 +1,593 @@
+:root {
+    --error-color: #880000;
+    --text-color: black;
+    --greyed-text-color: #7b7b7b;
+    --card-count-color: white;
+    --card-count-red-color: #ff6969;
+    --card-count-blue-color: #99ecff;
+    --botify-pending-text-color: #dcdcdc;
+    --player-text-color: #006;
+    --button-small-color: black;
+    --button-main-color: white;
+    --light-box-text-color: white;
+    --dialog-text-color: black;
+    --toaster-text-color: rgba(255, 255, 255, .9);
+    --chat-text-color: black;
+    --link-color: #0000ea;
+    --link-hover-color: #720000;
+    --link-active-color: black;
+    --input-text-color: black;
+
+    --theme-primary-bgcolor: #bebebe;
+    --theme-secondary-bgcolor: #6a6264;
+    --theme-ternary-bgcolor: #e0e0e0;
+    --button-bgcolor: #137206;
+    --button-hover-bgcolor: #148d06;
+    --button-active-bgcolor: #125306;
+    --button-disabled-bgcolor: #777777;
+    --button-small-bgcolor: #add9ff;
+    --button-small-hover-bgcolor: #d0e9ff;
+    --button-small-active-bgcolor: #6cbaff;
+    --button-small-disabled-bgcolor: #5a5a5a;
+    --button-stop-party-abort-bgcolor: #a92424;
+    --button-stop-party-abort-hover-bgcolor: #682222;
+    --button-stop-party-abort-active-bgcolor: #421616;
+    --processing-animation-bgcolor: #016b70;
+    --processing-end-animation-bgcolor: green;
+    --link-button-bgcolor: #6cbaff;
+    --link-button-hover-bgcolor: #d0e9ff;
+    --link-button-active-bgcolor: #6cbaff;
+    --overlay-bg-color: black;
+    --dialog-bgcolor: #a2a2a2;
+    --light-box-bgcolor: #000000dd;
+    --stop-party-requested-bg-color: #900000;
+    --botify-pending-bgcolor: #a1a1bf;
+    --messages-in-bgcolor: white;
+    --messages-out-bgcolor: #d5ecff;
+    --bottom-bgcolor: #d7d7d7;
+    --toaster-bgcolor: rgba(0, 0, 0, .85);
+    --input-bgcolor: white;
+    --no-cards-bgcolor: #293133;
+
+    --processing-animation-bordercolor: #00989f;
+    --processing-end-animation-bordercolor: #00b100;
+    --dialog-bordercolor: silver;
+    --new-messages-mark-color: #006150;
+    --ruler-color: #a0a0a0;
+    --wish-red-color: #b30303;
+    --wish-green-color: #1ba204;
+    --wish-blue-color: #025db5;
+    --wish-yellow-color: #d4d33c;
+    --turn-bar-color: #24bb07;
+    --turn-bar-stop-party-requested-color: #86ab7f;
+    --toaster-shadow-color: rgba(0, 0, 0, .8);
+    --input-bordercolor: silver;
+    --input-hover-bordercolor: black;
+    --card-shadow-color: black;
+
+    --scrollbar-track-color: white;
+    --scrollbar-handle-color: #454545;
+    --scrollbar-handle-hover-color: black;
+
+    --brightness-filter: 1.0;
+    --disabled-brightness-filter: 0.8;
+    --hover-brightness-filter: 1.15;
+    --brightness-revert-filter: 1.0;
+}
+
+[data-theme="dark"] {
+    --error-color: #ff6262;
+    --text-color: #b9b9b9;
+    --player-text-color: #b7b7ff;
+    --button-small-color: #d1d1d1;
+    --button-main-color: #e3e3e3;
+    --light-box-text-color: #bbbbbb;
+    --dialog-text-color: #d6d6d6;
+    --toaster-text-color: rgba(0, 0, 0, .8);
+    --chat-text-color: white;
+    --link-color: #c4c4f1;
+    --link-hover-color: #ff9292;
+    --link-active-color: white;
+    --input-text-color: #d6d6d6;
+
+    --theme-primary-bgcolor: #1f1f1f;
+    --theme-secondary-bgcolor: #2f2d2d;
+    --theme-ternary-bgcolor: black;
+    --button-bgcolor: #0c5700;
+    --button-hover-bgcolor: #0e7900;
+    --button-active-bgcolor: #12a000;
+    --button-disabled-bgcolor: #3e3e3e;
+    --button-small-bgcolor: #325371;
+    --button-small-hover-bgcolor: #3c6182;
+    --button-small-active-bgcolor: #476d92;
+    --button-small-disabled-bgcolor: #3e3e3e;
+    --button-stop-party-abort-bgcolor: #980000;
+    --button-stop-party-abort-hover-bgcolor: #bd0000;
+    --button-stop-party-abort-active-bgcolor: #e20000;
+    --processing-animation-bgcolor: #004346;
+    --processing-end-animation-bgcolor: #025202;
+    --link-button-bgcolor: #3a6184;
+    --link-button-hover-bgcolor: #4f75a0;
+    --link-button-active-bgcolor: #5781a7;
+    --dialog-bgcolor: #252424;
+    --stop-party-requested-bg-color: #750505;
+    --botify-pending-bgcolor: #000069;
+    --messages-in-bgcolor: #3e3e3e;
+    --messages-out-bgcolor: #243848;
+    --bottom-bgcolor: black;
+    --toaster-bgcolor: rgba(255, 255, 255, .65);
+    --input-bgcolor: #1b1b1b;
+    --no-cards-bgcolor: #626769;
+
+    --processing-animation-bordercolor: #014f52;
+    --processing-end-animation-bordercolor: #007300;
+    --dialog-bordercolor: #353333;
+    --new-messages-mark-color: #00cca8;
+    --ruler-color: #313131;
+    --turn-bar-color: #127100;
+    --turn-bar-stop-party-requested-color: #597753;
+    --toaster-shadow-color: black;
+    --input-bordercolor: #3e3e3e;
+    --input-hover-bordercolor: #545454;
+    --card-shadow-color: #dedede;
+
+    --scrollbar-track-color: black;
+    --scrollbar-handle-color: #6c6c6c;
+    --scrollbar-handle-hover-color: #a1a1a1;
+
+    --brightness-filter: 0.8;
+    --disabled-brightness-filter: 0.5;
+    --hover-brightness-filter: 1;
+    --brightness-revert-filter: 1.7;
+    --saturate-filter: 0.5;
+}
+
+@font-face {
+    font-family: "Arial";
+    src: url("/res/css/webfonts/arial.ttf");
+}
+
+svg {
+    user-select: none;
+}
+
+img.preload {
+    width: 1px;
+    visibility: hidden;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    background: var(--theme-primary-bgcolor);
+    color: var(--text-color);
+    scroll-behavior: smooth;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+p {
+    margin: 16px 0;
+}
+
+header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 30px;
+    background: var(--theme-secondary-bgcolor);
+}
+
+header svg.logo {
+    display: inline-block;
+    width: 155px;
+    height: 26px;
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+header .toggle {
+    opacity: 0;
+    pointer-events: none;
+}
+
+header .toggle.on {
+    opacity: 1;
+    pointer-events: all;
+}
+
+img {
+    filter: brightness(var(--brightness-filter));
+}
+
+#javaUno {
+    display: none;
+    padding: 30px 10px 20px 10px;
+}
+
+.view > p:first-child, .view > h3:first-child {
+    margin-top: 0;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+.view > p:first-child:before,
+.view > h3:first-child:before,
+#view-switch-device:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 10px;
+}
+
+.errMsg {
+    color: var(--error-color);
+}
+
+#processingAnimation, #processingEndAnimation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 3px;
+}
+
+#processingAnimation {
+    background: var(--processing-animation-bgcolor);
+    border-left: 0 var(--processing-animation-bordercolor) solid;
+    border-right: 0 var(--processing-animation-bordercolor) solid;
+    animation: animateProcessing 2s linear infinite alternate;
+}
+
+#processingEndAnimation {
+    background: var(--processing-end-animation-bgcolor);
+    border-left: 0 var(--processing-end-animation-bordercolor) solid;
+    opacity: 0;
+    animation: animateProcessingEnd 0.5s linear 1;
+}
+
+@keyframes animateProcessing {
+    0%   {
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+    50%  {
+        border-left-width: 100vw;
+        border-right-width: 0;
+    }
+    51%  {
+        border-left-width: 100vw;
+        border-right-width: 100vw;
+    }
+    52%  {
+        border-left-width: 0;
+        border-right-width: 100vw;
+    }
+    100% {
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+}
+
+@keyframes animateProcessingEnd {
+    0%   {
+        border-left-width: 0;
+        opacity: 0;
+    }
+    1%   {
+        border-left-width: 0;
+        opacity: 1;
+    }
+    100% {
+        border-left-width: 100vh;
+        opacity: 1;
+    }
+}
+
+#view-backend-down div {
+    margin: 5px 0;
+    font-size: 2rem;
+}
+
+input, textarea {
+    font-size: 1.5rem;
+    padding: 7px;
+    border: 1px var(--input-bordercolor) solid;
+    border-radius: 11px;
+    background: var(--input-bgcolor);
+    color: var(--input-text-color);
+}
+body.hover input:hover, input:focus, body.hover textarea:hover, textarea:focus {
+    border: 1px var(--input-hover-bordercolor) solid;
+    outline: none;
+    box-shadow: none;
+}
+
+button {
+    font-size: 1.5rem;
+    margin-top: 10px;
+    padding: 7px;
+    background: var(--button-bgcolor);
+    border: 1px var(--button-bgcolor) solid;
+    color: var(--button-main-color);
+    border-radius: 11px;
+    cursor: pointer;
+    outline: none;
+}
+body.hover button:hover, button:focus {
+    background: var(--button-hover-bgcolor);
+    border: 1px var(--button-hover-bgcolor) solid;
+}
+button:active {
+    background: var(--button-active-bgcolor);
+    border: 1px var(--button-active-bgcolor) solid;
+}
+button:disabled, body.hover button:disabled {
+    background: var(--button-disabled-bgcolor);
+    border: 1px var(--button-disabled-bgcolor) solid;
+    cursor: not-allowed;
+}
+
+input.small, button.small, #current-players .player.players-enter-to, #current-players .player.players-enter-to button {
+    margin-top: 0;
+    font-size: 1rem;
+    padding: 3px;
+}
+
+button.small {
+    background: var(--button-small-bgcolor);
+    border: 1px var(--button-small-bgcolor) solid;
+    color: var(--button-small-color);
+}
+body.hover button.small:hover, button.small:focus {
+    background: var(--button-small-hover-bgcolor);
+    border: 1px var(--button-small-hover-bgcolor) solid;
+    color: var(--button-small-color);
+}
+button.small:active {
+    background: var(--button-small-active-bgcolor);
+    border: 1px var(--button-small-active-bgcolor) solid;
+    color: var(--button-small-color);
+}
+
+button.small:disabled, body.hover button.small:disabled {
+    background: var(--button-small-disabled-bgcolor);
+    border: 1px var(--button-small-disabled-bgcolor) solid;
+    cursor: not-allowed;
+}
+
+header a:link, header a:visited {
+    position: absolute;
+    top: 50%;
+    left: 175px;
+    transform: translateY(-50%);
+    border-radius: 5px;
+    padding: 4px 4px;
+    background: var(--link-button-bgcolor);
+    color: var(--button-small-color);
+    text-decoration: none;
+    line-height: 0;
+    font-size: 1.2rem;
+}
+header a:focus, body.hover header a:hover {
+    color: var(--button-small-color);
+    background: var(--link-button-hover-bgcolor);
+}
+header a:active {
+    color: var(--button-small-color);
+    background: var(--link-button-active-bgcolor);
+}
+
+#javaUno a:link, #javaUno a:visited {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+#javaUno a:focus, #javaUno a:hover {
+    color: var(--link-hover-color);
+    text-decoration: none;
+}
+
+#javaUno a:active {
+    color: var(--link-active-color);
+    text-decoration: none;
+}
+
+
+header a.chatToggle {
+    left: auto;
+    right: 5px;
+}
+
+header div#newMessages {
+    position: absolute;
+    top: 18px;
+    right: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--new-messages-mark-color);
+}
+
+#legalHint {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--theme-ternary-bgcolor);
+    color: var(--greyed-text-color);
+    padding: 1px 0 1px 3px;
+    font-size: 0.8rem;
+}
+
+#qrScanBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-bg-color);
+    opacity: 0.8;
+    display:none;
+}
+
+#qrScanVideo {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    width: calc(100% - 20px);
+    max-width: 400px;
+    height: calc(100% - 75px);
+    max-height: 800px;
+    display: none;
+}
+
+#qrScanBtn {
+    display: none;
+}
+
+#qrScanStopBtn {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    z-index: 1;
+    transform: translateX(-50%);
+    display: none;
+}
+
+.smallButtonDescription {
+    font-size: 0.9rem;
+}
+
+#dialogBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-bg-color);
+    opacity: 0.9;
+}
+
+#dialogElement {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: 80%;
+    max-width: 600px;
+    background: var(--dialog-bgcolor);
+    border: 2px var(--dialog-bordercolor) solid;
+    border-radius: 5px;
+    transform: translate(-50%,-50%);
+    color: var(--dialog-text-color);
+}
+
+#dialogElement > div {
+    padding: 10px;
+    font-size: 1.3rem;
+}
+
+#dialogElement > div.error {
+    color: var(--error-color);
+}
+
+#dialogElement > button {
+    margin: 10px;
+}
+
+.qr-image {
+    width: 360px;
+}
+
+.ruler {
+    max-width: 840px;
+    height: 3px;
+    background: var(--ruler-color);
+    margin-bottom: 10px;
+}
+
+html.custom-scrollbars::-webkit-scrollbar, html.custom-scrollbars .chatContent::-webkit-scrollbar {
+    width: 8px;
+}
+
+html.custom-scrollbars::-webkit-scrollbar-track, html.custom-scrollbars .chatContent::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color);
+}
+
+html.custom-scrollbars::-webkit-scrollbar-thumb, html.custom-scrollbars .chatContent::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-handle-color);
+}
+
+html.custom-scrollbars::-webkit-scrollbar-thumb:hover, html.custom-scrollbars .chatContent::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-handle-hover-color);
+}
+
+/* firefox */
+html.custom-scrollbars, html.custom-scrollbars .chatContent {
+    scrollbar-color: var(--scrollbar-handle-color) var(--scrollbar-track-color);
+}
+
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media (max-width: 875px) {
+    header svg.logo {
+        width: 119px;
+        height: 20px;
+        margin-top: 5px;
+    }
+
+    header a.toggleTheme:link,
+    header a.toggleTheme:visited,
+    header a.toggleTheme:focus,
+    body.hover header a.toggleTheme:hover,
+    header a.toggleTheme:hover {
+        left: 135px;
+    }
+
+    .qr-image {
+        width: 300px;
+    }
+
+    p.largeMarginBottom {
+        margin-bottom: 32px;
+    }
+
+    .ruler {
+        width: 100%;
+    }
+
+    html.custom-scrollbars::-webkit-scrollbar, html.custom-scrollbars .chatContent::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    html.custom-scrollbars, html.custom-scrollbars .chatContent {
+        scrollbar-width: thin;
+    }
+}
+
+@media (max-width: 450px) {
+    #legalHint {
+        font-size: 0.6rem;
+    }
+}

@@ -1,0 +1,180 @@
+/* current player list (set-players view) */
+
+#current-players .player {
+    transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: font-size, padding, margin-bottom, opacity, background, color;
+}
+
+#current-players .player button {
+    transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: font-size, padding, color, background, border;
+}
+
+#current-players .player.players-leave-to, #current-players .player.players-leave-to button,
+#current-players .player.players-enter, #current-players .player.players-enter button {
+    font-size: 0;
+    padding: 0;
+}
+
+#current-players .player.players-leave-to,
+#current-players .player.players-enter{
+    margin-bottom: 0;
+    opacity: 0;
+}
+
+#current-players .player.players-enter-to, #current-players .player.players-enter-to button {
+    opacity: 1;
+}
+
+#current-players .player.players-enter-to {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+/* card animations */
+
+#players .player .cards.none.animated {
+    background-position-y: var(--card-height);
+}
+
+#ownCards .card {
+    transition: 500ms ease;
+    transition-property: width, margin, filter;
+    perspective: 1500px;
+}
+
+#topCard {
+    perspective: 1500px;
+}
+
+#ownCards .card .turn-around, #topCard .turn-around {
+    transform: translate(0, 0) rotateY(0);
+    transition: 500ms ease;
+    transition-property: transform, opacity;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+#ownCards .card .turn-around svg, #topCard .turn-around svg {
+    transition: 500ms ease;
+    transition-property: filter;
+}
+
+#ownCards .card .back, #topCard .turn-around .back {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+#ownCards .card .back, #ownCards .card .front,
+#topCard .turn-around .back, #topCard .turn-around svg.front {
+    backface-visibility: hidden;
+    position: absolute;
+}
+
+#topCard {
+    position: relative;
+}
+
+#topCard .turn-around {
+    position: absolute;
+}
+
+#drawPile {
+    transition: 500ms ease;
+    transition-property: transform, filter;
+}
+
+body.hover #drawPile.enabled:hover {
+    filter: brightness(var(--hover-brightness-filter));
+}
+
+body.hover #ownCards .turn-around.enabled:hover svg {
+    filter: brightness(var(--hover-brightness-filter));
+}
+
+#players .player .cards-count-wrapper {
+    position: relative;
+}
+
+#players .player .cards, .floating-wrapper-cards {
+    transition: 500ms ease;
+    transition-property: transform, filter, background-position-y;
+}
+
+img.back {
+    width: 100%;
+}
+
+/* players in game */
+
+#players .player {
+    transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: opacity, transform, width, margin;
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+#players .player.members-leave-to {
+    width: 0;
+    transform: scaleX(0);
+    margin: 0 0 10px 0;
+}
+
+
+/* color selection */
+
+body.hover #color-selection div>div>div {
+    transform: scale(1);
+    transition: transform 500ms ease;
+}
+
+body.hover #color-selection div>div>div:hover {
+    transform: scale(1.03);
+}
+
+#topCard .turn-around svg {
+    transition-property: filter, fill;
+}
+
+
+/* button, inputs, theme toggle */
+
+html, button, input, textarea, a, header, #legalHint, .ruler, #bottomButtons {
+    transition: 500ms ease;
+    transition-property: background, color, border, filter;
+}
+
+header .toggle {
+    transition-property: background, color, border, opacity;
+}
+
+img, #topCard {
+    transition: filter 500ms ease;
+}
+
+#current-players, #add-players, #add-players-limit-reached, #table {
+    transition: border 500ms ease;
+}
+
+.me, .errMsg, #noMessages {
+    transition: color 500ms ease;
+}
+
+.turnBar, #chatControls, #newMessages {
+    transition: background 500ms ease;
+}
+
+#processingAnimation, #processingEndAnimation {
+    transition: 500ms ease;
+    transition-property: background, border;
+}
+
+#messages .message-content {
+    transition: 500ms ease;
+    transition-property: background, color;
+}
+
+#messages .message-content .clock {
+    transition: color 500ms ease;
+}

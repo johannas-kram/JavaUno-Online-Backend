@@ -1,0 +1,136 @@
+#chat-view .backTopBottom {
+    margin-top: 10px;
+}
+
+.messages {
+    width: 840px;
+    color: var(--chat-text-color);
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.message .message-content {
+    position: relative;
+    background: var(--messages-in-bgcolor);
+    padding: 5px;
+    max-width: 65%;
+    border-radius: 10px;
+}
+
+.message.out .message-content {
+    background: var(--messages-out-bgcolor);
+}
+
+.message.in {
+    align-items: flex-start;
+}
+
+.message.out {
+    align-items: flex-end;
+}
+
+.message h3 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: bolder;
+}
+
+.message.out h3 span.name {
+    font-style: italic;
+}
+
+.message h3 .clock {
+    position: absolute;
+    right: 6px;
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+
+#noMessages {
+    margin-top: 10px;
+}
+
+#chat-view #chatPlaceholder {
+    height: 51px;
+    min-height: 51px;
+    max-height: 147px;
+}
+
+#chat-view #chatControls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: var(--bottom-bgcolor);
+    width: 100%;
+    padding: 10px;
+}
+
+#chat-view #chatControls button {
+    margin-top: 0;
+}
+
+#chat-view .chatContent {
+    width: 796px;
+    min-height: 42px;
+    max-height: 139px;
+    vertical-align: top;
+    resize: none;
+    overflow: hidden;
+    border-radius: 11px 0 0 11px;
+    border-right: none;
+    margin: 0;
+}
+
+#chat-view button.chatSendBtn {
+    width: 40px;
+    min-height: 42px;
+    max-height: 139px;
+    border-radius: 0 11px 11px 0;
+    border: 1px transparent solid;
+    border-left: none;
+    font-size: 1.7rem;
+}
+
+body.hover #chat-view .chatContent:hover+button.chatSendBtn, #chat-view .chatContent:focus+button.chatSendBtn {
+    border: 1px var(--input-hover-bordercolor) solid;
+    border-left: none;
+}
+
+#chat-view #chatControls .chatContent+button.chatSendBtn:focus {
+    border: 1px var(--input-hover-bordercolor) solid;
+}
+
+
+@media (max-width: 875px) {
+
+    #messages {
+        width: 100%;
+    }
+
+    #chat-view #chatPlaceholder {
+        height: 41px;
+        min-height: 41px;
+        max-height: 113px;
+    }
+
+    #chat-view .chatContent {
+        width: calc(100% - 35px);
+        height: 31px;
+        min-height: 31px;
+        max-height: 104px;
+        font-size: 0.9rem;
+    }
+
+    #chat-view button.chatSendBtn {
+        width: 30px;
+        height: 31px;
+        min-height: 31px;
+        max-height: 104px;
+        font-size: 0.9rem;
+    }
+}

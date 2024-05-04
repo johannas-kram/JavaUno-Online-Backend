@@ -1,0 +1,667 @@
+:root {
+    --card-width: 100px;
+    --card-height: 150px;
+}
+
+#players-placeholder {
+    height: 5px;
+}
+
+#players {
+    max-width: 840px;
+}
+
+#players .player {
+    display: inline-block;
+    margin: 0 2px 10px 2px;
+    border-top: 5px transparent solid;
+    width: 100px;
+}
+
+#players .player .name {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#players .player .cards {
+    width: var(--card-width);
+    height: var(--card-height);
+}
+
+.floating-wrapper-cards .count {
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    height: max-content;
+    color: var(--card-count-color);
+    user-select: none;
+    font-weight: bold;
+    font-size: 6rem;
+    text-shadow: -1px -1px 1px black, 1px 1px 1px black;
+}
+
+.floating-wrapper-cards .count.red {
+    color: var(--card-count-red-color);
+}
+
+.floating-wrapper-cards .count.more {
+    font-size: 5rem;
+}
+
+.floating-wrapper-cards .count.penalties {
+    color: var(--card-count-red-color);
+}
+
+.floating-wrapper-cards .count.duties {
+    color: var(--card-count-blue-color);
+}
+
+.floating-wrapper-draw .duties.more {
+    font-size: 5.5rem;
+}
+
+.floating-wrapper-cards {
+    width: 100%;
+    height: 100%;
+}
+
+#table {
+    border-bottom: 3px var(--ruler-color) solid;
+    margin-bottom: 10px;
+    max-width: 840px;
+    padding-bottom: 10px;
+}
+
+#topCard, #topCard .turn-around, #topCard .turn-around svg {
+    width: var(--card-width);
+    height: var(--card-height);
+}
+
+#topCard svg {
+    position: absolute;
+}
+
+#ownCards svg, #topCard svg, #finished svg { fill: #444; }
+
+#topCard svg.red    {fill: #f48080;}
+#topCard svg.green  {fill: #80d780;}
+#topCard svg.blue   {fill: #80c7f5;}
+#topCard svg.yellow {fill: #f5f280;}
+
+#ownCards svg, #topCard svg, #finished svg, #drawPile, #players .cards {
+    border-radius: 5px;
+}
+
+#drawPile {
+    width: var(--card-width);
+    height: var(--card-height);
+    cursor: pointer;
+}
+
+.floating-wrapper-draw {
+    width: var(--card-width);
+    height: var(--card-height);
+}
+
+.floating-wrapper-draw .duties, .floating-wrapper-draw .penalties {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 7rem;
+    text-shadow: -1px -1px 1px black, 1px 1px 1px black;
+    pointer-events: none;
+}
+
+.floating-wrapper-draw .penalties {
+    color: var(--card-count-red-color);
+}
+
+.floating-wrapper-draw .duties {
+    color: var(--card-count-blue-color);
+}
+
+#topCard, #drawPile {
+    display: inline-block;
+    margin: 0 2px;
+}
+
+#say-uno {
+    display: inline-block;
+}
+
+#say-uno button {
+    margin-top: 0;
+}
+
+#say-uno > div {
+    display: table-cell;
+    height: var(--card-height);
+    text-align: center;
+    vertical-align: middle;
+}
+
+#color-selection {
+    display: inline-block;
+    height: var(--card-height);
+}
+
+#color-selection > div{
+    display: table;
+}
+
+#color-selection > div > div {
+    display: inline-block;
+}
+
+#color-selection > div > div > div {
+    width: 170px;
+    height: 60px;
+    margin: 11px 5px 11px 6px;
+    border-radius: 20px;
+    font-size: 3rem;
+    font-weight: bolder;
+    text-align: center;
+    cursor: pointer;
+}
+
+#color-selection .red {background: var(--wish-red-color);}
+#color-selection .green {background: var(--wish-green-color); }
+#color-selection .blue {background: var(--wish-blue-color); }
+#color-selection .yellow {background: var(--wish-yellow-color); }
+
+#players .player .cards, #drawPile {
+    background-image: url('/res/img/back.png');
+}
+
+#players .player .cards.none {
+    background-color: var(--no-cards-bgcolor);
+    background-position-y: 0;
+    background-repeat: no-repeat;
+}
+
+#players .player .cards.none.instantly {
+    background-image: none;
+}
+
+#players .player .cards, .floating-wrapper-cards.float, #drawPile, #color-selection, #ownCards .card {
+    filter: brightness(var(--brightness-filter));
+}
+
+#players .player .cards button.small.kick, .floating-wrapper-cards.float button.small.kick {
+    filter: brightness(var(--brightness-revert-filter));
+}
+
+#finished div {
+    font-size: 2rem;
+}
+
+#finished button {
+    width: 50px;
+}
+
+#ownCards {
+    max-width: 840px;
+    margin-bottom: 44px;
+}
+
+#ownCards.putDrawn {
+    margin-bottom: 15px;
+}
+
+#ownCards + .putDrawn-buttons {
+    margin-bottom: 44px;
+}
+
+#ownCards #own-cards-container {
+    padding-right: 8px;
+}
+
+#ownCards div.card {
+    display: inline-block;
+    position: relative;
+}
+
+#ownCards .turn-around {
+    margin: 0 2px;
+}
+
+#drawPile.disabled, #ownCards .turn-around.disabled {
+    cursor: not-allowed;
+}
+
+.floating-wrapper-draw.float {
+    cursor: not-allowed;
+    pointer-events: all;
+}
+
+#drawPile.disabled, .floating-wrapper-draw.float {
+    filter: brightness(var(--disabled-brightness-filter));
+}
+
+#topCard, #ownCards .card .turn-around svg {
+    filter: brightness(var(--brightness-filter));
+}
+
+#ownCards .turn-around.disabled svg {
+    filter: brightness(var(--disabled-brightness-filter));
+}
+
+body.hover #drawPile.enabled:hover, body.hover #ownCards .turn-around.enabled:hover {
+    cursor: pointer;
+}
+
+.current div {
+    display: block;
+    height: 5px;
+}
+
+.current div.turnBar {
+    width: 100%;
+    background: var(--turn-bar-color);
+    will-change: width;
+}
+
+#ownCards .current {
+    margin-bottom: 7px;
+}
+
+#topCard svg, .card .turn-around, .card svg, #finished svg {
+    width: var(--card-width);
+    height: var(--card-height);
+}
+
+#ownCards .card {
+    width: calc(var(--card-width) + 4px);
+}
+
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: var(--light-box-bgcolor);
+}
+
+.lightbox > div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--light-box-text-color);
+    text-align: center;
+}
+
+#bottomButtons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 44px;
+    background: var(--bottom-bgcolor);
+}
+
+#bottomButtons button {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+#bottomButtons button.switch {
+    left: 10px;
+}
+
+#bottomButtons button.stopParty {
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#bottomButtons button.leave {
+    right: 10px;
+}
+
+button.stopParty.red {
+    background:var(--button-stop-party-abort-bgcolor);
+    border: 1px var(--button-stop-party-abort-bgcolor) solid;
+    color: white;
+}
+
+body.hover button.stopParty.red:hover, button.stopParty.red:focus {
+    background: var(--button-stop-party-abort-hover-bgcolor);
+    border: 1px var(--button-stop-party-abort-hover-bgcolor) solid;
+    color: white;
+}
+
+button.stopParty.red:active {
+    background: var(--button-stop-party-abort-active-bgcolor);
+    border: 1px var(--button-stop-party-abort-active-bgcolor) solid;
+    color: white;
+}
+
+.stopPartyRequested {
+    background: var(--stop-party-requested-bg-color);
+    color: white;
+}
+
+#current-players .player.botifyPending {
+    background: var(--botify-pending-bgcolor);
+}
+
+#players .player.botifyPending {
+    background: var(--botify-pending-bgcolor);
+}
+
+.bot .name {
+    font-style: italic;
+}
+
+#current-players .player.botifyPending span {
+    color: var(--botify-pending-text-color);
+}
+
+.player.stopPartyRequested .current div {
+    background: var(--turn-bar-stop-party-requested-color);
+}
+
+#players .player .cards {
+    position: relative;
+}
+
+button.small.kick {
+    position: absolute;
+    top: -5px;
+    right: -3px;
+}
+
+div#toasts {
+    position: absolute;
+    width: 840px;
+    height: 100%;
+    bottom: 0;
+    left: 10px;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+div#toasts div {
+    max-width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 875px) {
+
+    :root {
+        --card-width: 87px;
+        --card-height: 130px;
+    }
+
+    #players .player .cards, #drawPile {
+        background-size: 100% 100%;
+    }
+
+    .floating-wrapper-cards .count.more {
+        font-size: 4.4rem;
+    }
+
+    .floating-wrapper-draw .duties.more {
+        font-size: 4.6rem;
+    }
+
+    #view-running, div#toasts {
+        width: 756px;
+    }
+
+    #players .player, #players .player .name, #players .player .current {
+        width: var(--card-width);
+    }
+
+    #players .player .cards, #drawPile, #drawPile div,
+    #topCard, #topCard .turn-around, #topCard .turn-around svg,
+    .card .turn-around, .card svg {
+        width: var(--card-width);
+        height: var(--card-height);
+    }
+
+    #color-selection > div > div > div {
+        width: 162px;
+        height: 55px;
+        margin: 5px 5px 11px 6px;
+    }
+
+    #players .player .current, #players .player .name {
+        width: var(--card-width);
+    }
+
+    #ownCards #own-cards-container {
+         padding-right: 28px;
+     }
+}
+
+@media (max-width: 775px){
+
+    :root {
+        --card-width: 67px;
+        --card-height: 101px;
+    }
+
+    .floating-wrapper-cards .count {
+        font-size: 5rem;
+    }
+
+    .floating-wrapper-cards .count.more {
+        font-size: 3.2rem;
+    }
+
+    .floating-wrapper-draw .duties, .floating-wrapper-draw .penalties {
+        font-size: 5.5rem;
+    }
+
+    .floating-wrapper-draw .duties.more {
+        font-size: 3.2rem;
+    }
+
+    #color-selection > div > div > div {
+        margin-top: 6px;
+    }
+
+    #view-running, div#toasts {
+        width: 581px;
+    }
+
+    #color-selection > div > div > div {
+        width: 132px;
+        height: 39px;
+        margin: 7px 5px 11px 6px;
+    }
+
+    #ownCards #own-cards-container {
+        padding-right: 13px;
+    }
+
+    .floating-wrapper-cards button {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 600px) {
+
+    :root {
+        --card-width: 53px;
+        --card-height: 80px;
+    }
+
+    .floating-wrapper-cards .count {
+        font-size: 4rem;
+    }
+
+    .floating-wrapper-cards .count.more {
+        font-size: 2.5rem;
+    }
+
+    #players .player .name {
+        font-size: 0.7rem;
+    }
+
+    .floating-wrapper-cards button.small.kick {
+        top: -6px;
+        font-size: 0.7rem;
+    }
+
+    div#toasts div {
+        max-width: 350px;
+    }
+
+    .floating-wrapper-draw .duties, .floating-wrapper-draw .penalties {
+        font-size: 5rem;
+    }
+
+    .floating-wrapper-draw .duties.more {
+        font-size: 2.7rem;
+    }
+
+    #view-running, div#toasts {
+        width: 456px;
+    }
+
+    #ownCards #own-cards-container {
+        padding-right: 0;
+    }
+
+    #color-selection > div > div > div {
+        width: 92px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 475px) {
+
+    :root {
+        --card-width: 44px;
+        --card-height: 66px;
+    }
+
+    .floating-wrapper-cards .count {
+        font-size: 3.8rem;
+    }
+
+    .floating-wrapper-cards .count.more {
+        font-size: 2.2rem;
+    }
+
+    .floating-wrapper-draw .duties, .floating-wrapper-draw .penalties {
+        font-size: 4rem;
+    }
+
+    .floating-wrapper-draw .duties.more {
+        font-size: 2.4rem;
+    }
+
+    #view-running, div#toasts {
+        width: 391px;
+    }
+
+    #color-selection > div > div > div {
+        width: 75px;
+        height: 23px;
+    }
+
+    #ownCards #own-cards-container {
+         padding-right: 41px;
+    }
+}
+
+@media (max-width: 410px) {
+
+    :root {
+        --card-width: 38px;
+        --card-height: 57px;
+    }
+
+    #players .player .name {
+        font-size: 0.6rem;
+    }
+
+    #say-uno button {
+        font-size: 1rem;
+    }
+
+    .floating-wrapper-cards .count {
+        font-size: 3.5rem;
+    }
+
+    .floating-wrapper-cards .count.more {
+        font-size: 1.9rem;
+    }
+
+    .floating-wrapper-draw .duties, .floating-wrapper-draw .penalties {
+        font-size: 3.7rem;
+    }
+
+    .floating-wrapper-draw .duties.more {
+        font-size: 2.1rem;
+    }
+
+    #bottomButtons {
+        height: 30px;
+    }
+
+    button.small.bottomButton {
+        font-size: 0.7rem;
+    }
+
+    #ownCards button {
+        font-size: 0.7rem;
+    }
+
+    #view-running, div#toasts {
+        width: 340px;
+    }
+
+    .floating-wrapper-cards button {
+        padding: 2px;
+    }
+
+    #say-uno > div, #color-selection {
+         height: var(--card-height);
+     }
+
+    #color-selection > div > div > div {
+        margin: 1px 5px 11px 6px;
+    }
+
+    #ownCards #own-cards-container {
+         padding-right: 32px;
+    }
+}
+
+@media (max-width: 359px) {
+    #view-running, div#toasts {
+        width: 300px;
+    }
+
+    div#toasts div {
+        max-width: 310px;
+    }
+
+    #ownCards #own-cards-container {
+        padding-right: 36px;
+    }
+
+    #color-selection > div > div > div {
+        width: 53px;
+        height: 20px;
+        margin: 5px 5px 11px 6px;
+    }
+}

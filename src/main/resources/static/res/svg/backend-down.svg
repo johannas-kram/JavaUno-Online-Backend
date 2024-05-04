@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 190">
+  <symbol viewBox="0 0 470 190" id="image">
+    <style>
+      @font-face {font-family:"Arial";src: url("/test/webfonts/arial.ttf");}
+    </style>
+    <rect x="0" y="0" width="470" height="190" fill="#e5f3fe" />
+    <rect x="63" y="108" width="40" height="10" fill="#1076c7" />
+    <path d="M 25 31 L 141 31 A 6 6 0 0 1 146 37 L 146 113 L 159 113 L 159 116 A 8 8 0 0 1 153 125 L 12 125 A 8 8 0 0 1 6 120 L 6 113 L 19 113 L 19 37 A 6 6 0 0 1 25 31 Z M 19 113 L 64 113 L 66 117 L 99 117 L 101 113 L 146 113" fill="#cce6fe" stroke="#1076c7" stroke-width="3" />
+    <rect x="32" y="44" width="101" height="58" fill="white" />
+    <circle cx="83.5" cy="38.5" r="3" stroke="none" fill="#1076c7"/>
+    <g id="server">
+      <rect x="218" y="5" rx="3" ry="3" width="52" height="120" fill="#cce6fe" stroke="#1076c7" stroke-width="3"/>
+      <rect x="224" y="52" width="11" height="13" fill="#1076c7" />
+      <rect x="225" y="15" width="38" height="12" fill="#a2c9e9" />
+      <rect x="237" y="53" width="26" height="12" fill="#a2c9e9" />
+      <rect x="225" y="100" width="38" height="12" fill="#a2c9e9" />
+    </g>
+    <use href="#server" transform="translate(135)" />
+    <path d="M 159 66 L 159 71 L 205 71 L 205 66 L 214 73 L 205 80 L 205 75 L 159 75 L 159 80 L 150 73 L 159 66 Z" fill="#4fa000" />
+    <rect x="275" y="71" width="25" height="4" fill="black" />
+    <rect x="323" y="71" width="25" height="4" fill="black" />
+    <line x1="306" y1="67" x2="317" y2="78" stroke="#a10022" stroke-width="2"/>
+    <line x1="306" y1="78" x2="317" y2="67" stroke="#a10022" stroke-width="2"/>
+    <text x="45" y="153"  style="font-family:Arial,sans-serif;font-size:30px;font-weight:bold;fill:#1076c7">Client</text>
+    <text x="213" y="153" style="font-family:Arial,sans-serif;font-size:30px;font-weight:bold;fill:#1076c7">Web</text>
+    <text x="200" y="183" style="font-family:Arial,sans-serif;font-size:30px;font-weight:bold;fill:#1076c7">Server</text>
+    <text x="305" y="153" style="font-family:Arial,sans-serif;font-size:30px;font-weight:bold;fill:#1076c7">Application</text>
+    <text x="337" y="183" style="font-family:Arial,sans-serif;font-size:30px;font-weight:bold;fill:#1076c7">Server</text>
+  </symbol>
+</svg>

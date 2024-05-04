@@ -1,0 +1,62 @@
+#view-set-players {
+    max-width: 600px;
+}
+
+#current-players, #add-players, #add-players-limit-reached {
+    border-bottom: 3px var(--ruler-color) solid;
+    font-size: 1.1rem;
+}
+
+#add-players-limit-reached {
+    padding-bottom: 12px;
+}
+
+#add-players {
+    padding-bottom: 10px;
+}
+
+#invitation-link-toCopy {
+    position: fixed;
+    top: -1000px;
+}
+
+#view-set-players h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+#current-players .player {
+    background: var(--theme-ternary-bgcolor);
+    color: var(--player-text-color);
+    font-size: 1.2rem;
+    font-weight: bolder;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+button.small.invitation {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@media (max-width: 619px) {
+    #current-players .player,
+    #current-players {
+        font-size: 1.0rem;
+    }
+
+    #invitationButtons {
+        width: 200px;
+    }
+
+    button.small.invitation {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    button.small.invitation.indent {
+        position: relative;
+        left: 100%;
+        transform: translateX(-100%);
+    }
+}

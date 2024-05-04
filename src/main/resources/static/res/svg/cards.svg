@@ -1,0 +1,407 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150">
+	<style>@font-face{font-family:"Arial";src:url("/test/webfonts/arial.ttf");}</style>
+	<rect id="frame" x="0" y="0" rx="6" ry="6"  width="100" height="150" fill="white"/>
+	<g id="cardColorBlue">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140" fill="#80c7f5"/>
+		<circle cx="50" cy="75" r="27" stroke="none" fill="#0062e1"/>
+		<circle cx="22" cy="22" r="13.5" stroke="none" fill="#0062e1"/>
+		<circle cx="78" cy="128" r="13.5" stroke="none" fill="#0062e1"/>
+	</g>
+	<g id="cardColorRed">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140" fill="#f48080"/>
+		<circle cx="50" cy="75" r="27" stroke="none" fill="#a50000"/>
+		<circle cx="22" cy="22" r="13.5" stroke="none" fill="#a50000"/>
+		<circle cx="78" cy="128" r="13.5" stroke="none" fill="#a50000"/>
+	</g>
+	<g id="cardColorGreen">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140" fill="#80d780"/>
+		<circle cx="50" cy="75" r="27" stroke="none" fill="#0a8000"/>
+		<circle cx="22" cy="22" r="13.5" stroke="none" fill="#0a8000"/>
+		<circle cx="78" cy="128" r="13.5" stroke="none" fill="#0a8000"/>
+	</g>
+	<g id="cardColorYellow">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140" fill="#f5f280"/>
+		<circle cx="50" cy="75" r="27" stroke="none" fill="#ada900"/>
+		<circle cx="22" cy="22" r="13.5" stroke="none" fill="#ada900"/>
+		<circle cx="78" cy="128" r="13.5" stroke="none" fill="#ada900"/>
+	</g>
+	<g id="cardColorJoker">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140"/>
+		<g id="jokerCenter">
+			<path d="M 50 75 L 50 48 A 27 27 0 0 1 77 75 L 50 75 Z"  fill="#ada900"/>
+			<path d="M 50 75 L 77 75 A 27 27 0 0 1 50 102 L 50 75 Z" fill="#a50000"/>
+			<path d="M 50 75 L 23 75 A 27 27 0 0 0 50 102 L 50 75 Z" fill="#0a8000"/>
+			<path d="M 50 75 L 50 48 A 27 27 0 0 0 23 75 L 50 75 Z"  fill="#0062e1"/>
+		</g>
+		<use id="jokerUpperLeft" href="#jokerCenter" transform="scale(0.5) translate(-6,-31)"/>
+		<use href="#jokerUpperLeft" transform="rotate(180 50,75)"/>
+	</g>
+	<g id="cardColorDraw4">
+		<rect x="5" y="5" rx="5" ry="5"  width="90" height="140"/>
+		<circle cx="22" cy="22" r="13.5" stroke="none" fill="black"/>
+		<circle cx="78" cy="128" r="13.5" stroke="none" fill="black"/>
+	</g>
+	<text id="number0Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">0</text>
+	<text id="number1Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">1</text>
+	<text id="number2Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">2</text>
+	<text id="number3Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">3</text>
+	<text id="number4Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">4</text>
+	<text id="number5Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">5</text>
+	<text id="number6Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">6</text>
+	<text id="number7Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">7</text>
+	<text id="number8Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">8</text>
+	<text id="number9Center" x="35" y="93.5" style="font-size:50px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">9</text>
+	<text id="plus2" x="29.5" y="89" style="font-size:35px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">+2</text>
+	<text id="plus4" x="29.5" y="89" style="font-size:35px;font-family:Arial,sans-serif;font-weight:bold;fill:white;">+4</text>
+	<g id="cardNumber0">
+		<use href="#number0Center" />
+		<use id="number0UpperLeft" href="#number0Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number0UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber1">
+		<use href="#number1Center" />
+		<use id="number1UpperLeft" href="#number1Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number1UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber2">
+		<use href="#number2Center" />
+		<use id="number2UpperLeft" href="#number2Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number2UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber3">
+		<use href="#number3Center" />
+		<use id="number3UpperLeft" href="#number3Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number3UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber4">
+		<use href="#number4Center" />
+		<use id="number4UpperLeft" href="#number4Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number4UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber5">
+		<use href="#number5Center" />
+		<use id="number5UpperLeft" href="#number5Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number5UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber6">
+		<use href="#number6Center" />
+		<use id="number6UpperLeft" href="#number6Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number6UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber7">
+		<use href="#number7Center" />
+		<use id="number7UpperLeft" href="#number7Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number7UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber8">
+		<use href="#number8Center" />
+		<use id="number8UpperLeft" href="#number8Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number8UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardNumber9">
+		<use href="#number9Center" />
+		<use id="number9UpperLeft" href="#number9Center" transform="scale(0.5) translate(-5,-31.5)" />
+		<use href="#number9UpperLeft" transform="rotate(180 49.625,75.5)" />
+	</g>
+	<g id="cardFaceDraw2">
+		<rect x="36.5" y="56" width="20" height="30" fill="white" stroke-width="1" stroke="#bbb"/>
+		<rect x="44.5" y="64" width="20" height="30" fill="white" stroke-width="1" stroke="#bbb"/>
+		<use id="draw2UpperLeft" href="#plus2" transform="scale(0.5) translate(-6, -32.5)"/>
+		<use href="#draw2UpperLeft" transform="rotate(180 49.625,75.5)"/>
+	</g>
+	<g id="cardFaceDraw4">
+		<rect x="42" y="51" width="20" height="30" fill="#f5f280" stroke-width="1" stroke="#ada900"/>
+		<rect x="55" y="73" width="20" height="30" fill="#80c7f5" stroke-width="1" stroke="#0062e1"/>
+		<rect x="25" y="47" width="20" height="30" fill="#80d780" stroke-width="1" stroke="#0a8000"/>
+		<rect x="38" y="69" width="20" height="30" fill="#f48080" stroke-width="1" stroke="#a50000"/>
+		<use id="draw4UpperLeft" href="#plus4" transform="scale(0.5) translate(-6, -32.5)"/>
+		<use href="#draw4UpperLeft" transform="rotate(180 49.625,75.5)"/>
+	</g>
+	<g id="cardFaceSkip">
+		<g id="skipCenter">
+			<circle cx="50" cy="75" r="23" fill="none"/>
+			<circle cx="50" cy="75" r="20" stroke="white" stroke-width="6" fill="none"/>
+			<path d="M 37 59 L 65 86 L 62 90 L 33 63 L 37 59 Z" fill="white" />
+		</g>
+		<use id="skipUpperLeft" href="#skipCenter" transform="scale(0.5) translate(-6, -31.5)"/>
+		<use href="#skipUpperLeft" transform="rotate(180 50,75)"/>
+	</g>
+
+	<g id="cardFaceReverse">
+		<g id="reverseCenter">
+			<path d="M 28 83 L 50 61 L 43 59 L 61 54 L 56 72 L 53 65 L 32 87 L 28 83 Z M 39 96 L 44 77 L 46 84 L 68 62 L 72 66 L 50 88 L 57 90 L 39 96 Z" fill="white" />
+		</g>
+		<use id="reverseUpperLeft" href="#reverseCenter" transform="scale(0.5) translate(-6, -31.5)"/>
+		<use href="#reverseUpperLeft" transform="rotate(180 50,75)"/>
+	</g>
+
+	<symbol viewBox="0 0 100 150" id="red0">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber0" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red1">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber1" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red2">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red3">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber3" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red4">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber4" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red5">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber5" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red6">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber6" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red7">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber7" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red8">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber8" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="red9">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardNumber9" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="redskip">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardFaceSkip" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="redreverse">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardFaceReverse" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="reddraw2">
+		<use href="#frame" />
+		<use href="#cardColorRed" />
+		<use href="#cardFaceDraw2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green0">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber0" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green1">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber1" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green2">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green3">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber3" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green4">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber4" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green5">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber5" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green6">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber6" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green7">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber7" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green8">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber8" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="green9">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardNumber9" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="greenskip">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardFaceSkip" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="greenreverse">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardFaceReverse" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="greendraw2">
+		<use href="#frame" />
+		<use href="#cardColorGreen" />
+		<use href="#cardFaceDraw2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue0">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber0" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue1">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber1" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue2">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue3">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber3" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue4">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber4" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue5">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber5" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue6">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber6" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue7">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber7" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue8">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber8" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blue9">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardNumber9" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="blueskip">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardFaceSkip" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="bluereverse">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardFaceReverse" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="bluedraw2">
+		<use href="#frame" />
+		<use href="#cardColorBlue" />
+		<use href="#cardFaceDraw2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow0">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber0" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow1">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber1" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow2">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow3">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber3" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow4">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber4" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow5">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber5" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow6">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber6" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow7">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber7" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow8">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber8" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellow9">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardNumber9" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellowskip">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardFaceSkip" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellowreverse">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardFaceReverse" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="yellowdraw2">
+		<use href="#frame" />
+		<use href="#cardColorYellow" />
+		<use href="#cardFaceDraw2" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="joker">
+		<use href="#frame" />
+		<use href="#cardColorJoker" />
+	</symbol>
+	<symbol viewBox="0 0 100 150" id="jokerdraw4">
+		<use href="#frame" />
+		<use href="#cardColorDraw4" />
+		<use href="#cardFaceDraw4" />
+	</symbol>
+</svg>
