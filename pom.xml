@@ -8,7 +8,7 @@
         <version>2.2.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>de.tomatenmarkwebapps</groupId>
+    <groupId>de.johannaherrmann</groupId>
     <artifactId>javauno</artifactId>
     <version>2.0</version>
     <name>JavaUno</name>

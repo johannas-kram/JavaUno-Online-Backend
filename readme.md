@@ -10,13 +10,13 @@ This is the Backend for play.java-uno.de
 The backend offers the api endpoints for the frontend and controls all game instances.
 
 ## Frontend
-You can use your own frontend or use my frontend under https://github.com/marks-kram/JavaUno-Online-Frontend\
+You can use your own frontend or use my frontend under https://github.com/johannas-kram/JavaUno-Online-Frontend \
 If you use own frontend, it has to use the same endpoints, like my frontend
 
 ## API Documentation
 * Swagger
-    * API Doc: /v2/api-docs
-    * UI: /swagger-ui.html
+  * API Doc: /v2/api-docs
+  * UI: /swagger-ui.html
     
 ## How to run the backend
 * Pre-requisite: Java (8+)
@@ -25,8 +25,8 @@ If you use own frontend, it has to use the same endpoints, like my frontend
   (xx is the version)
 
 ### Spielanleitung
-https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
-(generated to https://play.java-uno.de/manual.pdf)
+https://github.com/johannas-kram/JavaUno-Online-Frontend/ ->  manual.docx
+(generated to `JAVA_UNO_BASE_URL`/manual.pdf)
 
 ## tokenized-game-create
 * This Feature is optional
@@ -51,7 +51,7 @@ https://github.com/tomatenmark/JavaUno-Online-Frontend/ ->  manual.docs
 ## License
 * The Backend source code is licensed under a CC-BY-SA-NC 4.0 Licence\
    * License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-   * Creator: Mark Herrmann (Nickname: Tomatenmark)
+   * Creator: Johanna Herrmann ([johannas-kram](https://github.com/johannas-kram))
 
 ## Compatibility
 * version 2.x frontend <-> version 1.x backend
