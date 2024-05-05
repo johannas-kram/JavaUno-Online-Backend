@@ -21,7 +21,7 @@ This is a webapp, powered by SpringBoot, Java and VueJS.
 * `/manual.pdf`
     
 ## How to run
-* Pre-requisite: Java (8+, tested with Java 8)
+* Pre-requisite: Java (17+, tested with Java 17)
 * build it with 'mvn clean package' (you will get a javauno-xx.jar file)
 * run following command in terminal: java -jar javauno-xx.jar\
   (xx is the version)

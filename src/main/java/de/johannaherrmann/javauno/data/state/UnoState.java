@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class UnoState {
-	private static Map<String, Game> games = new HashMap<>();
+	private static final Map<String, Game> games = new HashMap<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnoState.class);
 

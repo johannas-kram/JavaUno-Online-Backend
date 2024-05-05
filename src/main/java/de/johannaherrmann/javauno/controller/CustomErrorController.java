@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class CustomErrorController implements ErrorController {
@@ -25,10 +25,5 @@ public class CustomErrorController implements ErrorController {
             return ResponseEntity.status(httpStatus).build();
         }
         return ResponseEntity.status(httpStatus).body(errorResponse);
-    }
-
-    @Override
-    public String getErrorPath() {
-        return "/error";
     }
 }
