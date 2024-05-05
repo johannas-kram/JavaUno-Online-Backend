@@ -24,7 +24,7 @@ public class TokenService {
     @Autowired
     public TokenService(Environment environment){
         this.featureEnabled = "on".equals(environment.getProperty("feature.tokenized_game_create"));
-        this.tokensDirectory = setTokensDirectory(environment);
+        this.tokensDirectory = environment.getProperty("feature.tokenized_game_create.tokens_directory");
     }
 
     public void checkForTokenizedGameCreate(String token) {
@@ -48,7 +48,7 @@ public class TokenService {
         }
         String fileName = token.replaceFirst(tokenRegex, "$1");
         String message = token.replaceFirst(tokenRegex, "$2");
-        File tokenFile = new File(tokensDirectory+fileName);
+        File tokenFile = new File(String.format("%s/%s", tokensDirectory, fileName));
         if(tokenFile.exists()){
             String hash = readHashFromFile(tokenFile);
             boolean valid =  isMessageMatchingHash(message, hash);
@@ -72,17 +72,6 @@ public class TokenService {
     private boolean isMessageMatchingHash(String message, String hash){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(message, hash);
-    }
-
-    private String setTokensDirectory(Environment environment){
-        String tokensDirectory = environment.getProperty("feature.tokenized_game_create.tokens_directory");
-        if(tokensDirectory == null){
-            tokensDirectory = "./";
-        }
-        if(!tokensDirectory.endsWith("/")){
-            tokensDirectory += "/";
-        }
-        return tokensDirectory;
     }
 
 }

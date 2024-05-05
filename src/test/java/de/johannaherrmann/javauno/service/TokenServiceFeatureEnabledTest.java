@@ -34,20 +34,20 @@ public class TokenServiceFeatureEnabledTest {
 
     @Before
     public void setUp() throws IOException {
-        File tokensDir = new File("./tokens");
+        File tokensDir = new File("./data/tokens");
         if (!tokensDir.exists()){
             tokensDir.mkdirs();
         }
-        File testTokenFile = new File("./tokens/"+TEST_TOKEN_FILE_NAME);
+        File testTokenFile = new File("./data/tokens/"+TEST_TOKEN_FILE_NAME);
         testTokenFile.createNewFile();
         Files.write(testTokenFile.toPath(), TEST_HASH.getBytes());
     }
 
     @After
     public void tearDown(){
-        new File("./tokens/"+TEST_TOKEN_FILE_NAME).setReadable(true, true);
-        new File("./tokens/"+TEST_TOKEN_FILE_NAME).delete();
-        new File("./tokens").delete();
+        new File("./data/tokens/"+TEST_TOKEN_FILE_NAME).setReadable(true, true);
+        new File("./data/tokens/"+TEST_TOKEN_FILE_NAME).delete();
+        new File("./data/tokens").delete();
     }
 
     @Test
