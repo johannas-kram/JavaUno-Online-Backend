@@ -13,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,11 +37,13 @@ public class PersistenceServiceTest {
     @Before
     public void setup () {
         UnoState.clear();
+        deleteGames();
     }
 
     @After
     public void teardown () {
         UnoState.clear();
+        deleteGames();
     }
 
     @Test
@@ -61,11 +67,51 @@ public class PersistenceServiceTest {
     }
 
     @Test
-    public void shouldLoadGamesCorrectly () {
+    public void shouldLoadGamesCorrectly () throws Exception {
+        Game game1 = TestHelper.prepareAndStartGame(gameService, playerService);
+        Game game2 = TestHelper.prepareAndStartGame(gameService, playerService);
+        serializeGame(game1);
+        serializeGame(game2);
+        Game loadedGame1 = null;
+        Game loadedGame2 = null;
+        Exception exception = null;
+        UnoState.clear();
 
+        try {
+            persistenceService.loadGames();
+            loadedGame1 = UnoState.getGame(game1.getUuid());
+            loadedGame2 = UnoState.getGame(game2.getUuid());
+        } catch (Exception ex) {
+            exception = ex;
+        }
+
+        assertThat(exception).isNull();
+        assertThat(loadedGame1).isNotNull();
+        assertThat(loadedGame2).isNotNull();
+        assertThat(loadedGame1.getUuid()).isEqualTo(game1.getUuid());
+        assertThat(loadedGame1.getPlayers().get(0).getUuid()).isEqualTo(game1.getPlayers().get(0).getUuid());
+        assertThat(loadedGame1.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game1.getPlayers().get(0).getCards().get(0).getUuid());
+        assertThat(loadedGame1.getBotifyPlayerByRequestThread()).isNull();
+        assertThat(loadedGame2.getUuid()).isEqualTo(game2.getUuid());
+        assertThat(loadedGame2.getPlayers().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getUuid());
+        assertThat(loadedGame2.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getCards().get(0).getUuid());
+        assertThat(loadedGame2.getBotifyPlayerByRequestThread()).isNull();
     }
 
     private void dummyBotifyPlayerByRequestThread(Game ignoredGame, Player ignoredPlayer) {}
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void serializeGame (Game game) throws IOException {
+        String path = gamesPath + game.getUuid();
+        new File(gamesPath).mkdirs();
+        FileOutputStream fileOutputStream
+                = new FileOutputStream(path);
+        ObjectOutputStream objectOutputStream
+                = new ObjectOutputStream(fileOutputStream);
+        objectOutputStream.writeObject(game);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
 
     private Game deserializeGame (String path) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream
@@ -75,5 +121,13 @@ public class PersistenceServiceTest {
         Game game = (Game) objectInputStream.readObject();
         objectInputStream.close();
         return game;
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void deleteGames() {
+        File[] games = new File(gamesPath).listFiles();
+        for (File game : Objects.requireNonNull(games)) {
+            game.delete();
+        }
     }
 }

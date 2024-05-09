@@ -1,14 +1,13 @@
 package de.johannaherrmann.javauno.service;
 
+import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.Objects;
 
 @Service
 public class PersistenceService {
@@ -38,7 +37,16 @@ public class PersistenceService {
 
     }
 
-    public void loadGames () {
-
+    public void loadGames () throws IOException, ClassNotFoundException {
+        File[] games = new File(gamesPath).listFiles();
+        for (File gameFile : Objects.requireNonNull(games)) {
+            FileInputStream fileInputStream
+                    = new FileInputStream(gameFile.getPath());
+            ObjectInputStream objectInputStream
+                    = new ObjectInputStream(fileInputStream);
+            Game game = (Game) objectInputStream.readObject();
+            objectInputStream.close();
+            UnoState.putGame(game);
+        }
     }
 }
