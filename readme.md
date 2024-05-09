@@ -28,7 +28,7 @@ This is a webapp, powered by SpringBoot and VueJS.
 
 ## Application Arguments
 * `--server.port`: Sets the port the applications listens to (default: 9001)
-* `--server.address`: Sets the ip addresses the application will be reachable for (default: 0.0.0.0 meaning 'all')
+* `--server.address`: Sets the ip addresses the application will be reachable from (default: 0.0.0.0 meaning 'all')
 * `--data.path`: Sets the path to the data directory (default: ./data)
 * `--feature.tokenized_game_create`:
   Enables or disables the feature [tokenized-game-create](#tokenized-game-create) (default: off)
