@@ -4,7 +4,6 @@ import de.johannaherrmann.javauno.TestHelper;
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.Player;
-import org.assertj.core.data.Percentage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,15 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Objects;
 
-import static java.time.Instant.ofEpochMilli;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
