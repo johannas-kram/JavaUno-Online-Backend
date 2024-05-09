@@ -1,17 +1,18 @@
 package de.johannaherrmann.javauno.service;
 
 import de.johannaherrmann.javauno.TestHelper;
+import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.Player;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,21 +28,27 @@ public class PersistenceServiceTest {
     @Autowired
     private PlayerService playerService;
 
+    private final String gamesPath = "./data/games/";
+
+    @Before
+    public void setup () {
+        UnoState.clear();
+    }
+
+    @After
+    public void teardown () {
+        UnoState.clear();
+    }
+
     @Test
     public void shouldSaveGameCorrectly () throws Exception {
         Game game = TestHelper.prepareAndStartGame(gameService, playerService);
-        String path = "./data/games/" + game.getUuid();
         game.setBotifyPlayerByRequestThread(new Thread(() -> dummyBotifyPlayerByRequestThread(game, game.getPlayers().get(0))));
 
         persistenceService.saveGame(game);
 
-        assertThat(new File(path)).exists();
-        FileInputStream fileInputStream
-                = new FileInputStream(path);
-        ObjectInputStream objectInputStream
-                = new ObjectInputStream(fileInputStream);
-        Game deserializedGame = (Game) objectInputStream.readObject();
-        objectInputStream.close();
+        assertThat(new File(gamesPath + game.getUuid())).exists();
+        Game deserializedGame = deserializeGame(gamesPath + game.getUuid());
         assertThat(deserializedGame.getUuid()).isEqualTo(game.getUuid());
         assertThat(deserializedGame.getPlayers().get(0).getUuid()).isEqualTo(game.getPlayers().get(0).getUuid());
         assertThat(deserializedGame.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game.getPlayers().get(0).getCards().get(0).getUuid());
@@ -59,4 +66,14 @@ public class PersistenceServiceTest {
     }
 
     private void dummyBotifyPlayerByRequestThread(Game ignoredGame, Player ignoredPlayer) {}
+
+    private Game deserializeGame (String path) throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream
+                = new FileInputStream(path);
+        ObjectInputStream objectInputStream
+                = new ObjectInputStream(fileInputStream);
+        Game game = (Game) objectInputStream.readObject();
+        objectInputStream.close();
+        return game;
+    }
 }
