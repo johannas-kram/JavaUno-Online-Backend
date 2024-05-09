@@ -55,9 +55,7 @@ public class PersistenceServiceTest {
 
         assertThat(new File(gamesPath + game.getUuid())).exists();
         Game deserializedGame = deserializeGame(gamesPath + game.getUuid());
-        assertThat(deserializedGame.getUuid()).isEqualTo(game.getUuid());
-        assertThat(deserializedGame.getPlayers().get(0).getUuid()).isEqualTo(game.getPlayers().get(0).getUuid());
-        assertThat(deserializedGame.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game.getPlayers().get(0).getCards().get(0).getUuid());
+        assertGamesEqual(deserializedGame, game);
         assertThat(deserializedGame.getBotifyPlayerByRequestThread()).isNull();
     }
 
@@ -88,14 +86,14 @@ public class PersistenceServiceTest {
         assertThat(exception).isNull();
         assertThat(loadedGame1).isNotNull();
         assertThat(loadedGame2).isNotNull();
-        assertThat(loadedGame1.getUuid()).isEqualTo(game1.getUuid());
-        assertThat(loadedGame1.getPlayers().get(0).getUuid()).isEqualTo(game1.getPlayers().get(0).getUuid());
-        assertThat(loadedGame1.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game1.getPlayers().get(0).getCards().get(0).getUuid());
-        assertThat(loadedGame1.getBotifyPlayerByRequestThread()).isNull();
-        assertThat(loadedGame2.getUuid()).isEqualTo(game2.getUuid());
-        assertThat(loadedGame2.getPlayers().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getUuid());
-        assertThat(loadedGame2.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getCards().get(0).getUuid());
-        assertThat(loadedGame2.getBotifyPlayerByRequestThread()).isNull();
+        assertGamesEqual(loadedGame1, game1);
+        assertGamesEqual(loadedGame2, game2);
+    }
+
+    private void assertGamesEqual (Game game1, Game game2) {
+        assertThat(game1.getUuid()).isEqualTo(game2.getUuid());
+        assertThat(game1.getPlayers().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getUuid());
+        assertThat(game1.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getCards().get(0).getUuid());
     }
 
     private void dummyBotifyPlayerByRequestThread(Game ignoredGame, Player ignoredPlayer) {}
