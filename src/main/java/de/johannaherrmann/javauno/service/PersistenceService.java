@@ -2,6 +2,8 @@ package de.johannaherrmann.javauno.service;
 
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.Objects;
 @Service
 public class PersistenceService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceService.class);
 
     private final String gamesPath;
 
@@ -20,22 +23,24 @@ public class PersistenceService {
         this.gamesPath = environment.getProperty("games.path") + "/";
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void saveGame (Game game) throws IOException {
+    public void saveGame (Game game) {
         String path = gamesPath + game.getUuid();
-        new File(gamesPath).mkdirs();
-        FileOutputStream fileOutputStream
-                = new FileOutputStream(path);
-        ObjectOutputStream objectOutputStream
-                = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(game);
-        objectOutputStream.flush();
-        objectOutputStream.close();
+        try (
+                FileOutputStream fileOutputStream = new FileOutputStream(path);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)
+        ) {
+            objectOutputStream.writeObject(game);
+            objectOutputStream.flush();
+        } catch (IOException exception) {
+            LOGGER.error("Could not save game with uuid {}", game.getUuid(), exception);
+        }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteGame (String gameUuid) {
-        new File(gamesPath + gameUuid).delete();
+        boolean deleted = new File(gamesPath + gameUuid).delete();
+        if (!deleted) {
+            LOGGER.error("Could not delete game with uuid {}", gameUuid);
+        }
     }
 
     public void loadGames () throws IOException, ClassNotFoundException {
