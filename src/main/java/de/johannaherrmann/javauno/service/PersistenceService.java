@@ -33,8 +33,9 @@ public class PersistenceService {
         objectOutputStream.close();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteGame (String gameUuid) {
-
+        new File(gamesPath + gameUuid).delete();
     }
 
     public void loadGames () throws IOException, ClassNotFoundException {
@@ -46,6 +47,7 @@ public class PersistenceService {
                     = new ObjectInputStream(fileInputStream);
             Game game = (Game) objectInputStream.readObject();
             objectInputStream.close();
+            game.setLastAction(System.currentTimeMillis());
             UnoState.putGame(game);
         }
     }

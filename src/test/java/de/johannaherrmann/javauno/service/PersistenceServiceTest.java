@@ -4,6 +4,7 @@ import de.johannaherrmann.javauno.TestHelper;
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.Player;
+import org.assertj.core.data.Percentage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static java.time.Instant.ofEpochMilli;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -60,14 +65,20 @@ public class PersistenceServiceTest {
     }
 
     @Test
-    public void shouldDeleteGameCorrectly () {
+    public void shouldDeleteGameCorrectly () throws Exception {
+        Game game = TestHelper.prepareAndStartGame(gameService, playerService);
+        serializeGame(game);
 
+        persistenceService.deleteGame(game.getUuid());
+
+        assertThat(new File(gamesPath + game.getUuid())).doesNotExist();
     }
 
     @Test
     public void shouldLoadGamesCorrectly () throws Exception {
         Game game1 = TestHelper.prepareAndStartGame(gameService, playerService);
         Game game2 = TestHelper.prepareAndStartGame(gameService, playerService);
+        game1.setLastAction(50);
         serializeGame(game1);
         serializeGame(game2);
         Game loadedGame1 = null;
@@ -88,6 +99,7 @@ public class PersistenceServiceTest {
         assertThat(loadedGame2).isNotNull();
         assertGamesEqual(loadedGame1, game1);
         assertGamesEqual(loadedGame2, game2);
+        assertThat(loadedGame1.getLastAction()).isBetween(System.currentTimeMillis() - 100, System.currentTimeMillis());
     }
 
     private void assertGamesEqual (Game game1, Game game2) {
