@@ -3,11 +3,13 @@ package de.johannaherrmann.javauno.data.state.component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.johannaherrmann.javauno.data.fixed.Card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Player {
+public class Player implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private String uuid;
 	private String publicUuid;

@@ -1,8 +1,10 @@
 package de.johannaherrmann.javauno.data.fixed;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public final class Card {
+public final class Card implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private CardType cardType;
     private String color;
