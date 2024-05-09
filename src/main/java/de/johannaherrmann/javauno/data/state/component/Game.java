@@ -28,7 +28,7 @@ public class Game implements Serializable {
 	private int party;
 	private int stopPartyRequested;
 	private int lastWinner = -1;
-	private Thread botifyPlayerByRequestThread;
+	transient private Thread botifyPlayerByRequestThread;
 	private final List<Message> messages = new ArrayList<>();
 	private int drawnCards = 0;
 	private String drawReason;
