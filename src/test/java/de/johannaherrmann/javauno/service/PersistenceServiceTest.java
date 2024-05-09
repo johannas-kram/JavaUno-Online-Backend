@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,13 +33,13 @@ public class PersistenceServiceTest {
     @Before
     public void setup () {
         UnoState.clear();
-        deleteGames();
+        TestHelper.deleteGames();
     }
 
     @After
     public void teardown () {
         UnoState.clear();
-        deleteGames();
+        TestHelper.deleteGames();
     }
 
     @Test
@@ -123,13 +122,5 @@ public class PersistenceServiceTest {
         Game game = (Game) objectInputStream.readObject();
         objectInputStream.close();
         return game;
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void deleteGames() {
-        File[] games = new File(gamesPath).listFiles();
-        for (File game : Objects.requireNonNull(games)) {
-            game.delete();
-        }
     }
 }

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -26,6 +27,7 @@ public class GameService {
 
     private final FinalizeTurnService finalizeTurnService;
     private final HousekeepingService housekeepingService;
+    private final PersistenceService persistenceService;
     private final PushService pushService;
     private final TokenService tokenService;
 
@@ -33,20 +35,22 @@ public class GameService {
 
     @Autowired
     public GameService(FinalizeTurnService finalizeTurnService, HousekeepingService housekeepingService,
-                       PushService pushService, TokenService tokenService) {
+                       PersistenceService persistenceService, PushService pushService, TokenService tokenService) {
         this.finalizeTurnService = finalizeTurnService;
         this.housekeepingService = housekeepingService;
+        this.persistenceService = persistenceService;
         this.pushService = pushService;
         this.tokenService = tokenService;
     }
 
-    public String createGame(String token){
+    public String createGame(String token) {
         housekeepingService.removeOldGames();
         tokenService.checkForTokenizedGameCreate(token);
         Game game = new Game();
         UnoState.putGame(game);
         housekeepingService.updateLastAction(game);
         LOGGER.info("Created new game with uuid {}", game.getUuid());
+        persistenceService.saveGame(game);
         return game.getUuid();
     }
 
@@ -75,13 +79,10 @@ public class GameService {
             housekeepingService.updateLastAction(game);
             LOGGER.info("Started new round. Game: {}", game.getUuid());
             pushService.push(PushMessage.STARTED_GAME, game);
+            persistenceService.saveGame(game);
         }
         Player currentPlayer = game.getPlayers().get(game.getCurrentPlayerIndex());
         finalizeTurnService.handleBotTurn(game, currentPlayer);
-    }
-
-    public static void finishGame(Game game, Player player){
-        game.setLastWinner(game.getPlayers().indexOf(player));
     }
 
     public void addMessage(String gameUuid, String playerUuid, String content){
@@ -97,6 +98,7 @@ public class GameService {
             game.addMessage(message);
             pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, ""+ message.getTime() ,content);
             LOGGER.info("Successfully added message. Game: {}; Player: {}; Message: {}", gameUuid, playerUuid, content);
+            persistenceService.saveGame(game);
         }
     }
 

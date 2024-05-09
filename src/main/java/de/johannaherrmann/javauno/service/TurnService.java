@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class TurnService {
 
     private final FinalizeTurnService finalizeTurnService;
-    private final BotService botService;
+    private final PersistenceService persistenceService;
     private final GameService gameService;
     private final PlayerService playerService;
     private final HousekeepingService housekeepingService;
@@ -30,10 +30,10 @@ public class TurnService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
-    public TurnService(FinalizeTurnService finalizeTurnService, BotService botService, GameService gameService,
+    public TurnService(FinalizeTurnService finalizeTurnService, PersistenceService persistenceService, GameService gameService,
                        PlayerService playerService, HousekeepingService housekeepingService, PushService pushService){
         this.finalizeTurnService = finalizeTurnService;
-        this.botService = botService;
+        this.persistenceService = persistenceService;
         this.gameService = gameService;
         this.playerService = playerService;
         this.housekeepingService = housekeepingService;
@@ -51,6 +51,7 @@ public class TurnService {
             if(!isPlayersTurn(game, player)){
                 throw new IllegalStateException(ExceptionMessage.NOT_YOUR_TURN.getValue());
             }
+            persistenceService.saveGame(game);
         }
         finalizeTurn(game);
     }

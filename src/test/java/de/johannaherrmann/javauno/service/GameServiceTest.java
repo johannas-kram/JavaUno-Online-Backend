@@ -10,6 +10,7 @@ import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
 import org.assertj.core.data.Percentage;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.lang.IllegalStateException;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
@@ -45,12 +48,18 @@ public class GameServiceTest {
         game = TestHelper.createGame(gameService);
     }
 
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
+    }
+
     @Test
     public void shouldCreateGame(){
         String uuid = TestHelper.createGame(gameService).getUuid();
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
+        assertThat(new File("./data/games/" + uuid)).exists();
     }
 
     @Test
@@ -114,6 +123,7 @@ public class GameServiceTest {
         gameService.startGame(game.getUuid());
 
         assertStartedGameState();
+        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     @Test
@@ -179,6 +189,7 @@ public class GameServiceTest {
         assertThat(game.getMessages().get(0).getPlayerPublicUuid()).isEqualTo(player.getPublicUuid());
         assertThat(game.getMessages().get(0).getTime()).isCloseTo(System.currentTimeMillis(), Percentage.withPercentage(0.000001));
         assertThat(game.getMessages().get(0).getContent()).isEqualTo(testContent);
+        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     @Test

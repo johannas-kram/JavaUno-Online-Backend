@@ -12,6 +12,8 @@ import de.johannaherrmann.javauno.service.PlayerService;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
 
+import java.io.File;
+import java.util.Objects;
 import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,6 +76,14 @@ public class TestHelper {
             return new ObjectMapper().readValue(json, PutCardResponse.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteGames() {
+        File[] games = new File("./data/games").listFiles();
+        for (File game : Objects.requireNonNull(games)) {
+            game.delete();
         }
     }
 }

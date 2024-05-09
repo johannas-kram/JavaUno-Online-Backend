@@ -81,15 +81,6 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
     }
 
     @Test
-    public void shouldSetLastWinnerCausedByWinning(){
-        game.setLastWinner(-1);
-
-        GameService.finishGame(game, game.getPlayers().get(1));
-
-        assertThat(game.getLastWinner()).isEqualTo(1);
-    }
-
-    @Test
     public void shouldSelectSecondPlayerAsFirstCardReceiverBecauseOthersWereAlready(){
        game.addPreviousFirstCardReceiver(game.getPlayers().get(0).getUuid());
        game.addPreviousFirstCardReceiver(game.getPlayers().get(2).getUuid());

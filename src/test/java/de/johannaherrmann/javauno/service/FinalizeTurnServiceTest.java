@@ -9,12 +9,15 @@ import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,6 +39,11 @@ public class FinalizeTurnServiceTest {
     @Before
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test
@@ -109,6 +117,7 @@ public class FinalizeTurnServiceTest {
         turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(300);
         assertFinalized(turnState, index, drawPenalties);
+        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     private void shouldFail(GameLifecycle lifecycle, TurnState turnState, int index, ExceptionMessage exceptionMessage){
