@@ -4,6 +4,7 @@ import de.johannaherrmann.javauno.TestHelper;
 import de.johannaherrmann.javauno.data.fixed.Card;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.TurnState;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,11 @@ public class PutServiceSetAttributeTest {
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

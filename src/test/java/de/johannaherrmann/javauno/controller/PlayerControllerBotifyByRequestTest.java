@@ -56,6 +56,7 @@ public class PlayerControllerBotifyByRequestTest {
             thread.interrupt();
             game.removeBotifyPlayerByRequestThread();
         }
+        TestHelper.deleteGames();
     }
 
     @Test

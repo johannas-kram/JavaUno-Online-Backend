@@ -12,6 +12,7 @@ import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
 
+import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,6 +38,11 @@ public class PlayerServiceAddRemoveTest {
     @Before
     public void setup(){
         game = TestHelper.createGame(gameService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

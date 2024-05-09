@@ -13,6 +13,7 @@ import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.GameService;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,11 @@ public class TurnControllerPutTest {
         game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

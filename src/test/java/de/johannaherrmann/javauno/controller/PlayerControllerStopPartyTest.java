@@ -8,6 +8,7 @@ import de.johannaherrmann.javauno.data.state.component.GameLifecycle;
 import de.johannaherrmann.javauno.data.state.component.Player;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.service.GameService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,11 @@ public class PlayerControllerStopPartyTest {
     @Before
     public void setup(){
         game = TestHelper.createGame(gameService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

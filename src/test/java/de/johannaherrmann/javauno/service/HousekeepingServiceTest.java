@@ -3,6 +3,7 @@ package de.johannaherrmann.javauno.service;
 import de.johannaherrmann.javauno.TestHelper;
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,11 @@ public class HousekeepingServiceTest {
     @Before
     public void setup(){
         game = TestHelper.createGame(gameService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

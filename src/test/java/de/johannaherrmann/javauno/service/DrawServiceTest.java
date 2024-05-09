@@ -8,6 +8,7 @@ import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,11 @@ public class DrawServiceTest {
     @Before
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

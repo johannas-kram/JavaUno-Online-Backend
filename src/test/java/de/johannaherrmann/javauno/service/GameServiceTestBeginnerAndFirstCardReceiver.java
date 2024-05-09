@@ -48,6 +48,7 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
     @After
     public void teardown(){
         UnoRandom.testModeEnabled = false;
+        TestHelper.deleteGames();
     }
 
     @Test
