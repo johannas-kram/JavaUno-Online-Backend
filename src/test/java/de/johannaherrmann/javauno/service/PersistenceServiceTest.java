@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,6 +76,8 @@ public class PersistenceServiceTest {
     public void shouldLoadGamesCorrectly () throws Exception {
         Game game1 = TestHelper.prepareAndStartGame(gameService, playerService);
         Game game2 = TestHelper.prepareAndStartGame(gameService, playerService);
+        List<Game> sorted = new ArrayList<>(){{ add(game1); add(game2); }};
+        sorted.sort(Comparator.comparing(Game::getUuid));
         game1.setLastAction(50);
         serializeGame(game1);
         serializeGame(game2);
@@ -89,8 +93,8 @@ public class PersistenceServiceTest {
 
         assertThat(exception).isNull();
         assertThat(loadedGames).isNotNull().hasSize(2);
-        assertGamesEqual(loadedGames.get(0), game1);
-        assertGamesEqual(loadedGames.get(1), game2);
+        assertGamesEqual(loadedGames.get(0), sorted.get(0));
+        assertGamesEqual(loadedGames.get(1), sorted.get(1));
     }
 
     private void assertGamesEqual (Game game1, Game game2) {
