@@ -5,6 +5,7 @@ import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.GameLifecycle;
 import de.johannaherrmann.javauno.controller.response.GameStateResponse;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,11 @@ public class GameStateServiceTest {
     @Before
     public void setup(){
         game = TestHelper.createGame(gameService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

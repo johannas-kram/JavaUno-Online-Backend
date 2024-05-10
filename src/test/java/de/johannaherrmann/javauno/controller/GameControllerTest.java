@@ -15,6 +15,7 @@ import de.johannaherrmann.javauno.service.GameService;
 import de.johannaherrmann.javauno.service.TokenService;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +50,11 @@ public class GameControllerTest {
 
     @MockBean
     private TokenService tokenService;
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
+    }
 
     @Test
     public void shouldCreateGame() throws Exception {

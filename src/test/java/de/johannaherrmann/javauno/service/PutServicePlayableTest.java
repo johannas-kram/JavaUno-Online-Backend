@@ -6,6 +6,7 @@ import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,11 @@ public class PutServicePlayableTest {
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
         game.getPlayers().get(0).clearCards();
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

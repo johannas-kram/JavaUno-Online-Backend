@@ -9,6 +9,7 @@ import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FinalizeTurnServiceTest {
+public class TurnServiceTest {
 
     @Autowired
     private GameService gameService;
@@ -36,6 +37,11 @@ public class FinalizeTurnServiceTest {
     @Before
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

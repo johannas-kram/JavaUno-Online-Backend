@@ -21,22 +21,20 @@ import java.util.Arrays;
 public class TurnService {
 
     private final FinalizeTurnService finalizeTurnService;
-    private final BotService botService;
     private final GameService gameService;
     private final PlayerService playerService;
-    private final HousekeepingService housekeepingService;
+    private final GlobalStateService globalStateService;
     private final PushService pushService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TurnService.class);
 
     @Autowired
-    public TurnService(FinalizeTurnService finalizeTurnService, BotService botService, GameService gameService,
-                       PlayerService playerService, HousekeepingService housekeepingService, PushService pushService){
+    public TurnService(FinalizeTurnService finalizeTurnService, GameService gameService, PlayerService playerService,
+                       GlobalStateService globalStateService, PushService pushService){
         this.finalizeTurnService = finalizeTurnService;
-        this.botService = botService;
         this.gameService = gameService;
         this.playerService = playerService;
-        this.housekeepingService = housekeepingService;
+        this.globalStateService = globalStateService;
         this.pushService = pushService;
     }
 
@@ -104,10 +102,6 @@ public class TurnService {
 
     Player getPlayer(String playerUuid, Game game) throws IllegalArgumentException {
         return playerService.getPlayer(playerUuid, game);
-    }
-
-    void updateLastAction(Game game){
-        housekeepingService.updateLastAction(game);
     }
 
     void pushAction(PushMessage message, Game game){

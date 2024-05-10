@@ -10,6 +10,7 @@ import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,11 @@ public class SelectColorServiceTest {
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.setDesiredColor(null);
         game.setTurnState(TurnState.SELECT_COLOR);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

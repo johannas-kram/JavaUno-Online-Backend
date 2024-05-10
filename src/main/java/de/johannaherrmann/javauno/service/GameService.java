@@ -25,28 +25,28 @@ import java.util.Stack;
 public class GameService {
 
     private final FinalizeTurnService finalizeTurnService;
-    private final HousekeepingService housekeepingService;
+    private final GlobalStateService globalStateService;
     private final PushService pushService;
     private final TokenService tokenService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
-    public GameService(FinalizeTurnService finalizeTurnService, HousekeepingService housekeepingService,
-                       PushService pushService, TokenService tokenService) {
+    public GameService(FinalizeTurnService finalizeTurnService, GlobalStateService globalStateService, PushService pushService,
+                       TokenService tokenService) {
         this.finalizeTurnService = finalizeTurnService;
-        this.housekeepingService = housekeepingService;
+        this.globalStateService = globalStateService;
         this.pushService = pushService;
         this.tokenService = tokenService;
     }
 
-    public String createGame(String token){
-        housekeepingService.removeOldGames();
+    public String createGame(String token) {
+        globalStateService.removeOldGames();
         tokenService.checkForTokenizedGameCreate(token);
         Game game = new Game();
         UnoState.putGame(game);
-        housekeepingService.updateLastAction(game);
         LOGGER.info("Created new game with uuid {}", game.getUuid());
+        globalStateService.saveGame(game);
         return game.getUuid();
     }
 
@@ -72,16 +72,12 @@ public class GameService {
             game.getDrawPile().addAll(deck);
             game.setGameLifecycle(GameLifecycle.RUNNING);
             game.nextParty();
-            housekeepingService.updateLastAction(game);
             LOGGER.info("Started new round. Game: {}", game.getUuid());
+            globalStateService.saveGame(game);
             pushService.push(PushMessage.STARTED_GAME, game);
         }
         Player currentPlayer = game.getPlayers().get(game.getCurrentPlayerIndex());
         finalizeTurnService.handleBotTurn(game, currentPlayer);
-    }
-
-    public static void finishGame(Game game, Player player){
-        game.setLastWinner(game.getPlayers().indexOf(player));
     }
 
     public void addMessage(String gameUuid, String playerUuid, String content){
@@ -97,6 +93,7 @@ public class GameService {
             game.addMessage(message);
             pushService.pushDirectly(game.getUuid(), "chat-message", publicUuid, ""+ message.getTime() ,content);
             LOGGER.info("Successfully added message. Game: {}; Player: {}; Message: {}", gameUuid, playerUuid, content);
+            globalStateService.saveGame(game);
         }
     }
 

@@ -22,11 +22,13 @@ import org.springframework.stereotype.Service;
 public class PutService {
 
     private final TurnService turnService;
+    private final GlobalStateService globalStateService;
     private static final Logger LOGGER = LoggerFactory.getLogger(PutService.class);
 
     @Autowired
-    public PutService(TurnService turnService){
+    public PutService(TurnService turnService, GlobalStateService globalStateService){
         this.turnService = turnService;
+        this.globalStateService = globalStateService;
     }
 
     public Card put(String gameUuid, String playerUuid, Card card, int cardIndex)
@@ -39,13 +41,13 @@ public class PutService {
                 throw new CardDoesNotMatchException();
             }
             putCard(game, player, card, cardIndex);
-            turnService.updateLastAction(game);
             turnService.pushAction(PushMessage.PUT_CARD, game);
             if(player.getCards().isEmpty()){
-                GameService.finishGame(game, player);
+                game.setLastWinner(game.getPlayers().indexOf(player));
                 turnService.pushAction(PushMessage.FINISHED_GAME, game);
                 LOGGER.info("Successfully finished party. Game: {}; party: {}; winner: {}", gameUuid, game.getParty(), playerUuid);
             }
+            globalStateService.saveGame(game);
         }
         return game.getTopCard();
     }

@@ -3,9 +3,11 @@ package de.johannaherrmann.javauno.data.state.component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.johannaherrmann.javauno.data.fixed.Card;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Game{
+public class Game implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	private final String uuid;
 	private final Map<String, Player> humans = new HashMap<>();
@@ -26,7 +28,7 @@ public class Game{
 	private int party;
 	private int stopPartyRequested;
 	private int lastWinner = -1;
-	private Thread botifyPlayerByRequestThread;
+	transient private Thread botifyPlayerByRequestThread;
 	private final List<Message> messages = new ArrayList<>();
 	private int drawnCards = 0;
 	private String drawReason;

@@ -9,6 +9,7 @@ import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.GameService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,11 @@ public class TurnControllerSayUnoTest {
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.FINAL_COUNTDOWN);
         game.getPlayers().get(0).setUnoSaid(false);
+    }
+
+    @After
+    public void teardown(){
+        TestHelper.deleteGames();
     }
 
     @Test

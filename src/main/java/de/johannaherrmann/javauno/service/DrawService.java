@@ -21,11 +21,13 @@ import java.util.Collections;
 public class DrawService {
 
     private final TurnService turnService;
+    private final GlobalStateService globalStateService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DrawService.class);
 
     @Autowired
-    public DrawService(TurnService turnService){
+    public DrawService(TurnService turnService, GlobalStateService globalStateService){
         this.turnService = turnService;
+        this.globalStateService = globalStateService;
     }
 
     public void draw(String gameUuid, String playerUuid) throws IllegalArgumentException, IllegalStateException {
@@ -40,8 +42,8 @@ public class DrawService {
             if(TurnState.PUT_DRAWN.equals(game.getTurnState()) && !matches){
                 game.setTurnState(TurnState.FINAL_COUNTDOWN);
             }
+            globalStateService.saveGame(game);
         }
-        turnService.updateLastAction(game);
         turnService.pushAction(PushMessage.DRAWN_CARD, game);
     }
 
@@ -51,7 +53,7 @@ public class DrawService {
             Player player = turnService.getPlayer(playerUuid, game);
             preChecksMultiple(game, player);
             drawCards(game, player);
-            turnService.updateLastAction(game);
+            globalStateService.saveGame(game);
             turnService.pushAction(PushMessage.DRAWN_CARDS, game);
         }
     }

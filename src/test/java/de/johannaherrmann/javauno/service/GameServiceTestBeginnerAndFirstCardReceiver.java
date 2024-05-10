@@ -48,6 +48,7 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
     @After
     public void teardown(){
         UnoRandom.testModeEnabled = false;
+        TestHelper.deleteGames();
     }
 
     @Test
@@ -78,15 +79,6 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
         playerService.removePlayer(game.getUuid(), game.getPlayers().get(1).getUuid(), false, false);
 
         assertThat(game.getLastWinner()).isEqualTo(-1);
-    }
-
-    @Test
-    public void shouldSetLastWinnerCausedByWinning(){
-        game.setLastWinner(-1);
-
-        GameService.finishGame(game, game.getPlayers().get(1));
-
-        assertThat(game.getLastWinner()).isEqualTo(1);
     }
 
     @Test

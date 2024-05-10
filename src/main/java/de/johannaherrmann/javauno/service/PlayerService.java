@@ -21,7 +21,7 @@ import java.util.List;
 public class PlayerService {
 
     private final GameService gameService;
-    private final HousekeepingService housekeepingService;
+    private final GlobalStateService globalStateService;
     private final PushService pushService;
     private final FinalizeTurnService finalizeTurnService;
 
@@ -30,10 +30,10 @@ public class PlayerService {
     public int botifyPlayerByRequestCountdownMillis = 10000;
 
     @Autowired
-    public PlayerService(GameService gameService, HousekeepingService housekeepingService, PushService pushService,
+    public PlayerService(GameService gameService, GlobalStateService globalStateService, PushService pushService,
                          FinalizeTurnService finalizeTurnService) {
         this.gameService = gameService;
-        this.housekeepingService = housekeepingService;
+        this.globalStateService = globalStateService;
         this.pushService = pushService;
         this.finalizeTurnService = finalizeTurnService;
     }
@@ -64,7 +64,7 @@ public class PlayerService {
                 throw new IllegalStateException(ExceptionMessage.INVALID_STATE_GAME.getValue());
             }
             remove(game, playerUuid, bot, inGame);
-            boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+            boolean removedGame = globalStateService.removeGameIfNoHumans(game);
             if(removedGame){
                 pushService.push(PushMessage.END, game);
                 LOGGER.info("Removed Player. Game: {}; Player: {}", gameUuid, playerUuid);
@@ -194,7 +194,7 @@ public class PlayerService {
         game.setPlayerIndexForPush(index);
         game.getHumans().remove(playerUuid);
         game.getBots().put(player.getPublicUuid(), player);
-        boolean removedGame = housekeepingService.removeGameIfNoHumans(game);
+        boolean removedGame = globalStateService.removeGameIfNoHumans(game);
         if(removedGame){
             return true;
         }
