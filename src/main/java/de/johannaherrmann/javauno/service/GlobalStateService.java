@@ -3,6 +3,7 @@ package de.johannaherrmann.javauno.service;
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.GameLifecycle;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class HousekeepingService {
+public class GlobalStateService {
 
     static final long MAX_DURATION_WITHOUT_ACTION = 8*60*60*1000; // 8 hours
 
     private final PersistenceService persistenceService;
 
     @Autowired
-    public HousekeepingService (PersistenceService persistenceService) {
+    public GlobalStateService(PersistenceService persistenceService) {
         this.persistenceService = persistenceService;
     }
 
-    void updateLastAction(Game game){
+    void saveGame(Game game){
         game.setLastAction(System.currentTimeMillis());
+        persistenceService.saveGame(game);
     }
 
     void removeOldGames(){
@@ -51,4 +53,12 @@ public class HousekeepingService {
         return false;
     }
 
+    @PostConstruct
+    void loadGames () {
+        List<Game> games = persistenceService.loadGames();
+        games.forEach((game) -> {
+            game.setLastAction(System.currentTimeMillis());
+            UnoState.putGame(game);
+        });
+    }
 }

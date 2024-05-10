@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class PersistenceService {
@@ -49,23 +49,26 @@ public class PersistenceService {
         }
     }
 
-    @PostConstruct
-    public void loadGames () throws IOException, ClassNotFoundException {
-        File[] games = new File(gamesPath).listFiles();
-        if (games == null || games.length == 0) {
+    public List<Game> loadGames () {
+        File[] gameFiles = new File(gamesPath).listFiles();
+        List<Game> games = new ArrayList<>();
+        if (gameFiles == null || gameFiles.length == 0) {
             LOGGER.info("No games found to load.");
-            return;
+            return Collections.emptyList();
         }
-        for (File gameFile : games) {
-            FileInputStream fileInputStream
-                    = new FileInputStream(gameFile.getPath());
-            ObjectInputStream objectInputStream
-                    = new ObjectInputStream(fileInputStream);
-            Game game = (Game) objectInputStream.readObject();
-            objectInputStream.close();
-            game.setLastAction(System.currentTimeMillis());
-            UnoState.putGame(game);
-            LOGGER.info("Successfully loaded game with uuid {}", game.getUuid());
+        for (File gameFile : gameFiles) {
+            try (
+                    FileInputStream fileInputStream = new FileInputStream(gameFile.getPath());
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)
+            ) {
+                Game game = (Game) objectInputStream.readObject();
+                objectInputStream.close();
+                games.add(game);
+                LOGGER.info("Successfully loaded game with uuid {}", game.getUuid());
+            } catch (IOException | ClassNotFoundException exception) {
+                LOGGER.info("Could not load game with uuid {}. Error: {}", gameFile.getName(), exception.getMessage());
+            }
         }
+        return games;
     }
 }

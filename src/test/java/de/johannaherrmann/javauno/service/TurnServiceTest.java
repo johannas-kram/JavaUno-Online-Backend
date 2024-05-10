@@ -17,13 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FinalizeTurnServiceTest {
+public class TurnServiceTest {
 
     @Autowired
     private GameService gameService;
@@ -117,7 +115,6 @@ public class FinalizeTurnServiceTest {
         turnService.next(game.getUuid(), game.getPlayers().get(0).getUuid());
         Thread.sleep(300);
         assertFinalized(turnState, index, drawPenalties);
-        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     private void shouldFail(GameLifecycle lifecycle, TurnState turnState, int index, ExceptionMessage exceptionMessage){

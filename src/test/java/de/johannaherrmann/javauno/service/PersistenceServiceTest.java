@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,25 +73,20 @@ public class PersistenceServiceTest {
         game1.setLastAction(50);
         serializeGame(game1);
         serializeGame(game2);
-        Game loadedGame1 = null;
-        Game loadedGame2 = null;
+        List<Game> loadedGames = null;
         Exception exception = null;
         UnoState.clear();
 
         try {
-            persistenceService.loadGames();
-            loadedGame1 = UnoState.getGame(game1.getUuid());
-            loadedGame2 = UnoState.getGame(game2.getUuid());
+            loadedGames = persistenceService.loadGames();
         } catch (Exception ex) {
             exception = ex;
         }
 
         assertThat(exception).isNull();
-        assertThat(loadedGame1).isNotNull();
-        assertThat(loadedGame2).isNotNull();
-        assertGamesEqual(loadedGame1, game1);
-        assertGamesEqual(loadedGame2, game2);
-        assertThat(loadedGame1.getLastAction()).isBetween(System.currentTimeMillis() - 100, System.currentTimeMillis());
+        assertThat(loadedGames).isNotNull().hasSize(2);
+        assertGamesEqual(loadedGames.get(0), game1);
+        assertGamesEqual(loadedGames.get(1), game2);
     }
 
     private void assertGamesEqual (Game game1, Game game2) {

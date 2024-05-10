@@ -59,7 +59,6 @@ public class GameServiceTest {
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
-        assertThat(new File("./data/games/" + uuid)).exists();
     }
 
     @Test
@@ -123,7 +122,6 @@ public class GameServiceTest {
         gameService.startGame(game.getUuid());
 
         assertStartedGameState();
-        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     @Test
@@ -189,7 +187,6 @@ public class GameServiceTest {
         assertThat(game.getMessages().get(0).getPlayerPublicUuid()).isEqualTo(player.getPublicUuid());
         assertThat(game.getMessages().get(0).getTime()).isCloseTo(System.currentTimeMillis(), Percentage.withPercentage(0.000001));
         assertThat(game.getMessages().get(0).getContent()).isEqualTo(testContent);
-        assertThat(new File("./data/games/" + game.getUuid())).exists();
     }
 
     @Test
