@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,7 +32,7 @@ public class PutServicePlayableTest {
     private PlayerService playerService;
 
     @MockBean
-    private PersistenceService persistenceService;
+    private GlobalStateService globalStateService;
 
     private Game game;
 
@@ -39,6 +41,7 @@ public class PutServicePlayableTest {
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
         game.getPlayers().get(0).clearCards();
+        reset(globalStateService);
     }
 
     @Test
@@ -191,6 +194,7 @@ public class PutServicePlayableTest {
 
         TestHelper.assertPutCard(game, playersCard, discardPileSize, exception);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.PUT_CARD);
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     private void shouldNotPutCard(Card topCard, Card playersCard, TurnState turnState){

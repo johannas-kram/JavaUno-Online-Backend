@@ -3,6 +3,7 @@ package de.johannaherrmann.javauno.service;
 import de.johannaherrmann.javauno.TestHelper;
 import de.johannaherrmann.javauno.data.state.UnoState;
 import de.johannaherrmann.javauno.data.state.component.Game;
+import de.johannaherrmann.javauno.data.state.component.Message;
 import de.johannaherrmann.javauno.data.state.component.Player;
 import org.junit.After;
 import org.junit.Before;
@@ -53,6 +54,7 @@ public class PersistenceServiceTest {
     public void shouldSaveGameCorrectly () throws Exception {
         Game game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.setBotifyPlayerByRequestThread(new Thread(() -> dummyBotifyPlayerByRequestThread(game, game.getPlayers().get(0))));
+        game.addMessage(new Message("content", game.getPlayers().get(0).getUuid(), 0));
 
         persistenceService.saveGame(game);
 
@@ -101,6 +103,10 @@ public class PersistenceServiceTest {
         assertThat(game1.getUuid()).isEqualTo(game2.getUuid());
         assertThat(game1.getPlayers().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getUuid());
         assertThat(game1.getPlayers().get(0).getCards().get(0).getUuid()).isEqualTo(game2.getPlayers().get(0).getCards().get(0).getUuid());
+        if (!game1.getMessages().isEmpty()) {
+            assertThat(game2.getMessages()).isNotEmpty();
+            assertThat(game1.getMessages().get(0).getContent()).isEqualTo(game2.getMessages().get(0).getContent());
+        }
     }
 
     private void dummyBotifyPlayerByRequestThread(Game ignoredGame, Player ignoredPlayer) {}

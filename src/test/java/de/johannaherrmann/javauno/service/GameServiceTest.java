@@ -23,7 +23,7 @@ import java.lang.IllegalStateException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,13 +39,14 @@ public class GameServiceTest {
     private TokenService tokenService;
 
     @MockBean
-    private PersistenceService persistenceService;
+    private GlobalStateService globalStateService;
 
     private Game game;
 
     @Before
     public void setup(){
         game = TestHelper.createGame(gameService);
+        reset(globalStateService);
     }
 
     @Test
@@ -54,6 +55,7 @@ public class GameServiceTest {
 
         assertThat(uuid).isNotNull();
         assertThat(UnoState.containsGame(uuid)).isTrue();
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     @Test
@@ -117,6 +119,7 @@ public class GameServiceTest {
         gameService.startGame(game.getUuid());
 
         assertStartedGameState();
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     @Test
@@ -182,6 +185,7 @@ public class GameServiceTest {
         assertThat(game.getMessages().get(0).getPlayerPublicUuid()).isEqualTo(player.getPublicUuid());
         assertThat(game.getMessages().get(0).getTime()).isCloseTo(System.currentTimeMillis(), Percentage.withPercentage(0.000001));
         assertThat(game.getMessages().get(0).getContent()).isEqualTo(testContent);
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     @Test

@@ -8,7 +8,6 @@ import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,13 +34,14 @@ public class DrawServiceTest {
     private PlayerService playerService;
 
     @MockBean
-    private PersistenceService persistenceService;
+    private GlobalStateService globalStateService;
 
     private Game game;
 
     @Before
     public void setup(){
         game = TestHelper.prepareAndStartGame(gameService, playerService);
+        reset(globalStateService);
     }
 
     @Test
@@ -114,6 +116,7 @@ public class DrawServiceTest {
 
         assertDrawn(exception, turnStateOut);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARD);
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     private void shouldDrawMultiple(TurnState turnStateIn, TurnState turnStateOut, int count){
@@ -137,6 +140,7 @@ public class DrawServiceTest {
 
         assertDrawnMultiple(exception, turnStateOut, count, reason);
         assertThat(PushService.getLastMessage()).isEqualTo(PushMessage.DRAWN_CARDS);
+        verify(globalStateService, times(1)).saveGame(any());
     }
 
     private void shouldFail(TurnState turnState, Exception expectedException){
