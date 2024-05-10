@@ -10,12 +10,12 @@ import de.johannaherrmann.javauno.data.state.component.Player;
 import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Stack;
@@ -35,6 +35,9 @@ public class BotServiceTest {
     @Autowired
     private TurnService turnService;
 
+    @MockBean
+    private PersistenceService persistenceService;
+
     private Game game;
 
     @Before
@@ -43,11 +46,6 @@ public class BotServiceTest {
         addHumanAndBot();
         gameService.startGame(game.getUuid());
         game.setTurnState(TurnState.PUT_DRAWN);
-    }
-
-    @After
-    public void teardown(){
-        TestHelper.deleteGames();
     }
 
     @Test

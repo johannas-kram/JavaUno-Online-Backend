@@ -13,13 +13,14 @@ import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.GameService;
 
-import org.junit.After;
+import de.johannaherrmann.javauno.service.PersistenceService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,6 +43,9 @@ public class TurnControllerPutTest {
     @Autowired
     private GameService gameService;
 
+    @MockBean
+    private PersistenceService persistenceService;
+
     private Game game;
 
     @Before
@@ -49,11 +53,6 @@ public class TurnControllerPutTest {
         game = TestHelper.createGame(gameService);
         addPlayers();
         gameService.startGame(game.getUuid());
-    }
-
-    @After
-    public void teardown(){
-        TestHelper.deleteGames();
     }
 
     @Test

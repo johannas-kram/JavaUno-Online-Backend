@@ -9,12 +9,12 @@ import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.exceptions.IllegalStateException;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +32,9 @@ public class KeepServiceTest {
     @Autowired
     private PlayerService playerService;
 
+    @MockBean
+    private PersistenceService persistenceService;
+
     private Game game;
 
     @Before
@@ -39,11 +42,6 @@ public class KeepServiceTest {
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getPlayers().get(0).setUnoSaid(false);
         game.setTurnState(TurnState.PUT_DRAWN);
-    }
-
-    @After
-    public void teardown(){
-        TestHelper.deleteGames();
     }
 
     @Test

@@ -6,12 +6,12 @@ import de.johannaherrmann.javauno.data.state.component.Game;
 import de.johannaherrmann.javauno.data.state.component.TurnState;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +29,9 @@ public class PutServicePlayableTest {
     @Autowired
     private PlayerService playerService;
 
+    @MockBean
+    private PersistenceService persistenceService;
+
     private Game game;
 
     @Before
@@ -36,11 +39,6 @@ public class PutServicePlayableTest {
         game = TestHelper.prepareAndStartGame(gameService, playerService);
         game.getDiscardPile().clear();
         game.getPlayers().get(0).clearCards();
-    }
-
-    @After
-    public void teardown(){
-        TestHelper.deleteGames();
     }
 
     @Test

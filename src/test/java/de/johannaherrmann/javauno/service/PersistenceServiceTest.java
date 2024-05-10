@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
@@ -28,6 +29,9 @@ public class PersistenceServiceTest {
 
     @Autowired
     private PlayerService playerService;
+
+    @MockBean
+    private GlobalStateService globalStateService;
 
     private final String gamesPath = "./data/games/";
 

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GameServiceTestBeginnerAndFirstCardReceiver {
+public class GameServiceTestBeginnerAndFirstCardReceiverTest {
 
     @Autowired
     private GameService gameService;
@@ -36,6 +36,9 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
 
     @MockBean
     private TokenService tokenService;
+
+    @MockBean
+    private PersistenceService persistenceService;
 
     private Game game;
 
@@ -48,7 +51,6 @@ public class GameServiceTestBeginnerAndFirstCardReceiver {
     @After
     public void teardown(){
         UnoRandom.testModeEnabled = false;
-        TestHelper.deleteGames();
     }
 
     @Test

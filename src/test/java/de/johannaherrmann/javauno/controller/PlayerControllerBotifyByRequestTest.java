@@ -9,6 +9,7 @@ import de.johannaherrmann.javauno.data.state.component.Player;
 import de.johannaherrmann.javauno.exceptions.ExceptionMessage;
 import de.johannaherrmann.javauno.exceptions.IllegalArgumentException;
 import de.johannaherrmann.javauno.service.GameService;
+import de.johannaherrmann.javauno.service.PersistenceService;
 import de.johannaherrmann.javauno.service.PlayerService;
 import de.johannaherrmann.javauno.service.push.PushMessage;
 import de.johannaherrmann.javauno.service.push.PushService;
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,6 +44,9 @@ public class PlayerControllerBotifyByRequestTest {
     @Autowired
     private PlayerService playerService;
 
+    @MockBean
+    private PersistenceService persistenceService;
+
     private Game game;
 
     @Before
@@ -56,7 +61,6 @@ public class PlayerControllerBotifyByRequestTest {
             thread.interrupt();
             game.removeBotifyPlayerByRequestThread();
         }
-        TestHelper.deleteGames();
     }
 
     @Test
